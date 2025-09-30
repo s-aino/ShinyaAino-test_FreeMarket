@@ -1,0 +1,77 @@
+erDiagram
+    users ||--o{ items : "sells"
+    users ||--o{ addresses : "has"
+    users ||--o{ comments : "writes"
+    users ||--o{ orders : "buys(buyer_id)"
+
+    categories ||--o{ items : "includes"
+    items ||--o{ comments : "has"
+    items ||--|| orders : "sold in"
+    orders }o--|| addresses : "ships to"
+
+    users {
+        bigint id PK
+        varchar name
+        varchar email
+        varchar password
+        datetime email_verified_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    categories {
+        bigint id PK
+        varchar name
+        varchar slug
+        datetime created_at
+        datetime updated_at
+    }
+
+    items {
+        bigint id PK
+        bigint user_id FK
+        bigint category_id FK
+        varchar title
+        text description
+        int price
+        varchar status
+        varchar image_path
+        datetime created_at
+        datetime updated_at
+    }
+
+    addresses {
+        bigint id PK
+        bigint user_id FK
+        varchar postal
+        varchar prefecture
+        varchar city
+        varchar line1
+        varchar line2
+        varchar phone
+        boolean is_default
+        datetime created_at
+        datetime updated_at
+    }
+
+    orders {
+        bigint id PK
+        bigint buyer_id FK
+        bigint item_id FK
+        int price
+        int qty
+        varchar status
+        datetime ordered_at
+        bigint address_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    comments {
+        bigint id PK
+        bigint user_id FK
+        bigint item_id FK
+        varchar body
+        datetime created_at
+        datetime updated_at
+    }
