@@ -2,12 +2,19 @@
 
 namespace App\Providers;
 
+
+use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
 use App\Actions\Fortify\CreateNewUser;
 use App\Providers\RouteServiceProvider;
+
+use Laravel\Fortify\Actions\AttemptToAuthenticate;
+use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
+use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
+use App\Actions\Fortify\ValidateLogin;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -43,5 +50,14 @@ class FortifyServiceProvider extends ServiceProvider
 
         // これが無いと "CreatesNewUsers is not instantiable"
         Fortify::createUsersUsing(CreateNewUser::class);
+
+        Fortify::authenticateThrough(function ($request) {
+            return [
+                ValidateLogin::class,
+                EnsureLoginIsNotThrottled::class,
+                AttemptToAuthenticate::class,
+                PrepareAuthenticatedSession::class,
+            ];
+        });
     }
 }
