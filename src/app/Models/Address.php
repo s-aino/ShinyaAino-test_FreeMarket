@@ -16,11 +16,8 @@ class Address extends Model
         'phone',
         'is_default'
     ];
-    protected $casts = ['is_default' => 'boolean'];
 
-    // 仕様に合わせて updated_at を無効化（B案）
-    public $timestamps = true;
-    const UPDATED_AT = null;  // ← これだけでOK
+    protected $casts = ['is_default' => 'boolean'];
 
     public function user()
     {

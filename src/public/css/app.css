@@ -1,0 +1,282 @@
+/* ---- layout ---- */
+:root{
+  --gray-50:#f6f7f8; --gray-300:#d7dbe0; --gray-700:#475569;
+  --black:#111; --white:#fff; --brand:#ff6b6b; --brand-600:#ff4d4d;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,"Hiragino Kaku Gothic ProN",Meiryo,sans-serif;color:#111;background:var(--gray-50)}
+
+.header{background:#000;color:#fff}
+.header__inner{max-width:960px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+.brand{font-weight:800;letter-spacing:.5px}
+.brand span{font-weight:600;margin-left:.25em}
+.nav a,.nav .link{color:#fff;text-decoration:none;margin-left:16px;background:none;border:none;cursor:pointer}
+
+.container{max-width:720px;margin:36px auto;padding:0 16px}
+
+/* ---- card ---- */
+.card{background:var(--white);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.06);padding:28px 24px}
+.card h1{font-size:22px;text-align:center;margin:0 0 18px}
+
+/* ---- form ---- */
+.form-row{margin-bottom:14px}
+.label{display:block;color:var(--gray-700);font-size:12px;margin-bottom:6px}
+.input, .file{width:100%;padding:10px 12px;border:1px solid var(--gray-300);border-radius:8px;background:#fff}
+.input:focus{outline:2px solid #dbeafe;border-color:#93c5fd}
+.error{color:#d32f2f;font-size:12px;margin-top:6px}
+.actions{margin-top:18px;text-align:center}
+.btn{display:inline-block;padding:10px 20px;border-radius:8px;border:0;background:var(--brand);color:#fff;font-weight:600;cursor:pointer}
+.btn:hover{background:var(--brand-600)}
+.helper{text-align:center;margin-top:12px}
+.helper a{color:#0ea5e9;text-decoration:none}
+
+/* ---- avatar ---- */
+.avatar{width:96px;height:96px;border-radius:50%;background:#e5e7eb;object-fit:cover}
+
+/* ==== header layout ==== */
+.header{background:#000;color:#fff}
+.header__inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;gap:16px;
+  padding:10px 16px;
+}
+.brand{color:#fff;text-decoration:none;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+.brand span{font-weight:600;margin-left:.25em}
+
+/* 検索 */
+.header__search{flex:1;display:flex;justify-content:center}
+.header__search input{width:520px;max-width:100%;padding:8px 12px;border-radius:8px;border:none}
+
+/* 右ナビ */
+.nav{display:flex;align-items:center;gap:18px;white-space:nowrap}
+.nav__link{color:#fff;text-decoration:none;opacity:.9}
+.nav__link:hover{opacity:1;text-decoration:underline}
+.nav__logout{display:inline}
+
+/* ボタン（既存があるなら重複OK。これを後ろに置くと上書き） */
+.btn{display:inline-block;padding:10px 20px;border-radius:8px;border:0;background:#ff6b6b;color:#fff;font-weight:600;cursor:pointer}
+.btn:hover{background:#ff4d4d}
+.btn--sm{padding:6px 12px;font-size:14px;border-radius:6px}
+.btn--ghost{background:transparent;border:1px solid rgba(255,255,255,.8);color:#fff}
+.btn--ghost:hover{background:rgba(255,255,255,.12)}
+
+/* ===== Profile first tune ===== */
+.container{ max-width: 1120px; }
+
+/* カード：角丸を小さめ・影を控えめに、余白を広めに */
+.card{
+  border-radius: 6px;
+  padding: 40px 56px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+}
+.card h1{
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-align: center;
+  margin: 4px 0 24px;
+}
+
+/* アバター行：中央寄せで横並び */
+.profile-head{
+  display:flex; align-items:center; justify-content:center;
+  gap:16px; margin: 12px 0 18px;
+}
+.avatar{ width:96px; height:96px; border-radius:50%; background:#e5e7eb; object-fit:cover; }
+
+/* ラベル・入力のトーンを近づける */
+.label{ display:block; font-weight:700; color:#222; margin-bottom:6px; }
+.input{
+  display:block; width:100%; height:44px;
+  padding:10px 12px;
+  border:1px solid #d6d9dc; border-radius:6px;
+}
+.input:focus{ outline:none; border-color:#999; box-shadow:0 0 0 3px rgba(0,0,0,.05); }
+
+/* 送信ボタンは見本どおり“幅いっぱい・高さ揃え” */
+.actions{ margin-top:24px; }
+.actions .btn{ width:100%; height:44px; border-radius:6px; background:#ff6b6b; }
+.actions .btn:hover{ background:#ff4d4d; }
+
+/* プロフィールの「画像を選択する」を赤枠・赤文字 */
+.btn--outline-red{
+  background:transparent; border:1px solid #ff6b6b; color:#ff6b6b;
+}
+.btn--outline-red:hover{ background:rgba(255,107,107,.08) }
+
+/* --- ヘッダー：ログアウトを白枠なし・文字リンク風に --- */
+.nav__logout .btn{
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1;
+}
+.nav__logout .btn:hover{
+  background: transparent !important;
+  text-decoration: underline;
+}
+
+/* --- ヘッダー：出品だけ白枠ピルに（クラスはそのまま） --- */
+/* /sell へのリンクを狙い撃ち。サブディレクトリでも効くよう contains(*) を使用 */
+.nav__link[href*="/sell"]{
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid rgba(255,255,255,.85);
+  border-radius: 9999px;
+  color: #fff;
+}
+.nav__link[href*="/sell"]:hover{
+  background: rgba(255,255,255,.12);
+}
+/* === 出品：白塗り・黒文字の角丸ボタン（上書き） === */
+.nav .nav__link[href*="/sell"]{
+  display: inline-block;
+  padding: 6px 14px;
+  background: #fff !important;
+  color: #111 !important;
+  border: 1px solid #fff !important;
+  border-radius: 8px;      /* 角丸度。丸くしたければ 9999px に */
+  font-weight: 700;
+  text-decoration: none;
+}
+.nav .nav__link[href*="/sell"]:hover{
+  background: #f2f2f2 !important;
+  border-color: #f2f2f2 !important;
+  color: #111 !important;
+}
+/* ===== ヘッダーのテキスト系ナビを統一（マイページ/ログアウト） ===== */
+.nav__link,
+.nav__logout .btn{
+  display: inline-block;
+  padding: 2px 4px;              /* 行の高さをそろえるための最小パディング */
+  font-size: 14px;               /* ← 15pxにしたければ 15px に */
+  font-weight: 600;              /* 両者を同じ太さに（600 or 700 好みで） */
+  line-height: 1;
+  color: #fff !important;
+  text-decoration: none;
+  background: transparent !important;
+  border: 0 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.nav__link:hover,
+.nav__logout .btn:hover{
+  text-decoration: underline;    /* ホバー時の表情を同じに */
+}
+
+/* 既存の .nav や 出品(.nav__link[href*="/sell"]) には影響しません */
+/* ====== 基本（全ページ共通：既存を尊重して微調整だけ） ====== */
+.container{ max-width:1120px; margin:0 auto; }
+.card h1{ font-size:28px; font-weight:700; letter-spacing:.5px; }
+
+/* ====== PC 1400–1540px ====== */
+@media (min-width:1400px) and (max-width:1540px){
+  .container{ max-width:1200px; }
+  .card{ padding:40px 56px; }
+  .card h1{ font-size:28px; }
+  .input{ height:46px; font-size:15px; }
+  .actions .btn{ height:46px; font-size:15px; }
+  .header__search input{ width:560px; }  /* 長すぎ防止 */
+}
+
+/* ====== Tablet 768–1024px（来週以降の要件に備えて幅広め） ====== */
+@media (min-width:768px) and (max-width:1024px){
+  .container{ max-width:900px; padding:0 16px; }
+
+  /* ヘッダー：2段可・検索は下段で中央に */
+  .header__inner{ flex-wrap:wrap; row-gap:8px; }
+  .header__search{ order:3; flex:1 1 100%; display:flex; justify-content:center; }
+  .header__search input{ width:70vw; max-width:560px; }
+  .nav{ gap:14px; }
+  .nav__link, .nav__logout .btn{ font-size:14px; }
+
+  /* コンテンツ */
+  .card{ padding:28px 24px; border-radius:6px; }
+  .card h1{ font-size:24px; margin-bottom:16px; }
+  .form-row{ margin-bottom:14px; }
+  .input{ height:42px; font-size:14px; }
+  .actions .btn{ height:42px; font-size:14px; }
+  .avatar{ width:80px; height:80px; }
+}
+
+/* ====== Smartphone ～767px ====== */
+@media (max-width:767px){
+  .container{ max-width:100%; padding:0 14px; }
+
+  /* ヘッダー：2段。上段＝ロゴ＋右ナビ、下段＝検索  */
+  .header__inner{ flex-wrap:wrap; align-items:center; row-gap:6px; }
+  .nav{ gap:12px; }
+  .nav__link, .nav__logout .btn{ font-size:13px; }
+  .header__search{ order:3; flex:1 1 100%; }
+  .header__search input{ width:100%; max-width:none; }
+
+  /* コンテンツ */
+  .card{ padding:20px 16px; }
+  .card h1{ font-size:20px; margin-bottom:12px; }
+  .form-row{ margin-bottom:12px; }
+  .input{ height:40px; font-size:14px; }
+  .actions .btn{ height:40px; font-size:14px; }
+  .avatar{ width:72px; height:72px; }
+
+  /* テーブルがはみ出す場合の保険（ラップ用の親に .table-wrap を付けると良い） */
+  .table-wrap{ overflow-x:auto; }
+  .table-wrap table{ min-width:600px; }
+}
+
+/* ====== （任意）商品一覧用の汎用グリッド（クラスがあれば自動でレスポンシブ） ====== */
+/* 使っている一覧コンテナに .items-grid を付けるだけでOK */
+.items-grid{
+  display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px;
+}
+@media (max-width:1024px){ .items-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:767px){ .items-grid{ grid-template-columns:1fr; } }
+
+/* ==== 共通フォーム幅（全ページ） ========================= */
+/* 数値だけ変えれば全ページまとめて調整できます */
+:root{
+  --form-width-pc: 640px;   /* PCでの最大幅 */
+  --form-width-tab: 560px;  /* タブレットでの最大幅 */
+}
+
+/* .card 直下の <form> を中央・同幅に（マークアップ変更不要） */
+.card > form{
+  max-width: var(--form-width-pc);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* フォームの下にある補助リンク(.helper)も同じ幅で中央に */
+.card .helper{
+  max-width: var(--form-width-pc);
+  width: 100%;
+  margin: 12px auto 0;
+  text-align: center;
+}
+
+/* ボタンを横幅いっぱいにしたい場合の標準（既存があれば上書きされます） */
+.card > form .actions .btn{ width: 100%; }
+
+/* --- Tablet (768–1024px) --- */
+@media (min-width:768px) and (max-width:1024px){
+  .card > form,
+  .card .helper{ max-width: var(--form-width-tab); }
+}
+
+/* --- Smartphone (<=767px) --- */
+@media (max-width:767px){
+  .card > form,
+  .card .helper{ max-width: 100%; }
+}
+
+/* （任意）チェックボックス行など横並びにしたい時用のユーティリティ。
+   .form-row.inline を付ければ横並びになります（付けなくても動作OK） */
+.card > form .form-row.inline{
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* （保険）どうしてもこのページだけ全幅にしたい時は、
+   フォームに .form-full を付ければスコープ解除できます */
+.card > form.form-full{ max-width: none; }

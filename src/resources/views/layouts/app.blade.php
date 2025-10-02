@@ -1,21 +1,31 @@
 <!doctype html>
 <html lang="ja">
+
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>@yield('title','FreeMarket')</title>
-  <style>
-    body{font-family:system-ui,sans-serif;background:#f7f7f9;margin:0}
-    .wrap{max-width:720px;margin:48px auto;background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
-    label{display:block;margin-top:12px} input{width:100%;padding:10px;border:1px solid #ddd;border-radius:8px}
-    button{margin-top:16px;padding:10px 16px;border:0;border-radius:10px;cursor:pointer}
-    a{color:#0a7;text-decoration:none}
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>@yield('title', 'アプリ')</title>
+  <link rel="stylesheet" href="{{ asset('css/app.css') }}"?v={{ filemtime(public_path('css/app.css')) }}">
 </head>
-<body>
-  <div class="wrap">
-    {{-- ※ここは@が1個だけ！ --}}
+<body class="bg-gray">
+  {{-- ページ側が @section('header') を定義していればそれを表示、なければデフォルト --}}
+  @hasSection('header')
+    @yield('header')
+  @else
+    @include('partials.header', [
+      'showSearch' => false,
+      'showMypage' => false,
+      'showSell'   => false,
+      'showLogout' => false,
+      'showLogin'  => false,
+      'showRegister' => false,
+    ])
+  @endif
+
+  {{-- ====== 本文 ====== --}}
+  <main class="container">
     @yield('content')
-  </div>
+  </main>
 </body>
+
 </html>

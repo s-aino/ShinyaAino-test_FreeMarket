@@ -1,18 +1,37 @@
 @extends('layouts.app')
 @section('title','ログイン')
+@section('header')
+@include('partials.header', ['showSearch' => false,])
+@endsection
 @section('content')
-  <h1>ログイン</h1>
-  <form method="POST" action="{{ route('login') }}">@csrf
-    <label>メール
-      <input type="email" name="email" value="{{ old('email') }}" required autofocus>
-    </label>
-    <label>パスワード
-      <input type="password" name="password" required>
-    </label>
-    <label><input type="checkbox" name="remember"> ログイン状態を保持</label>
-    @error('email')<div style="color:#c00">{{ $message }}</div>@enderror
-    @error('password')<div style="color:#c00">{{ $message }}</div>@enderror
-    <button type="submit">ログインする</button>
-  </form>
-  <p style="margin-top:12px">未登録？ <a href="{{ route('register') }}">会員登録はこちら</a></p>
+<div class="card">
+    <h1>ログイン</h1>
+
+    <form method="POST" action="{{ route('login') }}" novalidate autocomplete="off">
+        @csrf
+
+        <div class="form-row">
+            <label class="label">メール</label>
+            <input class="input" type="email" name="email" value="{{ old('email') }}">
+            @error('email') <div class="error">{{ $message }}</div> @enderror
+        </div>
+
+        <div class="form-row">
+            <label class="label">パスワード</label>
+            <input class="input" type="password" name="password">
+            @error('password') <div class="error">{{ $message }}</div> @enderror
+        </div>
+
+        <div class="form-row" style="display:flex;align-items:center;gap:8px;">
+            <input id="remember" type="checkbox" name="remember">
+            <label class="label" for="remember" style="margin:0">ログイン状態を保持</label>
+        </div>
+
+        <div class="actions">
+            <button class="btn" type="submit">ログインする</button>
+        </div>
+    </form>
+
+    <div class="helper">未登録？ <a href="{{ route('register') }}">会員登録はこちら</a></div>
+</div>
 @endsection
