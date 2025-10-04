@@ -33,7 +33,7 @@
 
     <div class="form-row">
       <label class="label">郵便番号</label>
-      <input class="input" type="text" name="postal" value="{{ old('postal', $user->postal) }}" placeholder="123-4567">
+      <input class="input" type="text" name="postal" value="{{ old('postal', $user->postal) }}" >
       @error('postal') <div class="error">{{ $message }}</div> @enderror
     </div>
 
@@ -44,7 +44,7 @@
     </div>
 
     <div class="form-row">
-      <label class="label">建物名（任意）</label>
+      <label class="label">建物名</label>
       <input class="input" type="text" name="building" value="{{ old('building', $user->building) }}">
       @error('building') <div class="error">{{ $message }}</div> @enderror
     </div>

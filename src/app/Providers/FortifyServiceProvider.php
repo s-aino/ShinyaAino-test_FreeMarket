@@ -16,32 +16,24 @@ use Laravel\Fortify\Actions\EnsureLoginIsNotThrottled;
 use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
 use App\Actions\Fortify\ValidateLogin;
 
+use Illuminate\Cache\RateLimiting\Limit;
+use Illuminate\Support\Facades\RateLimiter;
+
 class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // 登録完了 → プロフィール編集へ
-        $this->app->singleton(RegisterResponse::class, fn() => new class implements RegisterResponse {
-            public function toResponse($request)
-            {
-                return redirect()->route('profile.edit');
-            }
-        });
 
-        // ログイン完了 → 初回はプロフィール編集、以後は HOME（/mypage）へ
-        $this->app->singleton(LoginResponse::class, fn() => new class implements LoginResponse {
-            public function toResponse($request)
-            {
-                $u = $request->user();
-                $needs = is_null($u->onboarded_at) || empty($u->postal) || empty($u->address);
-
-                return $needs
-                    ? redirect()->route('profile.edit')
-                    : redirect()->intended(RouteServiceProvider::HOME);
-            }
+        $this->app->singleton(RegisterResponse::class, function () {
+            return new class implements RegisterResponse {
+                public function toResponse($request)
+                {
+                    // 直前に保護URLがあればそこへ、なければ /home へ
+                    return redirect()->route('profile.edit'); 
+                }
+            };
         });
     }
-
     public function boot(): void
     {
         // Fortifyの画面を自作Bladeへ
@@ -59,5 +51,12 @@ class FortifyServiceProvider extends ServiceProvider
                 PrepareAuthenticatedSession::class,
             ];
         });
+
+        // 開発環境だけログイン制限を解除（or 大幅緩和）
+
+        if (app()->environment('local')) {
+            RateLimiter::for('login', fn(Request $r) => Limit::none());
+            RateLimiter::for('two-factor', fn(Request $r) => Limit::none());
+        }
     }
 }

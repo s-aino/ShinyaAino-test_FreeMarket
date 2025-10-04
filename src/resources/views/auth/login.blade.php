@@ -22,16 +22,16 @@
             @error('password') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <div class="form-row" style="display:flex;align-items:center;gap:8px;">
+        <!-- <div class="form-row" style="display:flex;align-items:center;gap:8px;">
             <input id="remember" type="checkbox" name="remember">
             <label class="label" for="remember" style="margin:0">ログイン状態を保持</label>
-        </div>
+        </div> -->
 
         <div class="actions">
             <button class="btn" type="submit">ログインする</button>
         </div>
     </form>
 
-    <div class="helper">未登録？ <a href="{{ route('register') }}">会員登録はこちら</a></div>
+    <div class="helper"> <a href="{{ route('register') }}">会員登録はこちら</a></div>
 </div>
 @endsection

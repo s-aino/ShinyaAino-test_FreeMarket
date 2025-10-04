@@ -1,12 +1,15 @@
+# ER Diagram (Mermaid)
+
+```mermaid
 erDiagram
     users ||--o{ items : "sells"
     users ||--o{ addresses : "has"
     users ||--o{ comments : "writes"
-    users ||--o{ orders : "buys(buyer_id)"
+    users ||--o{ orders : "buys (buyer_id)"
 
     categories ||--o{ items : "includes"
     items ||--o{ comments : "has"
-    items ||--|| orders : "sold in"
+    items ||--o{ orders : "sold in"
     orders }o--|| addresses : "ships to"
 
     users {
@@ -27,42 +30,29 @@ erDiagram
         datetime updated_at
     }
 
-    items {
-        bigint id PK
-        bigint user_id FK
-        bigint category_id FK
-        varchar title
-        text description
-        int price
-        varchar status
-        varchar image_path
-        datetime created_at
-        datetime updated_at
-    }
-
     addresses {
         bigint id PK
         bigint user_id FK
-        varchar postal
+        varchar postal_code
         varchar prefecture
         varchar city
-        varchar line1
-        varchar line2
-        varchar phone
-        boolean is_default
+        varchar street
+        varchar building nullable
         datetime created_at
         datetime updated_at
     }
 
-    orders {
+    items {
         bigint id PK
-        bigint buyer_id FK
-        bigint item_id FK
-        int price
-        int qty
-        varchar status
-        datetime ordered_at
-        bigint address_id FK
+        bigint user_id FK "seller"
+        bigint category_id FK
+        varchar title
+        text description
+        unsigned_int price ">= 0"
+        varchar status "active|sold"
+        varchar image_path
+        varchar brand nullable          
+        varchar condition nullable      
         datetime created_at
         datetime updated_at
     }
@@ -71,7 +61,18 @@ erDiagram
         bigint id PK
         bigint user_id FK
         bigint item_id FK
-        varchar body
+        text body
+        datetime created_at
+        datetime updated_at
+    }
+
+    orders {
+        bigint id PK
+        bigint user_id FK "buyer_id"
+        bigint item_id FK
+        bigint address_id FK
+        datetime ordered_at
+        varchar status "pending|paid|shipped|completed|cancelled"
         datetime created_at
         datetime updated_at
     }
