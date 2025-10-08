@@ -14,32 +14,31 @@ class ProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'profile_image' => ['nullable', 'file', 'mimes:jpeg,png'],
             'name'          => ['required', 'string', 'max:20'],
-            'postal'        => ['required', 'regex:/^\d{3}-\d{4}$/'],
+            'postal'        => ['required', 'regex:/^\d{3}-\d{4}$/'], // 123-4567
             'address'       => ['required', 'string', 'max:255'],
+            'building'      => ['nullable', 'string', 'max:255'],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], // 4MB
+        ];
+    }
+    public function attributes(): array
+    {
+        return [
+            'name'          => 'ユーザー名',
+            'postal'        => '郵便番号',
+            'address'       => '住所',
+            'building'      => '建物名',
+            'profile_image' => 'プロフィール画像',
         ];
     }
 
     public function messages(): array
     {
         return [
-            'profile_image.mimes' => 'プロフィール画像はjpegもしくはpngを指定してください。',
-            'name.required'       => 'ユーザー名を入力してください。',
-            'name.max'            => 'ユーザー名は20文字以内で入力してください。',
-            'postal.required'     => '郵便番号を入力してください。',
-            'postal.regex'        => '郵便番号はハイフンありの8文字で入力してください。',
-            'address.required'    => '住所を入力してください。',
-        ];
-    }
-
-    public function attributes(): array
-    {
-        return [
-            'profile_image' => 'プロフィール画像',
-            'name' => 'ユーザー名',
-            'postal' => '郵便番号',
-            'address' => '住所',
+            'postal.regex'         => '郵便番号はハイフンありの 8 文字で入力してください。（例: 123-4567）',
+            'profile_image.image'  => '画像ファイルを選択してください。',
+            'profile_image.mimes'  => '拡張子は jpeg もしくは png を指定してください。',
+            'profile_image.max'    => '画像サイズは 4MB 以下にしてください。',
         ];
     }
 }

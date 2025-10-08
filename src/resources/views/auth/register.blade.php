@@ -7,7 +7,7 @@
 <div class="card">
   <h1>会員登録</h1>
 
-  <form method="POST" action="{{ route('register') }}" novalidate autocomplete="off">
+  <form method="POST" action="{{ route('register') }}" class="auth-form" novalidate autocomplete="off">
     @csrf
 
     <div class="form-row">
@@ -33,12 +33,12 @@
       <input class="input" type="password" name="password_confirmation" autocomplete="new-password">
     </div>
 
-    <div class="actions">
+    <div class="form-actions">
       <button type="submit" class="btn">登録する</button>
     </div>
 
     <div class="helper">
-      ログインは <a href="{{ route('login') }}">こちら</a>
+      <a href="{{ route('login') }}">ログインはこちら</a>
     </div>
   </form>
 </div>

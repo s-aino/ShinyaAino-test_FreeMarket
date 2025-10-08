@@ -10,10 +10,16 @@ $showLogin = $showLogin ?? false;
 <header class="header">
     <div class="header__inner">
         <a href="{{ url('/') }}" class="brand logo">
-            <img src="/img/logo.svg" alt="COACHTECH Logo" height="24">
-        </a> @if($showSearch)
-        <form action="{{ url('/') }}" method="GET" class="header__search">
-            <input type="text" name="q" placeholder="なにをお探しですか？">
+            <img src="{{ asset('img/logo.svg') }}" alt="COACHTECH Logo" height="24">
+        </a>
+
+        @if($showSearch)
+        <form action="{{ url('/') }}" method="GET" class="header__search" role="search">
+            {{-- ★ いま表示中のタブを維持（recommend / likes） --}}
+            <input type="hidden" name="tab" value="{{ request('tab','recommend') }}">
+            {{-- ★ 検索語を保持（検索後もボックスに残す） --}}
+            <input type="text" name="q" value="{{ request('q') }}" placeholder="なにをお探しですか？" autocomplete="off">
+            {{-- ボタンは見た目不要なら省略可。Enterで送信できます --}}
         </form>
         @endif
 

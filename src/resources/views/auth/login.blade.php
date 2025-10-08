@@ -7,7 +7,7 @@
 <div class="card">
     <h1>ログイン</h1>
 
-    <form method="POST" action="{{ route('login') }}" novalidate autocomplete="off">
+    <form method="POST" action="{{ route('login') }}"  class="auth-form" novalidate autocomplete="off">
         @csrf
 
         <div class="form-row">
@@ -22,12 +22,8 @@
             @error('password') <div class="error">{{ $message }}</div> @enderror
         </div>
 
-        <!-- <div class="form-row" style="display:flex;align-items:center;gap:8px;">
-            <input id="remember" type="checkbox" name="remember">
-            <label class="label" for="remember" style="margin:0">ログイン状態を保持</label>
-        </div> -->
 
-        <div class="actions">
+        <div class="form-actions">
             <button class="btn" type="submit">ログインする</button>
         </div>
     </form>
