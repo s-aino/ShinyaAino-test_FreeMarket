@@ -29,25 +29,28 @@
     </nav>
 
     {{-- 一覧 --}}
-    <div class="item-grid">
-        @forelse($items as $item)
-        <a class="item-card" href="{{ url('/item/'.$item->id) }}">
-            <div class="thumb">
-                <img src="{{ $item->image_url }}" alt="{{ $item->title }}" loading="lazy" decoding="async">
-                @if($item->is_sold)
-                <span class="badge--sold">SOLD</span>
-                @endif
-            </div>
-            <div class="meta">
-                <div class="title">{{ $item->title }}</div>
-                @isset($item->price)
-                <div class="price">¥{{ number_format($item->price) }}</div>
-                @endisset
-            </div>
-        </a>
-        @empty
-        {{-- likesタブ未認証などで空の場合はメッセージ非表示の仕様 --}}
-        @endforelse
+    <div class="items-wrap">
+        <div class="item-grid">
+            @forelse($items as $item)
+            <a class="item-card" href="{{ url('/item/'.$item->id) }}">
+                <div class="thumb">
+                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}"> 
+                    <!-- loading="lazy" decoding="async"> -->
+                    @if($item->is_sold)
+                    <span class="badge--sold">SOLD</span>
+                    @endif
+                </div>
+                <div class="meta">
+                    <div class="title">{{ $item->title }}</div>
+                    @isset($item->price)
+                    <div class="price">¥{{ number_format($item->price) }}</div>
+                    @endisset
+                </div>
+            </a>
+            @empty
+            {{-- likesタブ未認証などで空の場合はメッセージ非表示の仕様 --}}
+            @endforelse
+        </div>
     </div>
 
     {{-- ページネーション --}}

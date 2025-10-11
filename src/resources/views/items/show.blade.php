@@ -97,7 +97,7 @@
             <div class="actions">
                 @auth
                 <a class="btn btn--primary btn--square"
-                    href="{{ route('purchase.create', ['itemId' => $item->id]) }}">
+                    href="{{ route('purchase.create', $item) }}">
                     購入手続きへ
                 </a>
                 @else
@@ -134,7 +134,7 @@
             </section>
 
             {{-- コメント一覧 --}}
-            <section class="detail__section detail__section--comments">
+            <section  class="detail__section detail__section--comments">
                 <h2>コメント（{{ $item->comments_count ?? $item->comments()->count() }}）</h2>
                 …
 
@@ -169,9 +169,9 @@
                     @csrf
                     <div class="comment-title">商品へのコメント</div>
 
-                    <textarea class="comment-box"
+                    <textarea id="comment-body" class="comment-box"
                         name="body"
-                        maxlength="255"
+                        maxlength="1000"
                         placeholder="ここにコメントを入力…">{{ old('body') }}</textarea>
 
                     @error('body')

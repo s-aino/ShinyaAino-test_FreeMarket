@@ -1082,3 +1082,349 @@ img{ max-width:100%; height:auto; display:block; }
 .glyph-svg { width:22px; height:22px; }
 .count { font-size:12px; color:#666; }
 
+/* コンテナ幅 */
+.purchase-wrap{max-width:1180px;margin:32px auto;padding:0 24px}
+
+/* 2カラム */
+.purchase-grid{display:grid;grid-template-columns:1fr 360px;gap:32px;align-items:start}
+@media (max-width:850px){.purchase-grid{grid-template-columns:1fr}}
+
+/* 商品ヘッダ */
+/* .product-head{display:flex;gap:16px;align-items:center}
+.thumb{width:96px;height:96px;background:#f2f2f2;border-radius:6px;overflow:hidden;flex:0 0 96px}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.meta .title{font-weight:600;font-size:16px;margin:0}
+.meta .price{font-weight:700;font-size:18px;margin:.25rem 0 0} */
+
+.divider{border:0;border-top:1px solid #e6e6e6;margin:20px 0}
+
+/* セクション */
+.block{margin:24px 0}
+.block h2{font-size:14px;margin:0 0 10px;color:#333}
+.addr-line{margin:.2rem 0}
+.change a{font-size:12px}
+
+/* サマリカード（右上） */
+.summary-card{border:1px solid #d9d9d9;border-radius:4px;padding:16px;background:#fff}
+.summary-card .row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #eee}
+.summary-card .row:last-child{border-bottom:0}
+
+/* ボタン */
+.btn-primary{display:block;width:100%;padding:12px 16px;border:0;border-radius:6px;background:#ff6b6b;color:#fff;font-weight:700;cursor:pointer}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-secondary{display:inline-block;padding:10px 16px;border:1px solid #d9d9d9;border-radius:6px}
+
+/* 右カラムの購入ボックス */
+.buy-box{margin-top:16px}
+.buy-mobile{display:none}
+@media (max-width:850px){
+  .buy-box{display:none}
+  .buy-mobile{display:block;margin-top:16px}
+}
+
+/* エラー */
+.errors{color:#c00;margin:10px 0 0 0}
+.errors li{margin:.25rem 0}
+/* ベース：少し大きめ */
+.purchase-wrap{max-width:1180px;margin:28px auto;padding:0 32px;font-size:16px;line-height:1.6}
+
+/* 2カラム */
+.purchase-grid{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:start}
+@media (max-width:850px){.purchase-grid{grid-template-columns:1fr}}
+
+/* 商品ヘッダ */
+.product-head{display:flex;gap:18px;align-items:center}
+.purchase-wrap .thumb{width:96px;height:96px;background:#f5f5f5;border-radius:8px;overflow:hidden;flex:0 0 96px}
+.purchase-wrpa .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.meta .title{font-weight:700;font-size:18px;margin:0}
+.meta .price{font-weight:800;font-size:20px;margin:.25rem 0 0}
+
+/* 横線：見本寄せ（やや太め＆薄グレー） */
+.divider{border:0;border-top:2px solid #e6e6e6;margin:18px 0 22px}
+
+/* セクション */
+.block{margin:26px 0}
+.block h2{font-size:15px;margin:0 0 12px;color:#222}
+
+/* 支払い方法トグル */
+.pay-toggle{display:grid;grid-template-columns:repeat(2, minmax(160px, 220px));gap:12px}
+.pay-option input{position:absolute;opacity:0;pointer-events:none}
+.pay-option span{
+  display:block;text-align:center;padding:10px 14px;border:2px solid #d9d9d9;border-radius:8px;
+  background:#fff;font-weight:600;transition:all .15s ease;user-select:none
+}
+.pay-option input:checked + span{border-color:#ff6b6b;background:#ffecec;box-shadow:0 0 0 2px #ffecec inset}
+
+/* 住所 */
+.addr-line{margin:.2rem 0}
+.change a{font-size:13px}
+
+/* 右上サマリカード */
+.summary-card{border:2px solid #dcdcdc;border-radius:8px;padding:18px;background:#fff}
+.summary-card .row{display:flex;justify-content:space-between;align-items:center;
+  padding:12px 10px;border-bottom:1px solid #ededed;font-size:15px}
+.summary-card .row:last-child{border-bottom:0}
+
+/* ボタン大きめ */
+.btn-primary{display:block;width:100%;padding:14px 18px;border:0;border-radius:8px;
+  background:#ff6b6b;color:#fff;font-weight:800;cursor:pointer;letter-spacing:.02em}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+/* 右カラムの購入ボックス / モバイル時は下に表示 */
+.buy-box{margin-top:14px}
+.buy-mobile{display:none}
+@media (max-width:850px){
+  .buy-box{display:none}
+  .buy-mobile{display:block;margin-top:16px}
+}
+
+/* エラー */
+.errors{color:#c00;margin:10px 0 0}
+.errors li{margin:.25rem 0}
+/* 支払い方法：カスタムプルダウン */
+.select{position:relative; width:360px; max-width:100%}
+.select-button{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:12px 16px; border:2px solid #d9d9d9; border-radius:8px; background:#fff;
+  font-weight:700; transition:box-shadow .15s ease, border-color .15s ease;
+}
+.select-button:focus{outline:none; box-shadow:0 0 0 3px #ffecec; border-color:#ff6b6b}
+.select .chevron{width:18px; height:18px}
+
+.select-menu{
+  position:absolute; top:100%; left:0; right:0; z-index:10; display:none;
+  background:#fff; border:2px solid #d9d9d9; border-top:none;
+  border-radius:0 0 8px 8px; box-shadow:0 8px 18px rgba(0,0,0,.05);
+}
+.select-menu.is-open{display:block}
+
+.select-option{padding:10px 14px; cursor:pointer}
+.select-option:hover{background:#f7f7f7}
+.select-option.is-selected{
+  background:#ffecec; border-left:3px solid #ff6b6b;
+}
+
+/* 右上サマリ＆全体の大きめレイアウト（前回からの続き） */
+.purchase-wrap{max-width:1180px;margin:28px auto;padding:0 32px;font-size:16px;line-height:1.6}
+.purchase-grid{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:start}
+@media (max-width:850px){.purchase-grid{grid-template-columns:1fr}}
+.summary-card{border:2px solid #dcdcdc;border-radius:8px;padding:18px;background:#fff}
+.summary-card .row{display:flex;justify-content:space-between;align-items:center;padding:12px 10px;border-bottom:1px solid #ededed}
+.summary-card .row:last-child{border-bottom:0}
+/* コンテナ & 2カラム */
+.purchase-wrap{max-width:1180px;margin:28px auto;padding:0 32px;font-size:16px;line-height:1.6}
+.purchase-wrap .purchase-grid{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:start}
+@media (max-width:850px){.purchase-wrap .purchase-grid{grid-template-columns:1fr}}
+
+/* 商品ヘッダ */
+.purchase-wrap .product-head{display:flex;gap:18px;align-items:center}
+.purchase-wrap .thumb{width:96px;height:96px;background:#f5f5f5;border-radius:8px;overflow:hidden;flex:0 0 96px}
+.purchase-wrap .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.purchase-wrap .meta .title{font-weight:700;font-size:18px;margin:0}
+.purchase-wrap .meta .price{font-weight:800;font-size:20px;margin:.25rem 0 0}
+
+/* 横線・セクション */
+.purchase-wrap .divider{border:0;border-top:2px solid #e6e6e6;margin:18px 0 22px}
+.purchase-wrap .block{margin:26px 0}
+.purchase-wrap .block h2{font-size:15px;margin:0 0 12px;color:#222}
+
+/* 支払い方法：カスタムプルダウン */
+.purchase-wrap .select{position:relative;width:360px;max-width:100%}
+.purchase-wrap .select-button{
+  width:100%;display:flex;align-items:center;justify-content:space-between;
+  padding:12px 16px;border:2px solid #d9d9d9;border-radius:8px;background:#fff;
+  font-weight:700;transition:box-shadow .15s ease,border-color .15s ease;
+}
+.purchase-wrap .select-button:focus{outline:none;box-shadow:0 0 0 3px #ffecec;border-color:#ff6b6b}
+.purchase-wrap .select .chevron{width:18px;height:18px}
+.purchase-wrap .select-menu{
+  position:absolute;top:100%;left:0;right:0;z-index:10;display:none;background:#fff;
+  border:2px solid #d9d9d9;border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 18px rgba(0,0,0,.05);
+}
+.purchase-wrap .select-menu.is-open{display:block}
+.purchase-wrap .select-option{padding:10px 14px;cursor:pointer}
+.purchase-wrap .select-option:hover{background:#f7f7f7}
+.purchase-wrap .select-option.is-selected{background:#ffecec;border-left:3px solid #ff6b6b}
+
+/* 住所 */
+.purchase-wrap .addr-line{margin:.2rem 0}
+.purchase-wrap .change a{font-size:13px}
+
+/* 右上サマリカード */
+.purchase-wrap .summary-card{border:2px solid #dcdcdc;border-radius:8px;padding:18px;background:#fff}
+.purchase-wrap .summary-card .row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:12px 10px;border-bottom:1px solid #ededed
+}
+.purchase-wrap .summary-card .row:last-child{border-bottom:0}
+
+/* ボタン（購入ページ内だけ） */
+.purchase-wrap .btn-primary{
+  display:block;width:100%;padding:14px 18px;border:0;border-radius:8px;
+  background:#ff6b6b;color:#fff;font-weight:800;cursor:pointer;letter-spacing:.02em
+}
+.purchase-wrap .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+/* 右カラム購入ボックス */
+.purchase-wrap .buy-box{margin-top:14px}
+.purchase-wrap .buy-mobile{display:none}
+@media (max-width:850px){
+  .purchase-wrap .buy-box{display:none}
+  .purchase-wrap .buy-mobile{display:block;margin-top:16px}
+}
+
+/* エラー */
+.purchase-wrap .errors{color:#c00;margin:10px 0 0}
+.purchase-wrap .errors li{margin:.25rem 0}
+
+/* ========== Purchase page scoped ========== */
+.purchase-wrap{max-width:1180px;margin:28px auto;padding:0 32px;font-size:16px;line-height:1.6}
+.purchase-wrap .purchase-grid{display:grid;grid-template-columns:1fr 380px;gap:36px;align-items:start}
+@media (max-width:850px){.purchase-wrap .purchase-grid{grid-template-columns:1fr}}
+
+.purchase-wrap .product-head{display:flex;gap:18px;align-items:center}
+.purchase-wrap .thumb{width:96px;height:96px;background:#f5f5f5;border-radius:8px;overflow:hidden;flex:0 0 96px}
+.purchase-wrap .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.purchase-wrap .meta .title{font-weight:700;font-size:18px;margin:0}
+.purchase-wrap .meta .price{font-weight:800;font-size:20px;margin:.25rem 0 0}
+
+.purchase-wrap .divider{border:0;border-top:2px solid #e6e6e6;margin:18px 0 22px}
+.purchase-wrap .block{margin:26px 0}
+.purchase-wrap .block h2{font-size:15px;margin:0 0 12px;color:#222}
+
+/* カスタムプルダウン */
+.purchase-wrap .select{position:relative;width:360px;max-width:100%}
+.purchase-wrap .select-button{width:100%;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border:2px solid #d9d9d9;border-radius:8px;background:#fff;font-weight:700;transition:box-shadow .15s ease,border-color .15s ease}
+.purchase-wrap .select-button:focus{outline:none;box-shadow:0 0 0 3px #ffecec;border-color:#ff6b6b}
+.purchase-wrap .select .chevron{width:18px;height:18px}
+.purchase-wrap .select-menu{position:absolute;top:100%;left:0;right:0;z-index:10;display:none;background:#fff;border:2px solid #d9d9d9;border-top:none;border-radius:0 0 8px 8px;box-shadow:0 8px 18px rgba(0,0,0,.05)}
+.purchase-wrap .select-menu.is-open{display:block}
+.purchase-wrap .select-option{padding:10px 14px;cursor:pointer}
+.purchase-wrap .select-option:hover{background:#f7f7f7}
+.purchase-wrap .select-option.is-selected{background:#ffecec;border-left:3px solid #ff6b6b}
+
+/* 住所/サマリ/ボタン */
+.purchase-wrap .addr-line{margin:.2rem 0}
+.purchase-wrap .change a{font-size:13px}
+
+.purchase-wrap .summary-card{border:2px solid #dcdcdc;border-radius:8px;padding:18px;background:#fff}
+.purchase-wrap .summary-card .row{display:flex;justify-content:space-between;align-items:center;padding:12px 10px;border-bottom:1px solid #ededed}
+.purchase-wrap .summary-card .row:last-child{border-bottom:0}
+
+.purchase-wrap .btn-primary{display:block;width:100%;padding:14px 18px;border:0;border-radius:8px;background:#ff6b6b;color:#fff;font-weight:800;cursor:pointer;letter-spacing:.02em}
+.purchase-wrap .btn-primary:disabled{opacity:.5;cursor:not-allowed}
+
+.purchase-wrap .buy-box{margin-top:14px}
+.purchase-wrap .buy-mobile{display:none}
+@media (max-width:850px){.purchase-wrap .buy-box{display:none}.purchase-wrap .buy-mobile{display:block;margin-top:16px}}
+
+.purchase-wrap .errors{color:#c00;margin:10px 0 0}
+.purchase-wrap .errors li{margin:.25rem 0}
+/* 見出し右側の「変更する」 */
+.purchase-wrap .block-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.purchase-wrap .block-head h2{font-size:15px;margin:0}
+.purchase-wrap .change-link{font-size:14px;color:#2563eb;text-decoration:none}
+.purchase-wrap .change-link:hover{text-decoration:underline}
+
+/* 3本のグレー横線（すでに .divider があればそのままでOK） */
+.purchase-wrap .divider{border:0;border-top:2px solid #e6e6e6;margin:18px 0 22px}
+
+/* 支払い方法：青/グレーの白文字ボックス */
+.purchase-wrap .pay-choices{display:flex;gap:16px;flex-wrap:wrap}
+.purchase-wrap .pay-btn{
+  min-width:200px;
+  padding:12px 16px;
+  border:0;
+  border-radius:8px;
+  background:#9aa3af;          /* グレー */
+  color:#fff;                   /* 白文字 */
+  font-weight:700;
+  cursor:pointer;
+  transition:transform .02s ease, box-shadow .2s, background .15s ease;
+}
+.purchase-wrap .pay-btn.is-active{background:#3b82f6;}  /* 選択時：青 */
+.purchase-wrap .pay-btn:focus{outline:none;box-shadow:0 0 0 3px rgba(59,130,246,.25)}
+.purchase-wrap .pay-btn:active{transform:translateY(1px)}
+/* --- 支払い方法：カスタムセレクト（購入ページ限定） --- */
+.purchase-wrap .pay-select{position:relative;width:360px;max-width:100%}
+
+/* 閉じている箱（見本の薄グレー枠） */
+.purchase-wrap .select-button{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; border:1.8px solid #b9bec6; border-radius:8px;
+  background:#fff; color:#111; font-weight:700; cursor:pointer;
+}
+.purchase-wrap .select-button[aria-expanded="true"]{border-color:#7f8894;}
+
+/* ▼アイコン */
+.purchase-wrap .chevron{width:18px; height:18px;}
+
+/* 開いたメニュー（濃いグレー地に白文字） */
+.purchase-wrap .select-menu{
+  position:absolute; top:100%; left:0; right:0; margin-top:6px; z-index:20;
+  display:none; list-style:none; padding:6px 0;
+  background:#5b6370; color:#fff; border-radius:8px; box-shadow:0 8px 18px rgba(0,0,0,.12);
+}
+.purchase-wrap .select-menu.is-open{display:block;}
+
+/* 各オプション */
+.purchase-wrap .select-option{
+  position:relative; padding:10px 14px 10px 36px; cursor:pointer; user-select:none;
+}
+.purchase-wrap .select-option:hover{background:#6a7483;}
+
+/* 選択中：青いハイライト＋チェック（白文字のまま） */
+.purchase-wrap .select-option.is-selected{background:#4f8df7;}
+.purchase-wrap .select-option.is-selected::before{
+  content:"✔"; position:absolute; left:12px; top:50%; transform:translateY(-50%);
+  font-size:13px; opacity:.95;
+}
+.select-menu{display:none;} .select-menu.is-open{display:block;}
+.select-option.is-selected{background:#4f8df7;color:#fff;}
+/* グリッド（今のままでOKならこのブロックは不要） */
+.item-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+/* サムネを正方形に固定して中の画像を塗りつぶし */
+.item-card .thumb{
+  position: relative;
+  aspect-ratio: 1 / 1;        /* 正方形に固定 */
+  overflow: hidden;
+  border-radius: 12px;         /* お好みで */
+  background: #f5f5f5;         /* 無画像時の下地色 */
+}
+
+.item-card .thumb img{
+  position: absolute;
+  inset: 0;                    /* top/right/bottom/left:0 の省略 */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* はみ出しをトリミング */
+  object-position: center;
+  display: block;
+}
+
+/* SOLDバッジがあるなら上に重ねる */
+.badge--sold{
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 1;
+}
+.items-wrap .item-card .thumb {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #f6f6f6;
+}
+.items-wrap .item-card .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+

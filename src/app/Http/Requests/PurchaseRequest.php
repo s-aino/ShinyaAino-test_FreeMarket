@@ -6,33 +6,31 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class PurchaseRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
-    public function rules(): array
+    public function rules()
     {
         return [
-            'payment_method' => ['required', 'string'],   // 必要なら in:card,bank,cod など
-            'address_id'     => ['required', 'integer', 'exists:addresses,id'],
+            'payment_method' => 'required|in:conveni,card',
+            'address_id'     => 'required|exists:addresses,id',
         ];
     }
 
-    public function messages(): array
+    public function attributes()
+    {
+        return ['payment_method' => '支払い方法', 'address_id' => '配送先'];
+    }
+
+    public function messages()
     {
         return [
             'payment_method.required' => '支払い方法を選択してください。',
-            'address_id.required'     => '配送先を選択してください。',
-            'address_id.exists'       => '選択した配送先が不正です。',
-        ];
-    }
-
-    public function attributes(): array
-    {
-        return [
-            'payment_method' => '支払い方法',
-            'address_id'     => '配送先',
+            'payment_method.in'       => '支払い方法の選択が不正です。',
+            'address_id.required'     => '配送先を登録してください。',
+            'address_id.exists'       => '配送先が見つかりません。',
         ];
     }
 }

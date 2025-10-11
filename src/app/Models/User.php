@@ -48,10 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Item::class);
     }
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
-    }
+    // public function addresses()
+    // {
+    //     return $this->hasMany(Address::class);
+    // }
     public function comments()
     {
         return $this->hasMany(Comment::class);
@@ -61,21 +61,19 @@ class User extends Authenticatable
         return $this->hasMany(Order::class, 'buyer_id');
     } // 購入履歴
 
-    public function defaultAddress()
-    {
-        return $this->hasOne(Address::class)->where('is_default', true);
-    }
+    // public function defaultAddress()
+    // {
+    //     return $this->hasOne(Address::class)->where('is_default', true);
+    // }
     // コメント等で呼べる: $user->avatar_url
     public function getAvatarUrlAttribute(): string
     {
-        if (!empty($this->profile_image_path)) {
-            // もし path が "public/..." で保存されていたら取り除いて正規化
-            $path = preg_replace('#^public/#', '', $this->profile_image_path);
-
-            // /storage/... の公開URLを返す（php artisan storage:link が前提）
-            return Storage::disk('public')->url($path);
+        $path = $this->profile_image_path;   // ←カラム名に合わせてください
+        if ($path && Storage::disk('public')->exists($path)) {
+            return Storage::url($path);      // /storage/.. 形式
         }
-
+        return asset('images/default-avatar.png'); // 既定の画像（なければ用意）
+    
         // 未設定時の丸いSVGプレースホルダ
         $initial = urlencode(mb_substr($this->name ?? 'U', 0, 1));
         return 'data:image/svg+xml;utf8,' . rawurlencode(
@@ -89,5 +87,21 @@ class User extends Authenticatable
     public function likes()
     {
         return $this->hasMany(\App\Models\Like::class);
+    }
+
+
+
+    // 住所一覧（複数）
+    public function address()
+    {
+        return $this->hasOne(Address::class)->where('is_default', true);
+    }
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
+    public function defaultAddress()
+    {
+        return $this->address();
     }
 }

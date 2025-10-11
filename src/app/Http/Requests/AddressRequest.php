@@ -6,30 +6,27 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class AddressRequest extends FormRequest
 {
-    public function authorize(): bool
+    public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
-    public function rules(): array
+    public function rules()
     {
         return [
-            'postal'  => ['required', 'regex:/^\d{3}-\d{4}$/'], // ハイフンあり8文字
-            'address' => ['required', 'string', 'max:255'],
+            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'], // 例: 123-4567
+            'address'     => ['required', 'max:255'],
+            'building'    => ['nullable', 'max:255'],
         ];
     }
 
-    public function messages(): array
+    public function attributes()
     {
-        return [
-            'postal.required' => '郵便番号を入力してください。',
-            'postal.regex'    => '郵便番号はハイフンありの8文字で入力してください。',
-            'address.required' => '住所を入力してください。',
-        ];
+        return ['postal_code' => '郵便番号', 'address' => '住所', 'building' => '建物名'];
     }
 
-    public function attributes(): array
+    public function messages()
     {
-        return ['postal' => '郵便番号', 'address' => '住所'];
+        return ['postal_code.regex' => '郵便番号は「123-4567」の形式で入力してください。'];
     }
 }

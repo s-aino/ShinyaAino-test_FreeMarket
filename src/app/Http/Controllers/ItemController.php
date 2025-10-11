@@ -53,13 +53,10 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         // 必要な関連を（存在すれば）読み込む
-        $with = ['comments.user:id,name', 'category:id,name']; // 単一カテゴリ
-        if (Schema::hasTable('category_item')) {               // 多カテゴリのピボットがあるなら
-            $with[] = 'categories:id,name';
-        }
+        $with =  ['comments.user',];
+        
 
         $item->loadMissing($with)->loadCount(['likes', 'comments']);
-
         // 表示用カテゴリ配列（多→単の順で優先）
         $categories = collect();
         if ($item->relationLoaded('categories') && $item->categories) {
