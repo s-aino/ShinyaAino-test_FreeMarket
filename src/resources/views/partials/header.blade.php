@@ -35,18 +35,24 @@ $showLogin = $showLogin ?? false;
             @guest
             @if($showLogin)
             <a class="nav__link" href="{{ route('login') }}">ログイン</a>
+            @else
+            <a class="nav__link hidden" href="#">ログイン</a>
             @endif
             @endguest
 
             {{-- 2) マイページ --}}
             @if($showMypage)
             <a class="nav__link" href="{{ auth()->check() ? route('mypage.show') : route('login') }}">マイページ</a>
+            @else
+            <a class="nav__link hidden" href="#">マイページ</a>
             @endif
 
             {{-- 3) 出品 --}}
             @if($showSell)
             <a class="nav__link btn-white"
                 href="{{ auth()->check() ? route('items.create') : route('login') }}">出品</a>
+            @else
+            <a class="nav__link btn btn--white hidden" href="#">出品</a>
             @endif
         </nav>
     </div>

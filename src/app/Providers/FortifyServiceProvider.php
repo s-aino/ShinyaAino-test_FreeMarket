@@ -10,6 +10,7 @@ use Laravel\Fortify\Contracts\RegisterResponse;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -20,7 +21,7 @@ class FortifyServiceProvider extends ServiceProvider
             return new class implements LoginResponse {
                 public function toResponse($request)
                 {
-                    return redirect()->intended('/'); // ← ここが最終遷移先
+                    return redirect()->intended(Session::pull('url.intended', '/'));
                 }
             };
         });
@@ -51,5 +52,15 @@ class FortifyServiceProvider extends ServiceProvider
                 return Limit::none();
             });
         }
+        // Fortify::authenticateThrough(function () {
+        //     return [
+        //         \Laravel\Fortify\Actions\AttemptToAuthenticate::class,
+        //         \Laravel\Fortify\Actions\EnsureLoginIsNotThrottled::class,
+        //         function ($request) {
+        //             // ログイン後 intended があればそこに飛ばす
+        //             return redirect()->intended(Session::pull('url.intended', '/'));
+        //         },
+        //     ];
+        // });
     }
 }

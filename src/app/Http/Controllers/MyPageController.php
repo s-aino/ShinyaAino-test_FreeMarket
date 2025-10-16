@@ -33,7 +33,7 @@ class MyPageController extends Controller
     {
         $user = $request->user();
         $address = $user->address()->first() ?? new Address;
-
+        $avatarSrc = $user->avatar_url;
         return view('profile.edit', compact('user', 'address'));
     }
 
@@ -67,7 +67,7 @@ class MyPageController extends Controller
         ];
 
         // これ1行で「is_default=1 のレコードを作成or更新」
-        $request->user()->addresses()->updateOrCreate(['is_default' => true], $data);        // --- 住所ここまで -------------------------------------------------------
+        $request->user()->address()->updateOrCreate(['is_default' => true], $data);        // --- 住所ここまで -------------------------------------------------------
 
         return redirect()->route('mypage.show')->with('message', 'プロフィールを更新しました。');
     }

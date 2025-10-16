@@ -32,9 +32,9 @@
     <div class="items-wrap">
         <div class="item-grid">
             @forelse($items as $item)
-            <a class="item-card" href="{{ url('/item/'.$item->id) }}">
+            <a class="item-card" href="{{ route('items.show',$item) }}">
                 <div class="thumb">
-                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}"> 
+                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}">
                     <!-- loading="lazy" decoding="async"> -->
                     @if($item->is_sold)
                     <span class="badge--sold">SOLD</span>

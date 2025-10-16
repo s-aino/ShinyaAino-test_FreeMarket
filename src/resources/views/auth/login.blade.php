@@ -7,8 +7,9 @@
 <div class="card">
     <h1>ログイン</h1>
 
-    <form method="POST" action="{{ route('login') }}"  class="auth-form" novalidate autocomplete="off">
+    <form method="POST" action="{{ route('login') }}" class="auth-form" novalidate autocomplete="off">
         @csrf
+        <input type="hidden" name="redirect" value="{{ session('url.intended') }}">
 
         <div class="form-row">
             <label class="label">メール</label>
@@ -28,6 +29,6 @@
         </div>
     </form>
 
-    <div class="helper"> <a href="{{ route('register') }}">会員登録はこちら</a></div>
+    <div class="helper"> <a href="{{ route('register') }}" class="auth-link">会員登録はこちら</a></div>
 </div>
 @endsection

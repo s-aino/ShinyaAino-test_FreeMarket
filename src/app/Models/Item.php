@@ -83,4 +83,18 @@ class Item extends Model
         if (!$user) return false;
         return $this->likes()->where('user_id', $user->id)->exists();
     }
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class, 'category_item');
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+    public function isSold()
+    {
+        return $this->orders()
+            ->where('status', 'paid')
+            ->exists();
+    }
 }

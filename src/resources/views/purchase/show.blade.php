@@ -87,9 +87,12 @@
                 </section>
 
                 <hr class="divider">
+                {{-- 支払い方法（JSが操作する hidden input） --}}
+                <input type="hidden" id="shadow_payment" name="payment_method" value="{{ old('payment_method') }}">
                 <div class="buy-mobile">
                     <button type="submit" class="btn-primary" {{ $address ? '' : 'disabled' }}>購入する</button>
                 </div>
+
             </form>
         </div>
 
@@ -97,98 +100,95 @@
         <aside class="right">
             <div class="summary-card">
                 <div class="row"><span>商品代金</span><span>¥{{ number_format($item->price) }}</span></div>
-                <div class="row">
-                    <span>支払い方法</span>
-                    <span id="summary_payment">
+                <span id="summary_payment">
+                    <div class="row">
+                        <span>支払い方法</span>
                         @switch(old('payment_method'))
                         @case('conveni') コンビニ払い @break
                         @case('card') カード支払い @break
                         @default ー
                         @endswitch
-                    </span>
-                </div>
+                </span>
             </div>
-
-            <form action="{{ route('purchase.store', $item->id) }}" method="POST" class="buy-box">
-                @csrf
-                {{-- ← 右は「送信用」hidden。必ず name="payment_method" を付ける --}}
-                <input type="hidden" name="payment_method" id="shadow_payment" value="{{ old('payment_method') }}">
-
-                @if($address)
-                <input type="hidden" name="address_id" value="{{ old('address_id', $address->id) }}">
-                @endif
-
-                <button type="submit" class="btn-primary" {{ $address ? '' : 'disabled' }}>購入する</button>
-            </form>
-        </aside>
     </div>
+
+    <form id="buy-form" method="POST" class="buy-box">
+        @csrf
+        <input type="hidden" id="shadow_payment" name="payment_method" value="{{ old('payment_method') }}">
+        @if($address)
+        <input type="hidden" name="address_id" value="{{ old('address_id', $address->id) }}">
+        @endif
+        <button type="submit" class="btn btn-purchase {{ $address ? '' : 'disabled' }}">購入する</button>
+    </form>
+    </aside>
+</div>
 </div>
 
 {{-- セレクト→サマリの表示をその場で同期（任意） --}}
 <script>
     (() => {
         const root = document.querySelector('[data-select]');
-        if (!root) return;
-
-        const btn = root.querySelector('[data-select-trigger]');
-        const label = root.querySelector('[data-label]');
-        const menu = root.querySelector('[data-menu]');
-        const items = Array.from(root.querySelectorAll('.select-option'));
-
-        // ← ここは上のIDに合わせています
-        const inputL = document.getElementById('payment_method'); // 左：表示用（nameなし）
-        const inputR = document.getElementById('shadow_payment'); // 右：送信用（nameあり）
-        const summary = document.getElementById('summary_payment'); // 右：表示
-
-        const textOf = v => v === 'conveni' ? 'コンビニ払い' :
-            v === 'card' ? 'カード支払い' :
-            '選択してください';
-
-        const open = () => {
-            menu.classList.add('is-open');
-            btn.setAttribute('aria-expanded', 'true');
-        };
-        const close = () => {
-            menu.classList.remove('is-open');
-            btn.setAttribute('aria-expanded', 'false');
-        };
-
-        function apply(val, text) {
-            if (inputL) inputL.value = val || '';
-            if (inputR) inputR.value = val || '';
-            if (label) label.textContent = text || textOf(val);
-            if (summary) summary.textContent = text || textOf(val);
-            items.forEach(x => x.classList.toggle('is-selected', x.dataset.value === val));
+        if (!root) {
+            console.log('data-select が見つかりません');
+            return;
         }
 
-        btn.addEventListener('click', () => {
-            const willOpen = !menu.classList.contains('is-open');
-            menu.classList.toggle('is-open', willOpen);
-            btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        const btn = root.querySelector('[data-select-trigger]');
+        const menu = root.querySelector('[data-menu]');
+        const items = root.querySelectorAll('.select-option');
+        const inputL = document.getElementById('payment_method');
+        const inputR = document.getElementById('shadow_payment');
+        const summary = document.getElementById('summary_payment');
+
+        // --- ▼ 開閉処理 ---
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            menu.classList.toggle('is-open');
+            btn.setAttribute('aria-expanded', menu.classList.contains('is-open'));
         });
 
+        // --- ▼ 外側クリックで閉じる ---
+        document.addEventListener('click', (e) => {
+            if (!root.contains(e.target)) {
+                menu.classList.remove('is-open');
+                btn.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // --- ▼ 選択処理 ---
         items.forEach(it => {
             it.addEventListener('click', () => {
-                apply(it.dataset.value, it.textContent.trim());
-                close();
+                const val = it.dataset.value;
+                inputL.value = val;
+                inputR.value = val;
+                summary.textContent = (val === 'conveni') ? 'コンビニ払い' :
+                    (val === 'card') ? 'カード支払い' : 'ーー';
+                menu.classList.remove('is-open');
             });
         });
 
-        document.addEventListener('click', e => {
-            if (!root.contains(e.target)) close();
-        });
-        root.addEventListener('keydown', e => {
-            if (e.key === 'Escape') close();
-        });
+        console.log('支払い方法JS起動 OK');
+        // --- ▼ 「購入する」ボタン押下時の処理 ---
+        const buyForm = document.getElementById('buy-form');
+        const itemId = @json($item-> id);
 
-        // 初期表示（old → 右hidden → 左hidden の順で復元）
-        const init = (inputR && inputR.value) || (inputL && inputL.value) || '';
-        if (init) {
-            const it = items.find(i => i.dataset.value === init);
-            apply(init, it ? it.textContent.trim() : textOf(init));
-        } else {
-            apply('', textOf(''));
+        if (buyForm) {
+            buyForm.addEventListener('submit', e => {
+                e.preventDefault();
+                const val = inputR.value;
+
+                if (val === 'card') {
+                    // Stripe（カード支払い）
+                    window.location.href = `/purchase/checkout/${itemId}`;
+                } else if (val === 'conveni') {
+                    // コンビニ払いダミー
+                    window.location.href = `/purchase/konbini/${itemId}`;
+                } else {
+                    alert('支払い方法を選択してください。');
+                }
+            });
         }
+
     })();
 </script>
 @endsection

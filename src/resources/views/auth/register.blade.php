@@ -38,7 +38,7 @@
     </div>
 
     <div class="helper">
-      <a href="{{ route('login') }}">ログインはこちら</a>
+      <a href="{{ route('login') }}"class="auth-link">ログインはこちら</a>
     </div>
   </form>
 </div>

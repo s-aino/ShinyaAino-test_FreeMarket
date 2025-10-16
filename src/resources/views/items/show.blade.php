@@ -96,12 +96,14 @@
 
             <div class="actions">
                 @auth
+                @if($item->status === 'sold')
+                <button class="btn btn--disabled" disabled>売り切れ</button>
+                @else
                 <a class="btn btn--primary btn--square"
-                    href="{{ route('purchase.create', $item) }}">
+                    href="{{ route('purchase.show', ['item' => $item->id]) }}">
                     購入手続きへ
                 </a>
-                @else
-                <a class="btn btn--primary btn--square" href="{{ route('login') }}">ログインして購入する</a>
+                @endif
                 @endauth
             </div> {{-- 商品説明 --}}
             @if(!empty($item->description))
@@ -134,7 +136,7 @@
             </section>
 
             {{-- コメント一覧 --}}
-            <section  class="detail__section detail__section--comments">
+            <section class="detail__section detail__section--comments">
                 <h2>コメント（{{ $item->comments_count ?? $item->comments()->count() }}）</h2>
                 …
 

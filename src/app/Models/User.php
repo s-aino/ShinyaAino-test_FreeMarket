@@ -73,7 +73,7 @@ class User extends Authenticatable
             return Storage::url($path);      // /storage/.. 形式
         }
         return asset('images/default-avatar.png'); // 既定の画像（なければ用意）
-    
+
         // 未設定時の丸いSVGプレースホルダ
         $initial = urlencode(mb_substr($this->name ?? 'U', 0, 1));
         return 'data:image/svg+xml;utf8,' . rawurlencode(
@@ -91,17 +91,8 @@ class User extends Authenticatable
 
 
 
-    // 住所一覧（複数）
     public function address()
     {
-        return $this->hasOne(Address::class)->where('is_default', true);
-    }
-    public function addresses()
-    {
-        return $this->hasMany(Address::class);
-    }
-    public function defaultAddress()
-    {
-        return $this->address();
+        return $this->hasOne(Address::class);
     }
 }

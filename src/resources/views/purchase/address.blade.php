@@ -1,39 +1,56 @@
 @extends('layouts.app')
+@section('title', $item->title ?? '')
+
+@section('header')
+@include('partials.header', [
+'showSearch' => true,
+'showLogin' => true,
+'showMypage' => true,
+'showSell' => true,
+])
+@endsection
 
 @section('content')
-<div class="address-wrap">
+<div class="address-edit">
     <h1>住所の変更</h1>
 
-    @if ($errors->any())
-    <ul class="errors">@foreach($errors->all() as $e)<li>{{ $e }}</li>@endforeach</ul>
+    @if (session('message'))
+    <p class="success-message">{{ session('message') }}</p>
     @endif
 
-    <form action="{{ route('purchase.address.update', $item->id) }}" method="POST" class="address-form">
+    <form action="{{ route('purchase.address.update', ['item' => $item->id]) }}" method="POST">
         @csrf
-        <label class="field"><span>郵便番号</span>
-            <input type="text" name="postal_code" placeholder="123-4567"
-                value="{{ old('postal_code', optional($address)->postal_code) }}" required>
-        </label>
+        @method('PUT')
 
-        <label class="field"><span>都道府県</span>
-            <input type="text" name="prefecture" value="{{ old('prefecture', optional($address)->prefecture) }}" required>
-        </label>
+        <div class="form-group">
+            <label for="postal_code">郵便番号</label>
+            <input type="text" id="postal_code" name="postal_code"
+                value="{{ old('postal_code', $address->postal ?? '') }}">
+            @error('postal_code')
+            <p class="error-message">{{ $message }}</p>
+            @enderror
+        </div>
 
-        <label class="field"><span>市区町村</span>
-            <input type="text" name="city" value="{{ old('city', optional($address)->city) }}" required>
-        </label>
+        <div class="form-group">
+            <label for="line1">住所</label>
+            <input type="text" id="line1" name="line1"
+                value="{{ old('line1', $address->line1 ?? '') }}">
+            @error('line1')
+            <p class="error-message">{{ $message }}</p>
+            @enderror
+        </div>
 
-        <label class="field"><span>住所（番地）</span>
-            <input type="text" name="address_line1" value="{{ old('address_line1', optional($address)->address_line1) }}" required>
-        </label>
+        <div class="form-group">
+            <label for="line2">建物名</label>
+            <input type="text" id="line2" name="line2"
+                value="{{ old('line2', $address->line2 ?? '') }}">
+            @error('line2')
+            <p class="error-message">{{ $message }}</p>
+            @enderror
+        </div>
 
-        <label class="field"><span>建物名（任意）</span>
-            <input type="text" name="address_line2" value="{{ old('address_line2', optional($address)->address_line2) }}">
-        </label>
-
-        <div class="actions">
-            <button type="submit" class="btn-primary">更新する</button>
-            <a href="{{ route('purchase.create', $item->id) }}" class="btn-secondary">戻る</a>
+        <div class="btn-area">
+            <button type="submit" class="btn-red">更新する</button>
         </div>
     </form>
 </div>

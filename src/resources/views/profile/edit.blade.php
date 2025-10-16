@@ -3,7 +3,7 @@
 @section('title', 'プロフィール設定')
 
 @section('header')
-@include('partials.header', ['showSearch' => true, 'showLogin' => false])
+@include('partials.header', ['showSearch' => true, 'showMypage' => true, 'showSell' => true])
 @endsection
 
 @section('content')
