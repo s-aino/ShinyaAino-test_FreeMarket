@@ -11,6 +11,7 @@ class Address extends Model
         'postal',
         'line1',
         'line2',
+        'is_temporary',
     ];
 
     public function user()

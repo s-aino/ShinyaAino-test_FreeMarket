@@ -11,11 +11,6 @@
 <div class="card">
   <h1>マイページ</h1>
 
-  @if(session('message'))
-  <div class="alert alert-success" style="margin:8px 0 16px;color:#166534;">
-    {{ session('message') }}
-  </div>
-  @endif
 
   <p>ようこそ、<strong>{{ $user->name }}</strong> さん。</p>
   <ul>

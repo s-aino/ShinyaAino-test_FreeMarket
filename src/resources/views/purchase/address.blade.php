@@ -14,9 +14,6 @@
 <div class="address-edit">
     <h1>住所の変更</h1>
 
-    @if (session('message'))
-    <p class="success-message">{{ session('message') }}</p>
-    @endif
 
     <form action="{{ route('purchase.address.update', ['item' => $item->id]) }}" method="POST">
         @csrf

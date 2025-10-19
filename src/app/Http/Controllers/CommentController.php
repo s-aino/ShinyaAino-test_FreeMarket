@@ -61,6 +61,6 @@ class CommentController extends Controller
             'user_id' => $request->user()->id,
             'body'    => $validated['body'],
         ]);
-        return back()->with('success(,コメントを投稿しました');
+        return back()->with('message', 'コメントを投稿しました。');
     }
 }

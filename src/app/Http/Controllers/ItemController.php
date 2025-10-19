@@ -52,10 +52,14 @@ class ItemController extends Controller
 
     public function show(Item $item)
     {
-        // 関連データを読み込み
-        $item->loadMissing(['comments.user'])
+        // 関連データを読み込み（コメントは古い順）
+        $item->loadMissing([
+            'comments' => function ($query) {
+                $query->orderBy('created_at', 'asc'); // ← 追加：古い順に表示
+            },
+            'comments.user'
+        ])
             ->loadCount(['likes', 'comments']);
-
         // カテゴリの取得（複数対応）
         $categories = collect();
         if ($item->relationLoaded('categories') && $item->categories) {

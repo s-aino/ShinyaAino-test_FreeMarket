@@ -24,33 +24,17 @@ class PurchaseController extends Controller
             Session::put('url.intended', route('purchase.show', ['item_id' => $item->id]));
             return redirect()->route('login');
         }
-        $address = auth()->user()->address; // nullでもOK
+        $user = auth()->user();
+
+        // ✅ セッションに一時住所があればそれを優先
+        $tempAddress = session('temp_address_id')
+            ? \App\Models\Address::find(session('temp_address_id'))
+            : null;
+
+        // ✅ 一時住所があればそれを、なければ登録住所を使用
+        $address = $tempAddress ?? $user->address;
+
         return view('purchase.show', compact('item', 'address'));
-    }
-
-    // 購入処理 (purchase.store)
-    public function store(Request $request, Item $item)
-    {
-        $user = $request->user();
-
-        // 自分の出品は購入不可
-        if ($item->user_id === $user->id) {
-            abort(403, '自分の出品は購入できません。');
-        }
-
-        // 売切れチェック
-        if (method_exists($item, 'isSold') && $item->isSold()) {
-            abort(403, 'この商品は売り切れです。');
-        }
-
-        // 住所取得
-        $address = $user->address()->first();
-
-        // ここに購入処理（注文作成や在庫更新など）を書く予定
-        // いまは仮でリダイレクト
-        return redirect()
-            ->route('purchase.show', ['item' => $item->id])
-            ->with('message', '購入処理を実行しました。');
     }
 
     // 住所変更画面
@@ -61,116 +45,160 @@ class PurchaseController extends Controller
     }
 
 
+    // 住所変更更新（今回のみの配送先）
     public function updateAddress(AddressRequest $request, Item $item)
     {
         $user = auth()->user();
 
-        // 単一住所として上書き
-        $user->address()->updateOrCreate(
-            [], // user_idは自動で補われる
-            [
-                'postal' => $request->postal_code,
-                'line1'  => $request->line1,
-                'line2'  => $request->line2,
-            ]
-        );
+        // 一時住所として新規登録
+        $tempAddress = $user->addresses()->create([
+            'postal'        => $request->postal_code,
+            'line1'         => $request->line1,
+            'line2'         => $request->line2,
+            'is_temporary'  => true, // ← 重要！
+        ]);
+
+        // 購入ページで使う一時住所IDをセッションに保存
+        session(['temp_address_id' => $tempAddress->id]);
 
         return redirect()
             ->route('purchase.show', ['item' => $item->id])
-            ->with('message', '住所を更新しました。');
+            ->with('message', '今回の配送先を変更しました。');
     }
-    public function checkout(Item $item)
-    {
-        // Stripe初期設定
-        Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
-        // 商品情報
-        $session = CheckoutSession::create([
-            'payment_method_types' => ['card'],
-            'line_items' => [[
-                'price_data' => [
-                    'currency' => 'jpy',
-                    'product_data' => [
-                        'name' => $item->title,
-                    ],
-                    'unit_amount' => $item->price,
-                ],
-                'quantity' => 1,
-            ]],
-            'mode' => 'payment',
-            'success_url' => route('purchase.success', ['item' => $item->id]),
-            'cancel_url' => route('purchase.show', ['item' => $item->id]),
+    public function checkout(Request $request, Item $item)
+    {
+        \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
+
+        $user = $request->user();
+
+        // --- バリデーション ---
+        $request->validate([
+            'payment_method' => 'required|in:card,conveni',
+            'address_id' => 'required|exists:addresses,id',
         ]);
 
-        // Stripe決済ページへリダイレクト
-        return redirect($session->url);
-    }
-    // コンビニ支払い（ダミー用）
-    public function konbini(Item $item)
-    {
-        // ダミーで購入完了処理
-        $item->update(['status' => 'sold']);
+        // --- 自分の出品は購入不可 ---
+        if ($item->user_id === $user->id) {
+            abort(403, '自分の出品は購入できません。');
+        }
 
-        // 成功ページへ
-        return view('purchase.success', compact('item'))
-            ->with('message', 'コンビニ支払いが完了しました（ダミー）');
+        // --- 売り切れチェック ---
+        if (method_exists($item, 'isSold') && $item->isSold()) {
+            abort(403, 'この商品は売り切れです。');
+        }
+
+        // --- 支払い方法で分岐 ---
+        $method = $request->input('payment_method');
+        $types = [];
+
+        if ($method === 'card') {
+            $types = ['card'];
+            $successUrl = route('purchase.success', ['item' => $item->id]);
+            $cancelUrl = route('purchase.show', ['item' => $item->id]);
+
+            // 💳 Stripe セッション作成（この時点ではDB登録しない）
+            $session = \Stripe\Checkout\Session::create([
+                'payment_method_types' => $types,
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => 'jpy',
+                        'product_data' => ['name' => $item->title],
+                        'unit_amount' => $item->price,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => $successUrl,
+                'cancel_url' => $cancelUrl,
+            ]);
+
+            // Stripe画面へ遷移（ここではまだDB登録しない）
+            return redirect($session->url);
+        }
+
+        // --- 🏪 コンビニ払い ---
+        if ($method === 'conveni') {
+            $existingOrder = Order::where('buyer_id', $user->id)
+                ->where('item_id', $item->id)
+                ->first();
+
+            if (!$existingOrder) {
+                Order::create([
+                    'buyer_id' => $user->id,
+                    'item_id' => $item->id,
+                    'address_id' => $request->input('address_id'),
+                    'price' => $item->price,
+                    'qty' => 1,
+                    'status' => 'paid',
+                    'ordered_at' => now(),
+                ]);
+
+            }
+            $item->update(['status' => 'sold']);
+
+            return view('purchase.success', compact('item'))
+                ->with('message', '購入が完了しました（コンビニ払い）');
+        }
+
+        // fallback
+        return redirect()
+            ->route('purchase.show', ['item' => $item->id])
+            ->with('message', '支払い方法を選択してください。');
     }
     public function success(Item $item)
     {
         $user = auth()->user();
 
-        // 既に購入済みでない場合のみ登録
         $existingOrder = Order::where('buyer_id', $user->id)
             ->where('item_id', $item->id)
             ->first();
 
         if (!$existingOrder) {
             Order::create([
-                'buyer_id'   => $user->id,
-                'item_id'    => $item->id,
+                'buyer_id' => $user->id,
+                'item_id' => $item->id,
                 'address_id' => optional($user->address)->id,
-                'price'      => $item->price,
-                'qty'        => 1,
-                'status'     => 'paid',
+                'price' => $item->price,
+                'qty' => 1,
+                'status' => 'paid',
                 'ordered_at' => now(),
             ]);
 
-            // ✅ 確実に status を更新（Eloquentではなく直接クエリ）
-            Item::where('id', $item->id)->update(['status' => Item::STATUS_SOLD]);
+            $item->update(['status' => 'sold']);
         }
 
-        return view('purchase.success', compact('item'));
+        return view('purchase.success', compact('item'))
+            ->with('message', '決済が完了しました。');
     }
 
-    // public function konbiniCheckout(Item $item)
-    // {
-    //     Stripe::setApiKey(config('services.stripe.secret'));
+    public function pending(Item $item)
+    {
+        return view('purchase.pending', compact('item'));
+    }
 
-    //     // 支払金額（円単位で整数指定）
-    //     $amount = $item->price;
+    public function tempAddress(Request $request, Item $item)
+    {
+        $validated = $request->validate([
+            'postal_code' => 'required|string|max:10',
+            'line1' => 'required|string|max:255',
+            'line2' => 'nullable|string|max:255',
+        ]);
 
-    //     // PaymentIntentを作成
-    //     $paymentIntent = PaymentIntent::create([
-    //         'amount' => $amount,
-    //         'currency' => 'jpy',
-    //         'payment_method_types' => ['konbini'],
-    //         'description' => "商品ID: {$item->id} の購入（コンビニ払い）",
-    //         'metadata' => [
-    //             'item_id' => $item->id,
-    //             'user_id' => auth()->id(),
-    //         ],
-    //     ]);
+        // 一時住所を保存（既存住所を上書きしない）
+        $address = \App\Models\Address::create([
+            'user_id' => auth()->id(),
+            'postal' => $validated['postal_code'],
+            'line1' => $validated['line1'],
+            'line2' => $validated['line2'],
+            'is_temporary' => true,
+        ]);
 
-    //     return view('purchase.konbini', [
-    //         'item' => $item,
-    //         'clientSecret' => $paymentIntent->client_secret,
-    //     ]);
-    // }
+        // 一時住所IDをセッションに保存
+        session(['temp_address_id' => $address->id]);
 
-    // public function konbiniSuccess(Item $item)
-    // {
-    //     // 成功画面。実際にはWebhookで更新するのが正ですが、まずは手動で。
-    //     $item->update(['status' => 'sold']);
-    //     return view('purchase.konbini_success', compact('item'));
-    // }
+        return redirect()
+            ->route('purchase.show', ['item' => $item->id])
+            ->with('message', '今回の配送住所を登録しました');
+    }
 }

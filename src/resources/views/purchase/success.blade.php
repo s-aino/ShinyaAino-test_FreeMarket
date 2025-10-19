@@ -9,6 +9,7 @@
 'showSell' => true,
 ])
 @endsection
+
 @section('content')
 <div class="container text-center mt-5">
     <h2>ご購入ありがとうございました！</h2>

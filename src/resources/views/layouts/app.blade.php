@@ -23,12 +23,30 @@
   'showRegister' => false,
   ])
   @endif
+  @if (session('message'))
+  <p id="flash-message" class="flash-message">
+    {{ session('message') }}
+  </p>
+  @endif
 
   {{-- メイン本文 --}}
   <main class="main-container">
     @yield('content')
   </main>
 
+  <script>
+    // メッセージを3秒後にフェードアウト
+    document.addEventListener('DOMContentLoaded', () => {
+      const flash = document.getElementById('flash-message');
+      if (flash) {
+        setTimeout(() => {
+          flash.style.transition = 'opacity 0.5s';
+          flash.style.opacity = '0';
+          setTimeout(() => flash.remove(), 500);
+        }, 3000);
+      }
+    });
+  </script>
 </body>
 
 </html>

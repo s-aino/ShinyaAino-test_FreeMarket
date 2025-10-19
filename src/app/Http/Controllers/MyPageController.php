@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Address;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
 class MyPageController extends Controller
 {
@@ -19,8 +21,12 @@ class MyPageController extends Controller
     // GET /mypage/purchases
     public function purchases()
     {
-        // TODO: ユーザーの購入履歴を取得して渡す
-        return view('mypage.purchases');
+        $orders = Order::with('item')
+            ->where('buyer_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('mypage.purchases', compact('orders'));
     }
 
     // GET /mypage/sales

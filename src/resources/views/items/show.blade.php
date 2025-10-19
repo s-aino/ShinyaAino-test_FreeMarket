@@ -105,7 +105,14 @@
                 </a>
                 @endif
                 @endauth
-            </div> {{-- 商品説明 --}}
+
+                @guest
+                <a href="{{ route('login', ['redirect_to' => route('purchase.show', ['item' => $item->id])]) }}"
+                    class="btn btn--primary btn--square">
+                    ログインして購入手続きへ
+                </a>
+                @endguest
+            </div>
             @if(!empty($item->description))
             <section class="detail__section">
                 <h2>商品説明</h2>
@@ -143,11 +150,19 @@
                 @forelse ($item->comments as $comment)
                 <article class="cmt">
                     {{-- アバター（左の列） --}}
-                    <img
-                        class="cmt__avatar"
-                        src="{{ $comment->user->avatar_url }}"
-                        alt="{{ $comment->user->name }} のアイコン">
-
+                    <div class="cmt_avatar">
+                        @if (!empty($comment->user->profile_image_path))
+                        {{-- プロフィール画像あり --}}
+                        <img src="{{ asset('storage/' . $comment->user->profile_image_path) }}"
+                            alt="{{ $comment->user->name }}のアイコン">
+                        @else
+                        {{-- プロフィール画像なし → 名前の頭文字を表示 --}}
+                        @php
+                        $initial = mb_substr($comment->user->name, 0, 1); // 名前の先頭1文字
+                        @endphp
+                        <div class="avatar-placeholder">{{ $initial }}</div>
+                        @endif
+                    </div>
                     {{-- 名前＋時刻（右の列の1行目） --}}
                     <div class="cmt__meta">
                         <strong class="cmt__user">{{ $comment->user->name }}</strong>
