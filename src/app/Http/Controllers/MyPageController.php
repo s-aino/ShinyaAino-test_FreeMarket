@@ -11,24 +11,25 @@ use App\Models\Order;
 
 class MyPageController extends Controller
 {
-    // GET /mypage
-    public function show(Request $r)
+    public function show()
     {
-        $user = $r->user();
-        $address = $user->address()->first();   // is_default=true の1件
-        return view('mypage.show', compact('user', 'address'));
-    }
-    // GET /mypage/purchases
-    public function purchases()
-    {
-        $orders = Order::with('item')
-            ->where('buyer_id', Auth::id())
-            ->orderBy('created_at', 'desc')
+        $user = auth()->user();
+
+        // 出品した商品（そのままでOK）
+        $sellingItems = $user->items()
+            ->with('images')
+            ->latest()
             ->get();
 
-        return view('mypage.purchases', compact('orders'));
-    }
+        // 購入した商品（Order経由 → Itemコレクションへ変換）
+        $purchasedItems = \App\Models\Order::where('buyer_id', $user->id)
+            ->with('item')     // itemリレーションを一度にロード
+            ->latest()
+            ->get()
+            ->pluck('item');   // ← ここでItemのコレクションだけ取り出す！
 
+        return view('mypage.show', compact('user', 'sellingItems', 'purchasedItems'));
+    }
     // GET /mypage/sales
     public function sales()
     {

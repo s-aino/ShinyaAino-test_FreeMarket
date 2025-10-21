@@ -1,0 +1,80 @@
+/* =====================================
+   商品一覧ページ専用CSS
+===================================== */
+
+/* タブ */
+.tabs {
+  display: flex;
+  gap: 24px;
+  margin-top: 30px;
+  font-weight: 500;
+  border-bottom: 1px solid #ddd;
+}
+
+.tab {
+  padding-bottom: 8px;
+  color: #666;
+  transition: color 0.2s, border-color 0.2s;
+}
+
+.tab.is-active {
+  color: #ff3b30;
+  border-bottom: 2px solid #ff3b30;
+}
+
+/* 上下余白を広げる */
+.items-wrap {
+  margin: 40px 0;
+}
+
+/* 商品グリッド */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 40px;
+  margin-top: 24px;
+}
+
+.item-card {
+  position: relative;
+  background-color: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.item-card:hover {
+  transform: translateY(-4px);
+}
+
+/* 商品画像 */
+.item-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+/* ✅ 商品名：画像の外・左下（黒文字） */
+.item-card .title {
+  position: relative;
+  margin-top: 6px;
+  margin-left: 4px;
+  color: #000;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: left;
+  display: block;
+}
+
+/* ✅ SOLDバッジ：画像の左上に固定 */
+.item-card .badge--sold {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  font-size: 16px;
+  padding: 4px 8px;
+  border-radius: 4px;
+}

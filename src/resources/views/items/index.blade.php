@@ -59,3 +59,7 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/items-index.css') }}?v={{ filemtime(public_path('css/items-index.css')) }}">
+@endpush

@@ -1,10 +1,8 @@
-{{-- resources/views/partials/header.blade.php --}}
 @php
 $showSearch = $showSearch ?? false;
 $showMypage = $showMypage ?? false;
 $showSell = $showSell ?? false;
 $showLogin = $showLogin ?? false;
-// 会員登録ボタンはもう使わないなら削除
 @endphp
 
 <header class="header">
@@ -49,7 +47,7 @@ $showLogin = $showLogin ?? false;
 
             {{-- 3) 出品 --}}
             @if($showSell)
-            <a class="nav__link btn-white"
+            <a class="nav__link btn--white"
                 href="{{ auth()->check() ? route('items.create') : route('login') }}">出品</a>
             @else
             <a class="nav__link btn btn--white hidden" href="#">出品</a>
