@@ -1,0 +1,110 @@
+/* ==============================
+   配送先変更ページ（背景一体・中央寄せ）
+============================== */
+.address-edit {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 0;
+  background: transparent;
+  text-align: center;
+}
+
+/* タイトル中央寄せ */
+.address-edit h1,
+.address-edit h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+/* ==============================
+   入力フォーム
+============================== */
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px; /* ← 入力欄間の距離を1.5倍ほど広く */
+}
+
+.form-group {
+  width: 100%;
+  max-width: 480px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* input */
+.form-group input[type="text"] {
+  width: 100%;
+  height: 45px;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #333;
+  background-color: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* フォーカス時 */
+.form-group input[type="text"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+  outline: none;
+}
+
+/* エラーメッセージ */
+.error-message {
+  color: #ff4d4d;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+/* ==============================
+   ボタン
+============================== */
+.btn-area {
+  width: 100%;
+  max-width: 480px; /* ← テキストボックスと同じ幅 */
+  margin-top: 10px;
+}
+
+.btn-red {
+  width: 100%; /* ← 横幅をぴったり合わせる */
+  background-color: #ff6b6b;
+  color: #fff;
+  font-weight: 600;
+  padding: 12px 0;
+  font-size: 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-red:hover {
+  background-color: #ff4444;
+}
+
+/* ==============================
+   レスポンシブ対応
+============================== */
+@media (max-width: 768px) {
+  .address-edit {
+    margin: 60px auto;
+    max-width: 90%;
+  }
+  form {
+    gap: 24px;
+  }
+}

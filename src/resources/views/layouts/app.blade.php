@@ -7,6 +7,7 @@
   <title>@yield('title', 'アプリ')</title>
   <link rel="stylesheet" href="{{ asset('css/app.css') }}?v={{ filemtime(public_path('css/app.css')) }}">
   @stack('styles')
+  @stack('css')
 </head>
 
 <body>
@@ -41,9 +42,12 @@
       const flash = document.getElementById('flash-message');
       if (flash) {
         setTimeout(() => {
-          flash.style.transition = 'opacity 0.5s';
+          flash.style.transition = 'opacity 0.5s ease';
           flash.style.opacity = '0';
-          setTimeout(() => flash.remove(), 500);
+          // フェードアウト後も高さを維持して「カクッ」と上がらないようにする
+          setTimeout(() => {
+            flash.style.visibility = 'hidden';
+          }, 500);
         }, 3000);
       }
     });

@@ -1,0 +1,160 @@
+/* ▼ 全体 */
+.mypage-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 80px;
+    box-sizing: border-box;
+}
+
+/* ▼ プロフィールブロック */
+.profile-block {
+    display: flex;
+    align-items: center;
+    /* アバターとテキストを縦位置中央に揃える */
+    justify-content: flex-start;
+    /* 左寄せ配置 */
+    gap: 40px;
+    /* アバターと名前群の間隔 */
+    margin: 40px auto;
+    max-width: 960px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.profile-image,
+.profile-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #e6e6e6;
+    flex-shrink: 0;
+}
+
+.profile-info {
+    display: flex;
+    align-items: center;
+    /* ← 中央揃え（横） */
+    gap: 20px;
+}
+
+.user-name {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #333;
+    margin-left: 20px;
+}
+
+.btn-profile-edit {
+    position: absolute;
+    right: 80px;
+    /* ← 固定位置を右端から調整（見本よりやや左） */
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 8px 16px;
+    font-size: 1.2rem;
+    border: 2px solid #ff5d5d;
+    color: #ff5d5d;
+    border-radius: 6px;
+    background: #fff;
+    transition: 0.2s;
+}
+
+.btn-profile-edit:hover {
+    background-color: #ff5d5d;
+    color: #fff;
+}
+
+.profile-info {
+    position: relative;
+    flex: 1;
+}
+
+/* ▼ タブ */
+.mypage-tabs {
+    display: flex;
+    gap: 40px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+.tab {
+    background: none;
+    border: none;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #666;
+    padding: 10px 20px;
+    cursor: pointer;
+    position: relative;
+}
+
+.tab.active {
+    color: #ff5d5d;
+}
+
+.tab.active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #ff5d5d;
+}
+
+/* ▼ 商品グリッド */
+.items-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.item-card {
+    background: #fff;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.item-card img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.item-image-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.item-image-wrapper img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+
+.item-name {
+    margin-top: 8px;
+    font-weight: 600;
+    text-align: left;
+    width: 100%;
+}
+
+/* ▼ 切替非表示 */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+

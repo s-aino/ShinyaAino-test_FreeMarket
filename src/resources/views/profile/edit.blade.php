@@ -10,7 +10,6 @@
 @php
 /** @var \App\Models\User $user */
 /** @var \App\Models\Address|null $address */
-$addr = $address ?? null;
 
 // プレビュー用アバター（画像未設定なら丸いグレーのプレースホルダSVG）
 $avatarSrc = $user->profile_image_path
@@ -43,13 +42,13 @@ $avatarSrc = $user->profile_image_path
     @csrf
 
     {{-- 画像 --}}
-    <div class="form-row" style="display:flex;gap:16px;align-items:center;justify-content:center;margin:12px 0 18px;">
+    <div class="form-row avatar-row">
       <img id="avatarPreview" class="avatar"
         src="{{ $avatarSrc }}"
         alt="avatar"
         style="width:96px;height:96px;border-radius:9999px;object-fit:cover;display:block;">
       <label for="profile_image"
-        class="btn btn--outline btn--sm"
+        class="btn btn--outline btn--select-image"
         style="margin:0;cursor:pointer">
         画像を選択する
       </label>
@@ -75,30 +74,27 @@ $avatarSrc = $user->profile_image_path
     {{-- 郵便番号 --}}
     <div class="form-row">
       <label class="label">郵便番号</label>
-      <input class="input" type="text" name="postal"
-        value="{{ old('postal', optional($addr)->postal) }}">
+      <input class="input" type="text" name="postal" value="{{ old('postal', $address->postal ?? '') }}">
       @error('postal') <div class="error">{{ $message }}</div> @enderror
     </div>
 
     {{-- 住所（addresses.line1 を使用） --}}
     <div class="form-row">
       <label class="label">住所</label>
-      <input class="input" type="text" name="address"
-        value="{{ old('address', optional($addr)->line1) }}">
+      <input class="input" type="text" name="address" value="{{ old('address', $address->line1 ?? '') }}">
       @error('address') <div class="error">{{ $message }}</div> @enderror
     </div>
 
     {{-- 建物名（addresses.line2 を使用） --}}
     <div class="form-row">
       <label class="label">建物名</label>
-      <input class="input" type="text" name="building"
-        value="{{ old('building', optional($addr)->line2) }}">
-      @error('building') <div class="error">{{ $message }}</div> @enderror
+      <input class="input" type="text" name="building" value="{{ old('building', $address->line2 ?? '') }}">
+       @error('building') <div class="error">{{ $message }}</div> @enderror
     </div>
 
     {{-- 送信ボタン（入力と同幅に） --}}
     <div class="form-actions">
-      <button type="submit" class="btn btn--primary">更新する</button>
+      <button type="submit" class="btn btn--update">更新する</button>
     </div>
   </form>
 </div>
@@ -115,5 +111,7 @@ $avatarSrc = $user->profile_image_path
     reader.readAsDataURL(file);
   });
 </script>
-
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/address-edit.css') }}">
+@endpush
 @endsection

@@ -17,14 +17,13 @@
     <form action="{{ route('purchase.checkout', $item->id) }}" method="POST" class="purchase-form">
         @csrf
         <div class="purchase-grid">
-
             {{-- ▼ 左カラム --}}
             <div class="left">
 
                 {{-- 商品ヘッダ --}}
                 <div class="product-head">
                     <div class="thumb">
-                        <img src="{{ $item->image_url ?? asset('img/placeholder.png') }}" alt="商品画像">
+                        <img src="{{ asset($item->image_path) }}" alt="{{ $item->title }}">
                     </div>
                     <div class="meta">
                         <p class="title">{{ $item->name ?? $item->title }}</p>
@@ -99,16 +98,17 @@
                     </div>
 
                     <section class="block">
-                        <h2>支払い方法</h2>
                         <p id="summary_payment">
-                            @if (old('payment_method') === 'conveni')
-                            コンビニ払い
-                            @elseif (old('payment_method') === 'card')
-                            カード支払い
-                            @else
-                            ――
-                            @endif
-                        </p>
+                            <span>支払い方法</span>
+                            <span id="summary-method">
+                                @if (old('payment_method') === 'conveni')
+                                コンビニ払い
+                                @elseif (old('payment_method') === 'card')
+                                カード支払い
+                                @else
+                                ――
+                                @endif
+                            </span>
                     </section>
                 </div>
 
@@ -123,61 +123,62 @@
 
 {{-- ▼ JS --}}
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const root = document.querySelector('[data-select]');
-    const input = document.getElementById('payment_method');
-    const summary = document.getElementById('summary_payment');
+    document.addEventListener('DOMContentLoaded', () => {
+        const selects = document.querySelectorAll('[data-select]');
+        selects.forEach(select => {
+            const button = select.querySelector('[data-select-trigger]');
+            const menu = select.querySelector('[data-menu]');
+            const options = select.querySelectorAll('.select-option');
+            const label = select.querySelector('[data-label]');
+            const hiddenInput = document.querySelector('#payment_method');
+            const summary = document.querySelector('#summary-method'); // 右カラム
 
-    if (!root || !input) return;
+            // ▼ 開閉制御
+            button.addEventListener('click', () => {
+                const isOpen = select.getAttribute('data-open') === 'true';
+                select.setAttribute('data-open', !isOpen);
+                button.setAttribute('aria-expanded', !isOpen);
 
-    const btn = root.querySelector('[data-select-trigger]');
-    const menu = root.querySelector('[data-menu]');
-    const items = root.querySelectorAll('.select-option');
-
-    // ▼ 支払方法をクリックしたときに hidden に値を入れる
-    items.forEach(option => {
-        option.addEventListener('click', () => {
-            const value = option.dataset.value;
-            input.value = value;});
-        });
-        // 開閉
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            menu.classList.toggle('is-open');
-            btn.setAttribute('aria-expanded', menu.classList.contains('is-open'));
-        });
-
-        // 外クリックで閉じる
-        document.addEventListener('click', (e) => {
-            if (!root.contains(e.target)) {
-                menu.classList.remove('is-open');
-                btn.setAttribute('aria-expanded', 'false');
-            }
-        });
-
-        // 選択処理
-        items.forEach(it => {
-            it.addEventListener('click', () => {
-                const val = it.dataset.value;
-                input.value = val;
-
-                summary.textContent =
-                    (val === 'conveni') ? 'コンビニ払い' :
-                    (val === 'card') ? 'カード支払い' :
-                    '――';
-
-                const label = root.querySelector('.select-label');
-                if (label) {
-                    label.textContent =
-                        (val === 'conveni') ? 'コンビニ払い' :
-                        (val === 'card') ? 'カード支払い' :
-                        '選択してください';
+                // 開くたびに一旦全てリセット（青・チェックを消す）
+                if (!isOpen) {
+                    options.forEach(opt => opt.removeAttribute('aria-selected'));
                 }
+            });
 
-                menu.classList.remove('is-open');
-                btn.setAttribute('aria-expanded', 'false');
+            // ▼ 選択処理
+            options.forEach(option => {
+                option.addEventListener('click', () => {
+                    // ① すべてリセット
+                    options.forEach(opt => opt.removeAttribute('aria-selected'));
+
+                    // ② 選択中の項目にマーク（青・✔）
+                    option.setAttribute('aria-selected', 'true');
+
+                    // ③ ラベル更新（白い1行に反映）
+                    label.textContent = option.textContent;
+
+                    // ④ hiddenInputと右カラムに反映
+                    const val = option.dataset.value;
+                    hiddenInput.value = val;
+                    if (summary) summary.textContent = option.textContent;
+
+                    // ⑤ メニューを閉じる
+                    select.setAttribute('data-open', 'false');
+                    button.setAttribute('aria-expanded', 'false');
+                });
+            });
+
+            // ▼ 外クリックで閉じる
+            document.addEventListener('click', e => {
+                if (!select.contains(e.target)) {
+                    select.setAttribute('data-open', 'false');
+                    button.setAttribute('aria-expanded', 'false');
+                }
             });
         });
     });
 </script>
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/purchase.css') }}">
+@endpush
 @endsection

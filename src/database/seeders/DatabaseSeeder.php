@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-         $this->call(LikeSeeder::class);
+        $this->call([
+            CategorySeeder::class,
+            ItemSeeder::class,
+            LikeSeeder::class, // 
+        ]);
     }
 }

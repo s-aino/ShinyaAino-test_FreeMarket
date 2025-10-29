@@ -6,6 +6,10 @@ use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Schema;
+use App\Http\Requests\ExhibitionRequest;
+// use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class ItemController extends Controller
 {
@@ -79,30 +83,42 @@ class ItemController extends Controller
     }
 
     // 出品保存（POST /sell）
-    public function store(Request $request)
+    public function store(ExhibitionRequest $request)
     {
-        $validated = $request->validate([
-            'title' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'integer', 'min:1'],
-            'description' => ['nullable', 'string', 'max:1000'],
-            'category_ids' => ['required', 'array'],
-            'category_ids.*' => ['exists:categories,id'], // 各idが存在すること
-        ]);
+        $validated = $request->validated();
 
-        $item = Item::create([
-            'user_id' => auth()->id(),
-            'title' => $validated['title'],
-            'price' => $validated['price'],
-            'description' => $validated['description'] ?? null,
-            'is_sold' => false,
-        ]);
+        // ① 画像を storage/app/public/items に保存
+        $path = $request->file('image')->store('items', 'public');
+        // $path の中身は "items/ファイル名.jpg"
 
+        // ② Intervention Image でサイズ調整
+        $imagePath = storage_path('app/public/' . $path);
+        $manager = new ImageManager(new Driver());
+        $manager->read($imagePath)
+            ->cover(600, 600)
+            ->save($imagePath);
 
-        $item->categories()->sync($validated['category_ids']);
+        // ③ 商品登録（DBには "items/〇〇.jpg" だけを保存）
+        $item = new Item();
+        $item->user_id = auth()->id();
+        $item->title = $validated['title'];
+        $item->description = $validated['description'];
+        $item->condition = $validated['condition'];
+        $item->price = $validated['price'];
+        $item->brand = $validated['brand'] ?? null;
+        $item->image_path = 'storage/' . $path;  // ← storage を付けるのがポイント
+        $item->save();
 
-        return redirect()->route('items.show', ['item_id' => $item->id])
-            ->with('message', '商品を出品しました。');
+        // ④ カテゴリの紐付け（もしあれば）
+        if (isset($validated['categories'])) {
+            $item->categories()->sync($validated['categories']);
+        }
+
+        return redirect()
+            ->route('mypage.show')
+            ->with('success', '商品を出品しました！');
     }
+
 
     // 編集フォーム（任意）
     public function edit(Item $item)
@@ -124,6 +140,6 @@ class ItemController extends Controller
         ]);
 
         $item->update($validated);
-        return redirect()->route('items.show', $item)->with('success', '更新しました');
+        return redirect()->route('items.show', $item)->with('message', '更新しました');
     }
 }

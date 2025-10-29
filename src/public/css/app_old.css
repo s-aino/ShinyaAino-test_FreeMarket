@@ -225,11 +225,11 @@ body {
   border-radius: 6px
 }
 
-.btn--ghost {
+/* .btn--ghost {
   background: transparent;
   border: 1px solid rgba(255, 255, 255, .8);
   color: #fff
-}
+} */
 
 .btn--ghost:hover {
   background: rgba(255, 255, 255, .12)
@@ -1480,7 +1480,7 @@ textarea.comment-box {
 
 .comment-box:focus {
   outline: none;
-  border-color: #ff6b6b;
+  /* border-color: #ff6b6b; */
   box-shadow: 0 0 0 3px rgba(255, 107, 107, .15);
 }
 
@@ -4536,13 +4536,15 @@ main,
 }
 
 
-.btn.btn--disabled {
-  background-color: #b0b0b0 !important;
-  /* グレー */
-  color: #ffffff !important;
-  /* 白文字 */
-  cursor: not-allowed;
-  /* 押せない感じ */
-  border: none;
-  box-shadow: none;
+
+.btn--disabled {
+    background: #aaa !important;
+    color: #fff !important;
+    border: none;
+    display: block;
+    width: 100%; /* 購入ボタンと同じ横幅に */
+    padding: 12px 0;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 4px;
 }

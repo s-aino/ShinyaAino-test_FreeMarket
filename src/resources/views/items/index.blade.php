@@ -34,16 +34,19 @@
             @forelse($items as $item)
             <a class="item-card" href="{{ route('items.show',$item) }}">
                 <div class="thumb">
-                    <img src="{{ $item->image_url }}" alt="{{ $item->title }}">
+                    <img src="{{ asset($item->image_path) }}" alt="{{ $item->title }}">
                     <!-- loading="lazy" decoding="async"> -->
                     @if($item->is_sold)
-                    <span class="badge--sold">SOLD</span>
+                    <span class="sold-badge">SOLD</span>
                     @endif
                 </div>
                 <div class="meta">
                     <div class="title">{{ $item->title }}</div>
                     @isset($item->price)
-                    <div class="price">¥{{ number_format($item->price) }}</div>
+                    <div class="price">
+                        ¥{{ number_format($item->price) }}
+                        <span class="price__tax">(税込)</span>
+                    </div>
                     @endisset
                 </div>
             </a>

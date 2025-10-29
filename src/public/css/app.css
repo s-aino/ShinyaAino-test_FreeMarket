@@ -1,3 +1,6 @@
+html {
+  overflow-y: scroll;
+}
 /* ================================================
    RESET & BASE
 ================================================ */
@@ -125,16 +128,34 @@ li {
    MESSAGE ALERT
 ================================================ */
 .flash-message {
+  position: fixed;
+  top: 70px;
+  /* ヘッダー下に表示、適宜調整 */
+  left: 50%;
+  transform: translateX(-50%);
+  /* 中央寄せの要 */
+  width: 80%;
+  /* 画面幅の80%、または固定値でもOK */
+  max-width: 600px;
+  /* 最大幅を制限して中央にコンパクト表示 */
   text-align: center;
+
+  background-color: #f1f5f2;
   color: #3cb371;
-  margin-top: 16px;
+  border: 1px solid #a3e4b3;
+  border-radius: 6px;
+  padding: 10px 0;
+  font-size: 14px;
   font-weight: 500;
+  line-height: 1.6;
   opacity: 1;
-  transition: opacity 1s ease;
+  transition: opacity 0.5s ease;
+  z-index: 1000;
 }
 
-.message.fade--out {
+.flash-message.fade--out {
   opacity: 0;
+  transition: opacity 1s ease;
 }
 
 /* JSで3秒後に自動フェードアウト */
@@ -151,13 +172,13 @@ li {
 /* ================================================
    UTILITY CLASSES
 ================================================ */
-.text-center {
+/* .text-center {
   text-align: center;
 }
 
 .mt-20 {
-  margin-top: 20px;
-}
+  margin-top: 20px; */
+/* } */
 
 /* ================================================
    HEADER（固定配置・左右にゆったり広げる）
@@ -166,7 +187,8 @@ li {
   background-color: #000;
   color: #fff;
   width: 100%;
-  height: 70px;                /* ← 高さを固定 */
+  height: 70px;
+  /* ← 高さを固定 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -178,9 +200,12 @@ li {
 .header__inner {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* 👈 両端配置に戻す */
-  width: 90%;                     /* 👈 左右の余白を確保（中央寄りより広い） */
-  max-width: 1400px;              /* 👈 広すぎ防止 */
+  justify-content: space-between;
+  /* 👈 両端配置に戻す */
+  width: 90%;
+  /* 👈 左右の余白を確保（中央寄りより広い） */
+  max-width: 1400px;
+  /* 👈 広すぎ防止 */
   padding: 12px 0;
   box-sizing: border-box;
 }
@@ -209,7 +234,8 @@ li {
 .nav {
   display: flex;
   align-items: center;
-  gap: 32px;                     /* 👈 余白を広めに変更 */
+  gap: 32px;
+  /* 👈 余白を広めに変更 */
 }
 
 /* 通常リンク */
@@ -239,11 +265,23 @@ li {
   background-color: #f2f2f2 !important;
 }
 
+/* ヘッダー右上リンク */
+.header-nav a {
+  color: #000;
+  /* ←黒文字で統一 */
+}
+
+.header-nav a:hover {
+  opacity: 0.7;
+}
+
+
 /* ================================================
    固定位置を確保（headerがなくても高さ維持）
 ================================================ */
 main.main-container {
-  margin-top: 70px;  /* ← header高さ分を確保してずれ防止 */
+  margin-top: 70px;
+  /* ← header高さ分を確保してずれ防止 */
 }
 
 /* ================================================
@@ -271,16 +309,24 @@ main.main-container {
 /* ================================================
    SOLDバッジ（全ページ共通）
 ================================================ */
-.badge-sold {
+/* SOLDバッジ：固定表示（アニメーションなし） */
+.sold-badge {
   position: absolute;
   top: 8px;
   left: 8px;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: #333;
   color: #fff;
-  font-size: 13px;
-  padding: 3px 8px;
-  border-radius: 4px;
-  font-weight: 500;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  border-radius: 3px;
+  z-index: 2;
+  opacity: 1;
+  /* 透過禁止 */
+  transition: none !important;
+  /* アニメーション効果を完全無効化 */
+  transform: none !important;
+  animation: none !important;
+  /* 旧CSSや他ファイルからの影響をブロック */
 }
 
 /* ================================================
@@ -330,4 +376,481 @@ main.main-container {
   .container {
     width: 94%;
   }
+}
+
+/* ================================
+   見出し・タイトル系
+================================ */
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.comment-title {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+/* ================================
+   コメント関連（一覧・投稿フォーム共通）
+================================ */
+.detail__section--comments {
+  max-width: 480px;
+  margin: 0 auto;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.cmt {
+  display: block;
+  margin-bottom: 24px;
+}
+
+.cmt__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.cmt__avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.cmt__name {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.cmt__time {
+  color: #888;
+  font-size: 12px;
+}
+
+/* コメント本文吹き出し */
+.cmt__bubble {
+  background-color: #e6e6e6;
+  color: #333;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  line-height: 1.4;
+  width: 100%;
+  box-sizing: border-box;
+  margin-left: 0x;
+  margin-top: 4px;
+  text-align: left;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  align-self: flex-start;
+}
+
+/* ================================
+   アイコン（いいね・コメント）
+================================ */
+.detail__stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  width: 24px;
+  height: 24px;
+  stroke: #acaaaa;
+  fill: none;
+  transition: 0.3s;
+}
+
+/* いいね済み（赤く点灯） */
+.icon-btn.is-on svg {
+  fill: #ff4e4e;
+  stroke: #ff4e4e;
+}
+
+/* コメントアイコン */
+.comment-rounded {
+  stroke: #333;
+  transition: 0.3s;
+}
+
+/* カウント（下に表示） */
+.count {
+  font-size: 13px;
+  color: #555;
+  text-align: center;
+}
+
+/* いいね済み状態（星全体を赤で塗りつぶす） */
+.icon-btn.is-on svg polygon {
+  fill: #ff4e4e !important;
+  stroke: #ff4e4e !important;
+}
+
+/* 通常状態は枠線だけ */
+.icon-btn svg polygon {
+  fill: none;
+  stroke: #777;
+  stroke-width: 2;
+  transition: 0.3s;
+}
+
+
+/* ================================
+   グリッド・共通ユーティリティ
+================================ */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-20 {
+  margin-top: 20px;
+}
+
+/* ================================
+   レスポンシブ
+================================ */
+@media (max-width: 600px) {
+
+  .detail__section--comments,
+  .comment-form {
+    max-width: 100%;
+    padding: 0 10px;
+  }
+
+  /* .cmt__bubble {
+    margin-left: 0;
+  } */
+}
+
+/* ヘッダーのログアウトボタンを他リンクと統一 */
+.nav__logout button {
+  background: #000;
+  color: #fff;
+  border: none;
+  padding: 6px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+/* .nav__logout button:hover {
+  background: #333; */
+/* } */
+
+/* ==============================
+   Header layout
+============================== */
+.header_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  /* ロゴ左・nav右 */
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.brand_logo img {
+  display: block;
+}
+
+/* 検索フォーム */
+.header_search {
+  flex: 1;
+  margin: 0 40px;
+}
+
+/* ナビ共通 */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* リンク */
+.nav_link {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 10px;
+
+}
+
+/* ログアウトボタン（リンク風） */
+.nav_logout_btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 10px;
+  transition: opacity 0.2s;
+}
+
+.nav_logout_btn:hover {
+  opacity: 0.7;
+}
+
+
+
+/* 出品ボタン */
+.btn--white {
+  background-color: #fff;
+  color: #000;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.btn--white:hover {
+  background-color: #f5f5f5;
+}
+
+/* ==============================
+   ログイン・登録ページの専用調整
+============================== */
+.auth header .header_inner {
+  justify-content: flex-start;
+  /* ロゴを左固定 */
+}
+
+/* ==============================
+   検索バー（header_search）
+============================== */
+.header_search {
+  flex: 1;
+  margin: 0 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.header_search input[type="text"] {
+  width: 100%;
+  max-width: 420px;
+  /* 💡 横幅を広めに調整 */
+  height: 40px;
+  /* 💡 高さを少しアップ */
+  border-radius: 10px;
+  /* 💡 角をなめらかに */
+  border: none;
+  outline: none;
+  padding: 0 16px;
+  font-size: 14px;
+  background-color: #fff;
+  color: #333;
+  box-shadow: 0 0 0 1px #ccc inset;
+  /* 薄い枠でスッキリ */
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.header_search input[type="text"]:focus {
+  background-color: #fafafa;
+  box-shadow: 0 0 0 2px #ff6b6b inset;
+  /* 💡 フォーカス時に赤枠 */
+}
+
+/* ==============================
+   ヘッダー全体
+============================== */
+.header_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  position: relative;
+}
+
+/* ロゴ：左固定 */
+.brand_logo {
+  flex: 0 0 200px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+/* 検索バー：中央固定 */
+.header_search {
+  position: absolute;
+  /* 💡 中央に固定配置 */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 420px;
+  /* 💡 固定幅を指定 */
+}
+
+/* 検索バー内のinput */
+.header_search input[type="text"] {
+  width: 100%;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  padding: 0 16px;
+  background: #fff;
+  font-size: 14px;
+  color: #333;
+  box-shadow: 0 0 0 1px #ccc inset;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.header_search input[type="text"]:focus {
+  background-color: #fafafa;
+  box-shadow: 0 0 0 2px #ff6b6b inset;
+}
+
+/* ナビ：右固定 */
+.nav {
+  flex: 0 0 260px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+}
+
+/* リンク共通 */
+.nav_link {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+/* 出品ボタン */
+.btn--white {
+  background-color: #fff;
+  color: #000;
+  padding: 6px 16px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.btn--white:hover {
+  background-color: #f5f5f5;
+}
+
+/* ログアウト（リンク風） */
+.nav_logout_btn {
+  background: transparent;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.brand_logo {
+  flex: 0 0 auto;
+  /* ← 幅を画像サイズに自動調整 */
+  display: flex;
+  align-items: center;
+}
+
+.brand_logo img {
+  height: 24px;
+  width: auto;
+  /* ← 比率を維持して自然に表示 */
+  object-fit: contain;
+  /* ← はみ出さない保険 */
+}
+
+/* ==============================
+   効果追加してみた
+============================== */
+.mypage-tabs .tab:hover,
+.tabs .tab:hover {
+  background-color: #f8f8f8;
+  /* ほんのり明るいグレー背景 */
+}
+
+.nav_mypage_btn :hover {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+共通ホバー（ふわっと薄くなる） .nav_link:hover,
+.nav_logout_btn:hover,
+.nav_login_btn:hover,
+.nav_mypage_btn:hover,
+.btn--white:hover {
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+/* ▼ 全フォーム統一（入力欄・テキストエリア・セレクト） */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  color: #222;
+  font-size: 15px;
+  padding: 10px 12px;
+  width: 100%;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+/* ▼ フォーカス時（クリックや入力中） */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #000 !important; /* ← 枠線を黒に統一 */
+  color: #000 !important;        /* ← テキストも黒 */
+  outline: none;                 /* ← 青い枠を消す */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2); /* ほんの少しだけ立体感 */
+}
+
+/* ▼ placeholderも黒寄りのグレーで統一 */
+input::placeholder,
+textarea::placeholder {
+  color: #888;
+}
+.form-error {
+  color: #f44336; /* 鮮やかな赤 */
+  font-size: 14px;
+  margin-top: 6px;
 }

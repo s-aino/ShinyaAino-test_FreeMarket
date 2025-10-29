@@ -51,7 +51,7 @@ class PurchaseController extends Controller
         $user = auth()->user();
 
         // 一時住所として新規登録
-        $tempAddress = $user->addresses()->create([
+        $tempAddress = $user->address()->create([
             'postal'        => $request->postal_code,
             'line1'         => $request->line1,
             'line2'         => $request->line2,

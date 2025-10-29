@@ -1,0 +1,680 @@
+/* ==============================
+   支払い方法セレクト（Coachtech風）
+============================== */
+
+/* 枠とボタン（閉じた状態） */
+.select-button {
+    background: #f8f8f8;
+    /* グレー地 */
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+    transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+/* hover / 開いた状態 */
+.select-button[aria-expanded="true"] {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+    background-color: #fff;
+}
+
+/* ▼アイコン */
+.select-button svg {
+    stroke: #666;
+    /* 少し濃いグレー */
+    transition: stroke 0.2s;
+}
+
+.select-button:hover svg {
+    stroke: #007bff;
+}
+
+/* 開いたリスト */
+.select-menu {
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    list-style: none;
+    margin: 4px 0 0;
+    padding: 4px 0;
+    z-index: 10;
+}
+
+/* 各選択肢 */
+.select-option {
+    padding: 10px 14px;
+    color: #333;
+    transition: background-color 0.15s;
+}
+
+/* hover時 */
+.select-option:hover {
+    background-color: #f0f6ff;
+    /* 薄い青 */
+}
+
+/* 選択中 */
+.select-option[aria-selected="true"] {
+    background-color: #323e4e;
+    /* 青みがかった背景 */
+    font-weight: 600;
+}
+
+/* 支払い方法右カラム側の再表示（summary） */
+#summary_payment {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 線・区切り */
+.divider {
+    border: none;
+    border-top: 1px solid #ccc;
+    margin: 20px 0;
+}
+
+/* ================================
+   支払い方法プルダウン（既存JS対応版）
+================================ */
+.pay-select {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin: 8px 0 24px;
+}
+
+/* 表示ボタン */
+/* .select-button {
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: border-color 0.25s, box-shadow 0.25s;
+} */
+
+/* .select-button:hover,
+.select-button[aria-expanded="true"] {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.15);
+} */
+
+/* 下向きアイコン */
+/* .select-button svg {
+    width: 22px;
+    height: 22px;
+    stroke: #333;
+    transition: transform 0.3s;
+}
+
+.select-button[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+} */
+
+/* 選択肢リスト */
+/* .select-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    list-style: none;
+    padding: 0;
+    margin: 6px 0 0;
+    display: none;
+} */
+
+/* JS で .is-open が付いた時に表示 */
+/* .select-menu.is-open {
+    display: block;
+} */
+
+/* 各選択肢 */
+/* .select-option {
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+} */
+
+/* ホバー時 */
+/* .select-option:hover {
+    background-color: #f0f6ff;
+} */
+
+/* 選択済み（aria-selected対応） */
+.select-option[aria-selected="true"] {
+    background-color: #e0edff;
+    font-weight: 600;
+}
+
+/* 右カラム summary */
+#summary_payment {
+    margin-top: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+}
+
+/* 線 */
+.divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 24px 0;
+}
+
+
+/* ==========================
+   全体レイアウト
+========================== */
+.purchase-wrap {
+    max-width: 950px;
+    margin: 40px auto;
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.purchase-form {
+    width: 100%;
+}
+
+.purchase-grid {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.left {
+    flex: 1 1 60%;
+}
+
+.right {
+    flex: 1 1 35%;
+}
+
+.purchase-grid .left img {
+    width: 140px;
+    /* ← 少し大きめ */
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 商品名だけ拡大 */
+.purchase-grid .left .title {
+    font-size: 32px;
+    /* 商品名を強調 */
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+/* 金額だけ拡大 */
+.purchase-grid .left .price {
+    font-size: 24px;
+    /* 金額を見本サイズに合わせる */
+    font-weight: 600;
+    color: #333;
+    margin-top: 4px;
+}
+
+/* ==========================
+   左カラム：商品情報
+========================== */
+.product-head {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.thumb img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 1px solid #ddd;
+    background: #fafafa;
+}
+
+.meta .title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 6px;
+}
+
+.meta .price {
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+/* ==========================
+   セクション共通
+========================== */
+.block {
+    margin-top: 16x;
+    padding: 0;
+    border: none;
+
+}
+
+.block-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.block h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.change-link {
+    color: #007bff;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.change-link:hover {
+    text-decoration: underline;
+}
+
+/* ==========================
+   線
+========================== */
+.divider {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 24px 0;
+}
+
+/* ==============================================
+   支払い方法プルダウン（Coachtech見本風 最強版）
+============================================== */
+
+/* 外枠 */
+.pay-select {
+    position: relative;
+    width: 100%;
+    max-width: 280px;
+    margin: 8px 0 20px;
+}
+
+/* ▼ボタン部分（閉じた状態） */
+.select-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* hover / 開いたとき */
+.select-button[aria-expanded="true"] {
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.15);
+}
+
+/* ▼アイコン */
+.select-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: #333;
+    transition: 0.2s;
+}
+
+.select-button[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+/* ▼リスト全体 */
+.select-menu {
+    position: absolute;
+    top: 105%;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    display: none;
+    z-index: 10;
+}
+
+/* 開いたとき */
+[data-select][data-open="true"] .select-menu {
+    display: block;
+}
+
+/* ▼個々の選択肢 */
+.select-option {
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background-color 0.2s;
+}
+
+/* hover時 */
+.select-option:hover {
+    background-color: #333;
+    color: #fff;
+}
+
+/* 選択中（チェック付き） */
+.select-option[aria-selected="true"] {
+    background-color: #333;
+    color: #fff;
+    font-weight: 600;
+    position: relative;
+}
+
+.select-option[aria-selected="true"]::after {
+    content: "✔";
+    position: absolute;
+    right: 14px;
+    top: 10px;
+    font-size: 14px;
+    color: #fff;
+}
+
+/* ==========================
+   配送先
+========================== */
+.addr-line {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 2px;
+}
+
+/* ==========================
+   右カラム：サマリーカード
+========================== */
+.summary-card {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 16px 20px;
+    font-size: 14px;
+}
+
+.summary-card .row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+    padding: 8px 0;
+    margin-bottom: 10px;
+}
+
+.summary-card .row+.row {
+    border-top: 1px solid #ccc;
+    padding-top: 16px;
+}
+
+
+.summary-card .row span:first-child {
+    color: #555;
+}
+
+.summary-card span:last-child {
+    font-weight: 600;
+}
+
+.summary-card #summary_payment {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.summary-card .price-value,
+.summary-card #summary_payment span:last-child {
+    font-weight: 600;
+}
+
+
+.summary-card .row+.block {
+    border-top: 1px solid #ccc;
+    padding-top: 16px;
+}
+
+.summary-card .row span:first-child {
+    font-size: 15px;
+    /* ← 他ラベルと同じ */
+    font-weight: 600;
+    /* ← 少し太字で視認性アップ */
+    color: #333;
+    /* ← これで薄すぎ問題解消 */
+}
+
+/* ===============================
+   購入ページ：右カラム調整
+=============================== */
+.right {
+    flex: 0 0 360px;
+    /* ← 固定幅っぽく（見本基準） */
+    max-width: 480px;
+    margin-left: 80px;
+    /* 左カラムとの余白を広げる */
+}
+
+/* 左カラムも合わせて微調整 */
+.left {
+    flex: 1;
+    min-width: 480px;
+}
+
+/* ==========================
+   購入ボタン
+========================== */
+.btn-purchase {
+    display: block;
+    width: 100%;
+    margin-top: 24px;
+    background-color: #f45c5c;
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    padding: 12px 0;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-purchase:hover {
+    background-color: #ff6b6b;
+}
+
+.block {
+    border: none;
+    padding: 0 0 20px;
+}
+
+/* 商品ヘッダー */
+.product.head {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.thumb img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* 商品名と価格 */
+.meta .title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.meta .price {
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+/* =====================================================
+   支払い方法セレクト（最終見本再現版）
+   ===================================================== */
+
+/* 外枠 */
+.pay-select {
+    position: relative;
+    max-width: 280px;
+    margin: 8px 0 20px;
+}
+
+/* ▼ 白い閉じた状態（選択ラベル） */
+.select-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px 14px;
+    cursor: pointer;
+    height: 44px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.select-button:hover{
+    border-color: #000000;}
+
+
+/* 開いているときやホバー時に青い枠 */
+.select-button[aria-expanded="true"] {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+/* ▼ 矢印アイコン */
+.select-button svg {
+    width: 18px;
+    height: 18px;
+    stroke: #333;
+    pointer-events: none;
+}
+
+/* ▼ 開いているときはボタンを非表示（白エリアを隠す） */
+[data-select][data-open="true"] .select-button {
+    visibility: hidden;
+}
+
+/* ▼ プルダウン本体 */
+.select-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50px);
+    background: #333;
+    border-radius: 6px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    list-style: none;
+    padding: 4px 0;
+    margin: 6px 0 0;
+    display: none;
+    z-index: 10;
+}
+
+/* 開いているときだけ表示 */
+[data-select][data-open="true"] .select-menu {
+    display: block;
+}
+
+/* ▼ 各選択肢 */
+.select-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px 10px 34px;
+    color: #fff;
+    background: #333;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.25s;
+}
+
+.select-option::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+}
+
+/* hover時は青く、左に✔ */
+.select-option:hover {
+    background: #3b82f6;
+}
+
+.select-option:hover::before {
+    content: '✔';
+    color: #fff;
+    font-size: 14px;
+}
+
+/* 選択済み項目（青＆チェックマーク） */
+.select-option[aria-selected="true"] {
+    background: #3b82f6;
+    font-weight: 600;
+}
+
+.select-option[aria-selected="true"]::before {
+    content: '✔';
+    color: #fff;
+    font-size: 14px;
+}
+
+/* ▼ 開いているとき白エリア隠す */
+[data-select][data-open="true"] .select-button {
+    visibility: hidden;
+}
+
+/* ▼ 閉じた状態のラベル（白エリア文字） */
+.select-label {
+    color: #333;
+    font-size: 14px;
+}
+
+.pay-select {
+    position: relative;
+    max-width: 280px;
+    margin: 8px 0 20px;
+}

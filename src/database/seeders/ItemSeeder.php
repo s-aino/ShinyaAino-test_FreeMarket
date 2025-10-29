@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use App\Models\User;
 use Carbon\Carbon;
+use App\Models\Item;
+use App\Models\Category;
+use Illuminate\Support\Arr;
 
 class ItemSeeder extends Seeder
 {
@@ -96,30 +99,55 @@ class ItemSeeder extends Seeder
 
         // 4) ダミー商品
         $rows = [
-            ['title' => '腕時計', 'price' => 15000, 'brand' => 'Rolax', 'description' => 'スタイリッシュなデザインのメンズ腕時計', 'image_path' => 'items/sample1.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
-            ['title' => 'HDD', 'price' => 5000, 'brand' => '西芝', 'description' => '高速で信頼性の高いハードディスク', 'image_path' => 'items/sample2.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
-            ['title' => '玉ねぎ3束', 'price' => 300, 'brand' => null, 'description' => '新鮮な玉ねぎ3束のセット', 'image_path' => 'items/sample3.jpg', 'status' => $statusAvailable, 'condition' => 'やや傷や汚れあり'],
-            ['title' => '革靴', 'price' => 4000, 'brand' => null, 'description' => 'クラシックなデザインの革靴', 'image_path' => 'items/sample4.jpg', 'status' => $statusAvailable, 'condition' => '状態が悪い'], 
-            ['title' => 'ノートPC', 'price' => 45000, 'brand' => null, 'description' => '高性能ノートパソコン', 'image_path' => 'items/sample5.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
-            ['title' => 'マイク', 'price' => 8000, 'brand' => null, 'description' => '高音質のレコーディング用マイク', 'image_path' => 'items/sample6.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
-            ['title' => 'ショルダーバッグ', 'price' => 3500, 'brand' => null, 'description' => 'おしゃれなショルダーバッグ', 'image_path' => 'items/sample7.jpg', 'status' => $statusAvailable, 'condition' => 'やや傷や汚れあり'],
-            ['title' => 'タンブラー', 'price' => 500, 'brand' => null, 'description' => '使いやすいタンブラー', 'image_path' => 'items/sample8.jpg', 'status' => $statusAvailable, 'condition' => '状態が悪い'],
-            ['title' => 'コーヒーミル', 'price' => 4000, 'brand' => 'Starbacks', 'description' => '手動のコーヒーミル', 'image_path' => 'items/sample9.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
-            ['title' => 'メイクセット', 'price' => 2500, 'brand' => null, 'description' => '便利なメイクアップセット', 'image_path' => 'items/sample10.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
+            ['title' => '腕時計', 'price' => 15000, 'brand' => 'Rolax', 'description' => 'スタイリッシュなデザインのメンズ腕時計', 'image_path' => 'storage/items/sample1.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
+            ['title' => 'HDD', 'price' => 5000, 'brand' => '西芝', 'description' => '高速で信頼性の高いハードディスク', 'image_path' => 'storage/items/sample2.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
+            ['title' => '玉ねぎ3束', 'price' => 300, 'brand' => null, 'description' => '新鮮な玉ねぎ3束のセット', 'image_path' => 'storage/items/sample3.jpg', 'status' => $statusAvailable, 'condition' => 'やや傷や汚れあり'],
+            ['title' => '革靴', 'price' => 4000, 'brand' => null, 'description' => 'クラシックなデザインの革靴', 'image_path' => 'storage/items/sample4.jpg', 'status' => $statusAvailable, 'condition' => '状態が悪い'],
+            ['title' => 'ノートPC', 'price' => 45000, 'brand' => null, 'description' => '高性能ノートパソコン', 'image_path' => 'storage/items/sample5.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
+            ['title' => 'マイク', 'price' => 8000, 'brand' => null, 'description' => '高音質のレコーディング用マイク', 'image_path' => 'storage/items/sample6.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
+            ['title' => 'ショルダーバッグ', 'price' => 3500, 'brand' => null, 'description' => 'おしゃれなショルダーバッグ', 'image_path' => 'storage/items/sample7.jpg', 'status' => $statusAvailable, 'condition' => 'やや傷や汚れあり'],
+            ['title' => 'タンブラー', 'price' => 500, 'brand' => null, 'description' => '使いやすいタンブラー', 'image_path' => 'storage/items/sample8.jpg', 'status' => $statusAvailable, 'condition' => '状態が悪い'],
+            ['title' => 'コーヒーミル', 'price' => 4000, 'brand' => 'Starbacks', 'description' => '手動のコーヒーミル', 'image_path' => 'storage/items/sample9.jpg', 'status' => $statusAvailable, 'condition' => '良好'],
+            ['title' => 'メイクセット', 'price' => 2500, 'brand' => null, 'description' => '便利なメイクアップセット', 'image_path' => 'storage/items/sample10.jpg', 'status' => $statusAvailable, 'condition' => '目立った傷や汚れなし'],
         ];
 
         // 5) 実在カラムだけ挿入（brand/condition 無くてもOK）
         $allowed = array_flip(Schema::getColumnListing('items'));
 
         foreach ($rows as $r) {
-            if ($userCol)     $r[$userCol] = $sellerId;
-            if ($categoryCol) $r[$categoryCol] = $categoryId;
+            if ($userCol) {
+                $r[$userCol] = $sellerId;
+            }
 
-            $data = array_intersect_key($r, $allowed);
-            if (isset($allowed['created_at'])) $data['created_at'] = $now;
-            if (isset($allowed['updated_at'])) $data['updated_at'] = $now;
+            // category_id は不要（belongsToMany対応済み）
+            unset($r['category_id']);
+         $data = array_intersect_key($r, $allowed);
+    if (isset($allowed['created_at'])) $data['created_at'] = $now;
+    if (isset($allowed['updated_at'])) $data['updated_at'] = $now;
 
-            DB::table('items')->updateOrInsert(['title' => $r['title']], $data);
+    // 商品登録（または更新）
+    $item = \App\Models\Item::updateOrCreate(
+        ['title' => $r['title']],
+        $data);
+          // ✅ カテゴリ指定マップを使って明示的に付与
+    $categoryMap = [
+        '腕時計' => [1,12],          // 例：ファッション
+        'HDD' => [2,8],            // 例：家電
+        '玉ねぎ3束' => [10],      // 食品
+        '革靴' => [1,5],           // ファッション
+        'ノートPC' => [2],       // 家電
+        'マイク' => [2, 8],      // 家電
+        'シルバーバッグ' => [1,4], // ファッション
+        'タンブラー' => [10,9],     // 雑貨
+        'コーヒーミル' => [10,3],   // 雑貨
+        'メイクセット' => [6,4],   // コスメ
+    ];
+
+    if (Schema::hasTable('category_item') && isset($categoryMap[$r['title']])) {
+        $item->categories()->sync($categoryMap[$r['title']]);
+    
+    }
+
         }
     }
 }

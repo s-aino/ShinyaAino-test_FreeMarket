@@ -1,7 +1,12 @@
 @extends('layouts.app')
 @section('title','会員登録')
 @section('header')
-@include('partials.header', ['showSearch' => false,])
+@include('partials.header', [
+'showSearch' => false,
+'showLogin' => false,
+'showMypage' => false,
+'showSell' => false,
+])
 @endsection
 @section('content')
 <div class="card">
@@ -42,4 +47,7 @@
     </div>
   </form>
 </div>
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/register.css') }}">
+@endpush
 @endsection

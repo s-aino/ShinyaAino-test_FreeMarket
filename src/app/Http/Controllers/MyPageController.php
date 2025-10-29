@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Address;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Address;
 use App\Models\Order;
+use App\Models\Item;
 
 class MyPageController extends Controller
 {
@@ -17,7 +18,7 @@ class MyPageController extends Controller
 
         // 出品した商品（そのままでOK）
         $sellingItems = $user->items()
-            ->with('images')
+            ->with('categories')
             ->latest()
             ->get();
 
@@ -30,52 +31,48 @@ class MyPageController extends Controller
 
         return view('mypage.show', compact('user', 'sellingItems', 'purchasedItems'));
     }
-    // GET /mypage/sales
-    public function sales()
+    public function edit()
     {
-        // TODO: ユーザーの出品一覧を取得して渡す
-        return view('mypage.sales');
-    }
-    public function edit(Request $request)
-    {
-        $user = $request->user();
-        $address = $user->address()->first() ?? new Address;
-        $avatarSrc = $user->avatar_url;
+        $user = auth()->user();
+
+        // 住所など必要であればここで取得
+        $address = $user->address;
+        // ->where('is_default', true)->first();
+
+        // profile/edit.blade.php を表示
         return view('profile.edit', compact('user', 'address'));
     }
-
     public function update(ProfileRequest $request)
     {
         $user = $request->user();
 
-        // 画像アップロード（現状ロジック維持）
+        // 画像アップロード（現状維持）
         if ($request->hasFile('profile_image')) {
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image_path = $path;
         }
 
-        // 基本情報（現状ロジック維持）
+        // 基本情報
         $user->name = $request->name;
         if (is_null($user->onboarded_at)) {
             $user->onboarded_at = now();
         }
         $user->save();
 
-        // --- ここから住所：デフォルト住所を作成/更新（is_default=true を常に1つ）---
-        // 入力名 -> DBカラム名のマッピング（あなたのスキーマに合わせ済み）
+        // --- 住所更新 or 新規作成 ---
         $data = [
-            'postal'     => $request->postal,                // 例: 123-4567
-            'prefecture' => $request->prefecture ?? null,    // 都道府県
-            'city'       => $request->city ?? null,          // 市区町村
-            'line1'      => $request->address,               // 住所（番地）
-            'line2'      => $request->building,              // 建物名（任意）
-            'phone'      => $request->phone ?? null,         // 任意
+            'postal' => $request->postal,
+            'line1' => $request->address,
+            'line2' => $request->building,
             'is_default' => true,
         ];
 
-        // これ1行で「is_default=1 のレコードを作成or更新」
-        $request->user()->address()->updateOrCreate(['is_default' => true], $data);        // --- 住所ここまで -------------------------------------------------------
+        // Userモデル: hasMany(Address::class)
+        $user->address()->updateOrCreate([], $data);
+        $user->load('address');
 
-        return redirect()->route('mypage.show')->with('message', 'プロフィールを更新しました。');
+
+        return redirect()->route('profile.edit')
+            ->with('message', 'プロフィールを更新しました。');
     }
 }

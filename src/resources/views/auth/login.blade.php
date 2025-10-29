@@ -1,7 +1,12 @@
 @extends('layouts.app')
 @section('title','ログイン')
 @section('header')
-@include('partials.header', ['showSearch' => false,])
+@include('partials.header', [
+'showSearch' => false,
+'showLogin' => false,
+'showMypage' => false,
+'showSell' => false,
+])
 @endsection
 @section('content')
 <div class="card">
@@ -31,4 +36,7 @@
 
     <div class="helper"> <a href="{{ route('register') }}" class="auth-link">会員登録はこちら</a></div>
 </div>
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@endpush
 @endsection

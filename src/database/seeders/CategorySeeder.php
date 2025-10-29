@@ -2,60 +2,77 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Seeder;
 use App\Models\Category;
 use App\Models\Item;
-use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
 
 class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        // UIに出ているカテゴリ（必要分だけでOK）
+        // ✅ ① カテゴリ一覧（UIに出すカテゴリ）
         $catalog = [
             'ファッション' => 'fashion',
-            '家電'        => 'electronics',
-            'インテリア'  => 'interior',
-            'レディース'  => 'ladies',
-            'メンズ'      => 'mens',
-            'コスメ'      => 'cosmetics',
-            '本'          => 'books',
-            'ゲーム'      => 'games',
-            'スポーツ'    => 'sports',
-            'キッチン'    => 'kitchen',
+            '家電' => 'electronics',
+            'インテリア' => 'interior',
+            'レディース' => 'ladies',
+            'メンズ' => 'mens',
+            'コスメ' => 'cosmetics',
+            '本' => 'books',
+            'ゲーム' => 'games',
+            'スポーツ' => 'sports',
+            'キッチン' => 'kitchen',
             'ハンドメイド' => 'handmade',
             'アクセサリー' => 'accessories',
-            'おもちゃ'    => 'toys',
+            'おもちゃ' => 'toys',
             'ベビー・キッズ' => 'kids',
-            'その他'      => 'others',
-        ];
-        $catIds = [];
-        foreach ($catalog as $name => $slug) {
-            $cat = \App\Models\Category::updateOrCreate(
-                ['name' => $name],   // ← name は unique
-                ['slug' => $slug]    // 既存なら slug を更新
-            );
-            $catIds[$name] = $cat->id; // 以降の割当で使用
-        }
-        // 10商品の割当（タイトルで雑にマップ。IDで指定してもOK）
-        $map = [
-            '腕時計'     => 'アクセサリー',
-            'HDD'        => '家電',
-            '玉ねぎ3束'   => 'キッチン',
-            '革靴'       => 'メンズ',
-            'ノートPC'   => '家電',
-            'マイク'     => '家電',
-            'ショルダーバッグ' => 'ファッション',
-            'タンブラー' => 'キッチン',
-            'コーヒーミル' => 'キッチン',
-            'メイクセット' => 'コスメ',
         ];
 
-        foreach ($map as $title => $catName) {
-            $item = Item::where('title', $title)->first();
-            if ($item && isset($catIds[$catName])) {
-                $item->update(['category_id' => $catIds[$catName]]);
+        // カテゴリ登録（既存なら更新）
+        $catIds = [];
+        foreach ($catalog as $name => $slug) {
+            $cat = Category::updateOrCreate(
+                ['name' => $name],
+                ['slug' => $slug]
+            );
+            $catIds[$name] = $cat->id;
+        }
+
+        // ✅ ② ダミー商品のカテゴリ割り当て（複数カテゴリ対応）
+        $map = [
+            '腕時計' => ['アクセサリー', 'ファッション'],
+            'HDD' => ['家電'],
+            '卓上ミラー' => ['コスメ', 'インテリア'],
+            '革靴' => ['ファッション', 'メンズ'],
+            'ノートPC' => ['家電'],
+            'マイク' => ['家電'],
+            'コーヒーメーカー' => ['キッチン', '家電'],
+            'タンブラー' => ['キッチン', 'スポーツ'],
+            'メイクセット' => ['コスメ', 'レディース'],
+            'おもちゃセット' => ['おもちゃ', 'ベビー・キッズ'],
+        ];
+
+        foreach ($map as $itemTitle => $categoryNames) {
+            $item = Item::where('title', $itemTitle)->first();
+            if (!$item) {
+                continue; // ダミー商品が存在しない場合スキップ
+            }
+
+            // カテゴリ名からIDを取り出し
+            $ids = [];
+            foreach ((array)$categoryNames as $catName) {
+                if (isset($catIds[$catName])) {
+                    $ids[] = $catIds[$catName];
+                }
+            }
+
+            // 中間テーブルに紐づけ
+            if (!empty($ids)) {
+                $item->categories()->sync($ids);
             }
         }
+
+        // ✅ 完了ログ
+        echo "✅ CategorySeeder: カテゴリと商品紐づけを登録しました。\n";
     }
 }

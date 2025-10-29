@@ -67,14 +67,3 @@
   display: block;
 }
 
-/* ✅ SOLDバッジ：画像の左上に固定 */
-.item-card .badge--sold {
-  position: absolute;
-  top: 8px;
-  left: 8px;
-  background-color: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  font-size: 16px;
-  padding: 4px 8px;
-  border-radius: 4px;
-}

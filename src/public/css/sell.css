@@ -1,0 +1,451 @@
+/* 全体調整 */
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+}
+
+/* 入力フォーム統一 */
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    max-width: 500px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 15px;
+    outline: none;
+}
+
+.form-group select:hover,
+.form-group input:hover {
+    border-color: #ff6b6b;
+}
+
+/* カテゴリチップ */
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.category-chip {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.category-chip input[type="checkbox"] {
+    display: none;
+}
+
+.category-chip span {
+    display: inline-block;
+    padding: 4px 12px;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    background-color: #fff;
+    border-radius: 20px;
+    font-size: 10px;
+    transition: all 0.2s ease;
+}
+
+/* hover & active */
+.category-chip span:hover {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/* checked状態 */
+.category-chip input[type="checkbox"]:checked+span {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/* 出品ボタン */
+.btn-primary {
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    padding: 12px 0;
+    background-color: #ff6b6b;
+    border: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #ff4a4a;
+}
+
+/* =====================
+   全体レイアウト
+===================== */
+.sell-title {
+    text-align: center;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 40px;
+}
+
+.sell-form {
+    max-width: 480px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    /* 各項目の余白 */
+}
+
+
+.form-group {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+
+/* =====================
+   ラベル・テキスト
+===================== */
+.form-label {
+    font-weight: 600;
+    font-size: 15px;
+    color: #222;
+    margin-bottom: 6px;
+}
+
+.section-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-top: 16px;
+    /* ← 上の余白を少し狭く */
+    margin-bottom: 2px;
+    /* ← 下の余白を詰める */
+    text-align: left;
+}
+
+.section-line {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 12px;
+}
+
+/* =====================
+   入力・セレクト共通
+===================== */
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 15px;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    border-color: #ff6b6b;
+    outline: none;
+}
+
+/* =====================
+   カテゴリチップ
+===================== */
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.category-chip input {
+    display: none;
+}
+
+.category-chip span {
+    display: inline-block;
+    padding: 4x 10px;
+    border: 1px solid #ff6b6b;
+    color: #ff6b6b;
+    background-color: #fff;
+    border-radius: 15px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.category-chip span:hover,
+.category-chip input:checked+span {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/* =====================
+   画像アップロード
+===================== */
+.image-frame {
+    border: 1px dashed #ccc;
+    padding: 30px;
+    text-align: center;
+    background-color: #ffffff;
+    border-radius: 8px;
+    position: relative;
+}
+
+.image-button {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #fff;
+    transition: all 0.2s ease;
+}
+
+.image-button:hover {
+    background-color: #ff6b6b;
+    color: #fff;
+}
+
+/* プレビュー */
+.image-preview {
+    max-width: 100%;
+    margin-top: 15px;
+    border-radius: 5px;
+}
+
+/* =====================
+   ボタン
+===================== */
+.btn-submit {
+    display: block;
+    width: 100%;
+    background-color: #ff6b6b;
+    color: #fff;
+    border: none;
+    padding: 14px 0;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #ff4a4a;
+}
+
+.pay-select {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: 8px 0 20px;
+}
+
+/* ▼ボタン（閉じた状態） */
+.select-button {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 12px 16px;
+    color: #333;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.25s;
+    box-sizing: border-box;
+}
+
+/* ラベルを幅いっぱいにする */
+.select-label {
+    flex: 1;
+    /* ← これで右端のアイコンと分離される */
+    text-align: left;
+}
+
+/* hover / 開いた時 */
+.select-button:hover,
+.select-button[aria-expanded="true"] {
+    border-color: #000000;
+    box-shadow: 0 0 2px rgba(255, 107, 107, 0.3);
+}
+
+/* ▼アイコン */
+.select-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: #333;
+    transition: 0.2s;
+}
+
+.select-button[aria-expanded="true"] svg {
+    transform: rotate(180deg);
+}
+
+/* ▼リスト */
+.select-menu {
+    position: absolute;
+    top: -3px;
+    width: 100%;
+    background-color: #3a3a3a;
+    /* ← 濃いグレー */
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    list-style: none;
+    padding: 4px 0;
+    margin: 0;
+    display: none;
+    z-index: 10;
+}
+
+/* 開いたとき */
+[data-select][data-open="true"] .select-menu {
+    display: block;
+}
+
+/* 各項目 */
+.select-option {
+    padding: 10px 14px 10px 32px;
+    cursor: pointer;
+    font-size: 15px;
+    color: #fff;
+    background-color: #3a3a3a;
+    position: relative;
+    transition: background-color 0.2s;
+}
+
+/* hover */
+.select-option:hover {
+    background-color: #007bff;
+    /* 青 */
+}
+
+.select-option:hover {
+    background-color: #007bff;
+    /* 青 */
+}
+
+.select-option:hover::before {
+    content: "✓";
+    position: absolute;
+    left: 10px;
+    top: 9px;
+    font-size: 14px;
+    color: #fff;
+}
+
+
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+    box-sizing: border-box;
+}
+
+/* ▼ テキストエリア */
+.form-group textarea {
+    min-height: 80px;
+    resize: vertical;
+}
+
+/* ▼ セクションタイトル（商品名と説明） */
+.section-title {
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 4px;
+    color: #504c4c;
+}
+
+.section-line {
+    border: none;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 20px;
+}
+
+/* ▼ 価格欄（円マーク付き） */
+.price-wrapper {
+    position: relative;
+}
+
+.price-wrapper::before {
+    content: "¥";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000;
+    font-size: 16px;
+}
+
+.price-wrapper input {
+    padding-left: 28px;
+    /* 円マーク分の余白 */
+}
+
+/* ▼ 出品ボタン */
+.btn-primary {
+    background-color: #ff6b6b;
+    color: #fff;
+    font-size: 16px;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #ff4d4d;
+}
+
+/* ▼ 「商品の詳細」とグレー線の間を個別に詰める */
+.sell-form .section-title {
+    margin-bottom: -12px !important;
+    /* ← gap分を打ち消す */
+}
+
+/* ▼ グレー線との間隔を見本に合わせる微調整 */
+.sell-form .section-line {
+    margin-top: 0 !important;
+    margin-bottom: -12px !important;
+}
+
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    /* ボタンの間隔を維持 */
+    width: 100%;
+    /* ←これが重要！ */
+    box-sizing: border-box;
+}
+
+.category-break {
+    flex-basis: 100%;
+    /* ← 強制改行 */
+    height: 0;
+}
+.sell-form button[type="submit"] {
+  margin-top: 40px; /* ← ここで調整、20～50pxあたりで試す */
+}

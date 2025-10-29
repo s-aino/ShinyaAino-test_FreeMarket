@@ -51,4 +51,7 @@
         </div>
     </form>
 </div>
+@push('css')
+<link rel="stylesheet" href="{{ asset('css/shipping-edit.css') }}">
+@endpush
 @endsection

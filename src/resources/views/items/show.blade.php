@@ -1,4 +1,3 @@
-{{-- resources/views/items/show.blade.php --}}
 @extends('layouts.app')
 
 @section('title', $item->title ?? '商品詳細')
@@ -18,9 +17,9 @@
         {{-- 画像 --}}
         <div class="detail__image">
             <div class="thumb">
-                <img src="{{ $item->image_url }}" alt="{{ $item->title }}" loading="lazy" decoding="async">
+                <img src="{{ asset($item->image_path) }}" alt="{{ $item->title }}">
                 @if(method_exists($item, 'getIsSoldAttribute') ? $item->is_sold : ($item->status === 'sold'))
-                <span class="badge--sold">SOLD</span>
+                <span class="sold-badge">SOLD</span>
                 @endif
             </div>
         </div>
@@ -33,8 +32,10 @@
             @endif
 
             {{-- 価格（※（税込）はCSSで付与） --}}
-            <div class="detail__price">¥{{ number_format((int)($item->price ?? 0)) }}</div>
-
+            <div class="detail__price">
+                ¥{{ number_format((int)($item->price ?? 0)) }}
+                <span class="price__tax">(税込)</span>
+            </div>
             {{-- いいね / コメント数（白抜き風アイコン） --}}
             @php
             $liked = auth()->check() ? $item->isLikedBy(auth()->user()) : false;
@@ -130,8 +131,10 @@
                         @foreach($categories as $name)
                         <span class="chip">{{ $name }}</span>
                         @endforeach
-                        @elseif(isset($item->category) && $item->category)
-                        <span class="chip">{{ $item->category->name }}</span>
+                        @elseif(isset($item->categories) && $item->categories->isNotEmpty())
+                        @foreach($item->categories as $category)
+                        <span class="chip">{{ $category->name }}</span>
+                        @endforeach
                         @else
                         <span class="muted">-</span>
                         @endif
@@ -145,32 +148,36 @@
             {{-- コメント一覧 --}}
             <section class="detail__section detail__section--comments">
                 <h2>コメント（{{ $item->comments_count ?? $item->comments()->count() }}）</h2>
-                …
+
 
                 @forelse ($item->comments as $comment)
                 <article class="cmt">
-                    {{-- アバター（左の列） --}}
-                    <div class="cmt_avatar">
-                        @if (!empty($comment->user->profile_image_path))
-                        {{-- プロフィール画像あり --}}
-                        <img src="{{ asset('storage/' . $comment->user->profile_image_path) }}"
-                            alt="{{ $comment->user->name }}のアイコン">
-                        @else
-                        {{-- プロフィール画像なし → 名前の頭文字を表示 --}}
-                        @php
-                        $initial = mb_substr($comment->user->name, 0, 1); // 名前の先頭1文字
-                        @endphp
-                        <div class="avatar-placeholder">{{ $initial }}</div>
-                        @endif
-                    </div>
-                    {{-- 名前＋時刻（右の列の1行目） --}}
-                    <div class="cmt__meta">
-                        <strong class="cmt__user">{{ $comment->user->name }}</strong>
-                        <time class="cmt__time" datetime="{{ $comment->created_at->toIso8601String() }}">
-                            {{ $comment->created_at->format('Y/m/d H:i') }}
-                        </time>
-                    </div>
+                    <div class="cmt__header">
+                        {{-- アバター（左の列） --}}
+                        <div class="cmt_avatar">
+                            @if (!empty($comment->user->profile_image_path))
+                            {{-- プロフィール画像あり --}}
+                            <img src="{{ asset('storage/' . $comment->user->profile_image_path) }}"
+                                alt="{{ $comment->user->name }}のアイコン">
+                            @else
+                            {{-- プロフィール画像なし → 名前の頭文字を表示 --}}
+                            @php
+                            $initial = mb_substr($comment->user->name, 0, 1); // 名前の先頭1文字
+                            @endphp
+                            <div class="avatar-placeholder">{{ $initial }}</div>
+                            @endif
+                        </div>
+                        <div class="cmt__body">
+                            {{-- 名前＋時刻（右の列の1行目） --}}
+                            <div class="cmt__meta">
+                                <strong class="cmt__user">{{ $comment->user->name }}</strong>
+                                <time class="cmt__time" datetime="{{ $comment->created_at->toIso8601String() }}">
+                                    {{ $comment->created_at->format('Y/m/d H:i') }}
+                                </time>
+                            </div>
+                        </div>
 
+                    </div>
                     {{-- グレーのボックス：コメント本文（右の列の2行目 / 幅は列いっぱい） --}}
                     <div class="cmt__bubble">
                         {!! nl2br(e($comment->body)) !!}
@@ -205,3 +212,6 @@
     </div>
 </div>
 @endsection
+@push('styles')
+<link rel="stylesheet" href="{{ asset('css/items-show.css') }}?v={{ filemtime(public_path('css/items-show.css')) }}">
+@endpush

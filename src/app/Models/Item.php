@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\Like;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Item extends Model
 {
@@ -28,10 +29,6 @@ class Item extends Model
     public function seller()
     {
         return $this->belongsTo(User::class, 'user_id');
-    }
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
     }
     public function comments()
     {
@@ -85,7 +82,7 @@ class Item extends Model
     }
     public function categories()
     {
-        return $this->belongsToMany(Category::class, 'category_item');
+        return $this->belongsToMany(Category::class);
     }
     public function orders()
     {
