@@ -96,9 +96,15 @@
             {{-- 購入ボタン（ゲストはログイン導線） --}}
 
             <div class="actions">
+                {{-- ログイン時 --}}
                 @auth
                 @if($item->status === 'sold')
+                {{-- 売り切れ --}}
                 <button class="btn btn--disabled" disabled>売り切れ</button>
+
+                @elseif(Auth::id() === $item->user_id)
+                {{-- 自分の出品商品 --}}
+                <button class="btn btn--disabled" disabled>自分の出品商品は購入できません</button>
                 @else
                 <a class="btn btn--primary btn--square"
                     href="{{ route('purchase.show', ['item' => $item->id]) }}">
@@ -186,10 +192,15 @@
                 @empty
                 <p class="muted">まだコメントはありません。</p>
                 @endforelse {{-- コメント投稿欄 --}}
-                <form action="{{ auth()->check()
-                  ? route('comments.store', ['item' => $item->id])
-                  : route('comments.prepare', ['item' => $item->id]) }}"
-                    method="POST" class="comment__form actions" id="comments">
+                @auth
+                @if (Auth::id() === $item->user_id)
+                {{-- 自分の出品商品にはコメント不可 --}}
+                <p class="text-muted" style="margin-top:10px;">※自分の出品商品にはコメントできません。</p>
+                @else
+                <form action="{{ route('comments.store', ['item' => $item->id]) }}"
+                    method="POST"
+                    class="comment__form actions"
+                    id="comments">
                     @csrf
                     <div class="comment-title">商品へのコメント</div>
 
@@ -207,11 +218,14 @@
                             コメントを送信する
                         </button>
                     </div>
+                </form>
+                @endif
+                @endauth
             </section>
         </div>
     </div>
 </div>
-@endsection
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/items-show.css') }}?v={{ filemtime(public_path('css/items-show.css')) }}">
 @endpush
+@endsection

@@ -426,3 +426,7 @@
   color: #555;
   margin-left: 4px;
 }
+.text-muted {
+    font-size: 18px;
+    font-weight: 600;
+}

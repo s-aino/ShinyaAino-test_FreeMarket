@@ -14,16 +14,6 @@
 @section('content')
 <div class="container">
     <h1 class="sell-title">商品の出品</h1>
-    <!-- {{-- エラーメッセージ --}}
-    @if ($errors->any())
-    <div class="error-box">
-        <ul>
-            @foreach ($errors->all() as $error)
-            <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-    </div>
-    @endif -->
 
     {{-- ★ フォーム開始ここに移動 ★ --}}
     <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data" class="sell-form">

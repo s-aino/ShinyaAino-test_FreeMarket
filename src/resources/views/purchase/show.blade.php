@@ -15,8 +15,7 @@
 
     {{-- ▼ フォーム開始 --}}
     <form action="{{ route('purchase.checkout', $item->id) }}" method="POST" class="purchase-form">
-        @csrf
-        <div class="purchase-grid">
+        @csrf <div class="purchase-grid">
             {{-- ▼ 左カラム --}}
             <div class="left">
 

@@ -113,10 +113,11 @@ class ItemController extends Controller
         if (isset($validated['categories'])) {
             $item->categories()->sync($validated['categories']);
         }
-
-        return redirect()
-            ->route('mypage.show')
-            ->with('success', '商品を出品しました！');
+        return redirect()->route('sell.success');
+    }
+    public function success()
+    {
+        return view('items.success');
     }
 
 

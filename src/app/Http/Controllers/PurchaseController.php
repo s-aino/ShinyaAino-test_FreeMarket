@@ -113,7 +113,6 @@ class PurchaseController extends Controller
                 'cancel_url' => $cancelUrl,
             ]);
 
-            // Stripe画面へ遷移（ここではまだDB登録しない）
             return redirect($session->url);
         }
 
@@ -133,7 +132,6 @@ class PurchaseController extends Controller
                     'status' => 'paid',
                     'ordered_at' => now(),
                 ]);
-
             }
             $item->update(['status' => 'sold']);
 
@@ -172,10 +170,6 @@ class PurchaseController extends Controller
             ->with('message', '決済が完了しました。');
     }
 
-    public function pending(Item $item)
-    {
-        return view('purchase.pending', compact('item'));
-    }
 
     public function tempAddress(Request $request, Item $item)
     {
