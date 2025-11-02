@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Http\Request;
 use App\Http\Controllers\{ItemController, PurchaseController, CommentController, MyPageController, LikeController};
 
 //  トップ・商品一覧（ゲストも閲覧可）
@@ -9,7 +11,7 @@ Route::get('/', [ItemController::class, 'index'])->name('items.index');
 Route::get('/item/{item}', [ItemController::class, 'show'])->name('items.show');
 
 // 認証必須ページ（auth）
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     // マイページ関連
     Route::get('/mypage', [MyPageController::class, 'show'])->name('mypage.show');
     Route::get('/mypage/profile', [MyPageController::class, 'edit'])->name('profile.edit');
@@ -36,3 +38,29 @@ Route::middleware('auth')->group(function () {
     Route::get('/purchase/address/{item}', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
     Route::put('/purchase/address/{item}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
 });
+//  メール認証関連ルート
+// ログイン済みユーザー専用（※ verified はまだ不要）
+Route::middleware('auth')->group(function () {
+
+    //  メール認証待ち画面
+    Route::get('/email/verify', function () {
+        return view('auth.verify-email');
+    })->name('verification.notice');
+
+    // メール認証画面（「認証はこちらから」ボタンで遷移）
+    Route::get('/email/verify/guide', function () {
+        return view('auth.verify-guide');
+    })->name('verification.guide');
+    
+    //  認証メール再送信
+    Route::post('/email/verification-notification', function (Request $request) {
+        $request->user()->sendEmailVerificationNotification();
+        return back()->with('message', '認証メールを再送しました。');
+    })->middleware('throttle:6,1')->name('verification.send');
+});
+
+// 認証リンクをクリックしたときの処理
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill(); // email_verified_at に時刻を記録
+    return redirect('mypage/profile')->with('message', 'メール認証が完了しました！'); // 認証完了後にプロフィールページへ
+})->middleware(['auth', 'signed'])->name('verification.verify');

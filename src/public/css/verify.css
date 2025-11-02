@@ -1,0 +1,66 @@
+.verify-container {
+    text-align: center;
+    margin-top: 160px;
+    font-family: 'Hiragino Kaku Gothic ProN', sans-serif;
+}
+
+.verify-container h2 {
+    font-size: 18px;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+}
+
+.verify-subtext {
+    font-size: 18px;
+    margin-bottom: 50px;
+    color: #333;
+    font-weight: bold;
+}
+
+.verify-btn {
+    background-color: #e0e0e0;
+    border: 1px solid #7a7a7a;
+    padding: 12px 20px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+    display: inline-block;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.verify-btn:hover .back-btn:hover {
+    background-color: #e6e6e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.resend-link {
+    display: inline-block;
+    margin-top: 40px;
+    color: #1d9bf0;
+    background: none;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.resend-link:hover {
+    text-decoration: underline;
+}
+
+.verify-instruction {
+    margin-top: 30px;
+    font-size: 14px;
+    color: #666;
+}
+
+.back-btn {
+    background-color: #f8f8f8;
+    border: 1px solid #aaa;
+    padding: 12px 20px;
+    border-radius: 7px;
+    font-size: 15px;
+    cursor: pointer;
+}

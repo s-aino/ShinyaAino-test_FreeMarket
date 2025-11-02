@@ -44,11 +44,6 @@ li {
   margin: 0 auto;
 }
 
-@media (max-width: 1024px) {
-  .container {
-    width: 94%;
-  }
-}
 
 
 /* ================================================
@@ -184,18 +179,6 @@ li {
 /* ================================================
    HEADER（固定配置・左右にゆったり広げる）
 ================================================ */
-.header {
-  background-color: #000;
-  color: #fff;
-  width: 100%;
-  height: 70px;
-  /* ← 高さを固定 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  z-index: 1000;
-}
 
 /* 内側レイアウト */
 .header__inner {
@@ -217,36 +200,36 @@ li {
 }
 
 /* 検索バー */
-.header__search {
+/* .header__search {
   flex: 1;
   display: flex;
   justify-content: center;
-}
+} */
 
-.header__search input {
+/* .header__search input {
   width: 60%;
   max-width: 420px;
   padding: 8px 12px;
   border: none;
   border-radius: 4px;
-}
+} */
 
 /* ナビゲーション */
-.nav {
+/* .nav {
   display: flex;
   align-items: center;
   gap: 32px;
   /* 👈 余白を広めに変更 */
-}
-
+/* } */
+*/
 /* 通常リンク */
-.nav__link {
+/* .nav__link {
   color: #fff;
   font-size: 14px;
   padding: 6px 12px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
-}
+} */
 
 .nav__link:hover {
   background-color: #333;
@@ -281,30 +264,10 @@ li {
    固定位置を確保（headerがなくても高さ維持）
 ================================================ */
 main.main-container {
-  margin-top: 70px;
+  margin-top: 90px;
   /* ← header高さ分を確保してずれ防止 */
 }
 
-/* ================================================
-   タブレット対応（幅が狭くなったら縦配置）
-================================================ */
-@media (max-width: 1024px) {
-  .header__inner {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 16px 20px;
-    gap: 16px;
-  }
-
-  .header__search {
-    order: 3;
-  }
-
-  .nav {
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-}
 
 
 /* ================================================
@@ -330,54 +293,6 @@ main.main-container {
   /* 旧CSSや他ファイルからの影響をブロック */
 }
 
-/* ================================================
-   MEDIA QUERIES
-================================================ */
-
-/* 💻 PCレイアウト（幅1400〜1540pxあたり） */
-@media (min-width: 1400px) and (max-width: 1540px) {
-  .container {
-    max-width: 1300px;
-  }
-
-  .header {
-    padding: 12px 60px;
-  }
-
-  .header__search input {
-    max-width: 500px;
-  }
-}
-
-/* 📱 タブレットレイアウト（幅768〜850pxあたり） */
-@media (min-width: 768px) and (max-width: 850px) {
-  .header {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 12px 24px;
-  }
-
-  .header__nav {
-    justify-content: center;
-    margin-top: 10px;
-  }
-
-  .header__search input {
-    width: 100%;
-  }
-
-  .items-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
-}
-
-/* 🎯 共通のモバイル縮小対応（1024px以下） */
-@media (max-width: 1024px) {
-  .container {
-    width: 94%;
-  }
-}
 
 /* ================================
    見出し・タイトル系
@@ -546,9 +461,6 @@ main.main-container {
     padding: 0 10px;
   }
 
-  /* .cmt__bubble {
-    margin-left: 0;
-  } */
 }
 
 /* ヘッダーのログアウトボタンを他リンクと統一 */
@@ -563,43 +475,24 @@ main.main-container {
   transition: background-color 0.2s ease;
 }
 
-/* .nav__logout button:hover {
-  background: #333; */
-/* } */
 
-/* ==============================
-   Header layout
-============================== */
-.header_inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  /* ロゴ左・nav右 */
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 10px 20px;
-}
 
-.brand_logo img {
-  display: block;
-}
 
 /* 検索フォーム */
-.header_search {
+/* .header_search {
   flex: 1;
   margin: 0 40px;
-}
+} */
 
 /* ナビ共通 */
-.nav {
+/* .nav {
   display: flex;
   align-items: center;
   gap: 20px;
-}
+} */
 
 /* リンク */
-.nav_link {
+/* .nav_link {
   background: none;
   border: none;
   color: #fff;
@@ -608,7 +501,7 @@ main.main-container {
   cursor: pointer;
   padding: 6px 10px;
 
-}
+} */
 
 /* ログアウトボタン（リンク風） */
 .nav_logout_btn {
@@ -658,44 +551,31 @@ main.main-container {
   justify-content: center;
 }
 
-.header_search input[type="text"] {
+/* .header_search input[type="text"] {
   width: 100%;
   max-width: 420px;
   /* 💡 横幅を広めに調整 */
-  height: 40px;
-  /* 💡 高さを少しアップ */
-  border-radius: 10px;
-  /* 💡 角をなめらかに */
-  border: none;
+/* height: 40px; */
+/* 💡 高さを少しアップ */
+/* border-radius: 10px; */
+/* 💡 角をなめらかに */
+/* border: none;
   outline: none;
   padding: 0 16px;
   font-size: 14px;
   background-color: #fff;
   color: #333;
-  box-shadow: 0 0 0 1px #ccc inset;
-  /* 薄い枠でスッキリ */
-  transition: box-shadow 0.2s, background-color 0.2s;
-}
-
-.header_search input[type="text"]:focus {
+  box-shadow: 0 0 0 1px #ccc inset; */
+/* 薄い枠でスッキリ */
+/* transition: box-shadow 0.2s, background-color 0.2s;
+} */
+*/
+/* .header_search input[type="text"]:focus {
   background-color: #fafafa;
   box-shadow: 0 0 0 2px #ff6b6b inset;
   /* 💡 フォーカス時に赤枠 */
-}
-
-/* ==============================
-   ヘッダー全体
-============================== */
-.header_inner {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 10px 20px;
-  position: relative;
-}
+/* } */
+*/
 
 /* ロゴ：左固定 */
 .brand_logo {
@@ -705,17 +585,17 @@ main.main-container {
 }
 
 /* 検索バー：中央固定 */
-.header_search {
-  position: absolute;
-  /* 💡 中央に固定配置 */
-  left: 50%;
+/* .header_search {
+  position: absolute; */
+/* 💡 中央に固定配置 */
+/* left: 50%;
   transform: translateX(-50%);
-  width: 420px;
-  /* 💡 固定幅を指定 */
-}
+  width: 420px; */
+/* 💡 固定幅を指定 */
+/* } */
 
 /* 検索バー内のinput */
-.header_search input[type="text"] {
+/* .header_search input[type="text"] {
   width: 100%;
   height: 40px;
   border-radius: 8px;
@@ -726,24 +606,24 @@ main.main-container {
   color: #333;
   box-shadow: 0 0 0 1px #ccc inset;
   transition: box-shadow 0.2s, background-color 0.2s;
-}
+} */
 
-.header_search input[type="text"]:focus {
+/* .header_search input[type="text"]:focus {
   background-color: #fafafa;
   box-shadow: 0 0 0 2px #ff6b6b inset;
-}
+} */
 
 /* ナビ：右固定 */
-.nav {
+/* .nav {
   flex: 0 0 260px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: 20px;
-}
+} */
 
 /* リンク共通 */
-.nav_link {
+/* .nav_link {
   background: none;
   border: none;
   color: #fff;
@@ -752,7 +632,7 @@ main.main-container {
   cursor: pointer;
   padding: 6px 10px;
   white-space: nowrap;
-}
+} */
 
 /* 出品ボタン */
 .btn--white {
@@ -862,4 +742,223 @@ textarea::placeholder {
   /* 鮮やかな赤 */
   font-size: 14px;
   margin-top: 6px;
+}
+
+/* ===============================
+   Header layout（共通）
+=============================== */
+
+/* .header_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px; */
+/* min-height: 60px; */
+/* ロゴ見えない防止 */
+/* } */
+
+/* ロゴ */
+.brand_logo img {
+  display: block;
+  height: 28px;
+  width: auto;
+}
+
+/* ナビ全体 */
+/* .nav {
+  display: flex;
+  align-items: center;
+  gap: 16px; */
+/* } */
+
+/* 出品ボタン */
+.btn--white {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ddd;
+  font-weight: bold;
+  padding: 6px 14px;
+  border-radius: 4px;
+}
+
+/* ログイン・登録ページ専用 */
+.auth header .header_inner {
+  justify-content: flex-start;
+}
+
+
+/* ===============================
+   ✅ 共通ヘッダー（固定表示対応）
+=============================== */
+header {
+  /* position: fixed; */
+  /* スクロールしても上に固定 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #000;
+  /* 黒帯 */
+  color: #fff;
+  z-index: 1000;
+  padding: 10px 0;
+  /* 上下の余白 */
+}
+
+/* ===============================
+   ✅ 中身レイアウト（PC時）
+=============================== */
+/* .header_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+  box-sizing: border-box;
+} */
+
+/* =========================================================
+   🌐 ヘッダー／ナビゲーション 統一スタイル
+   PC：横一列（右寄せ）
+   タブレット：2段構成（ロゴ＋検索 → ログイン類）
+========================================================= */
+
+/* 共通スタイル（PC・タブレット共通） */
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 20px;
+  height: 60px;
+  padding: 0;
+  margin: 0;
+}
+
+/* ナビ内リンクボタン共通 */
+.nav_link {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+
+.nav_link.nav_sell_btn {
+  background-color: #fff;
+  color: #000;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-weight: 600;
+}
+
+/* ---------------------------------------------
+   🧩 ヘッダー内の全体調整
+--------------------------------------------- */
+.header_inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+/* ---------------------------------------------
+   📱 タブレット専用：2段構成にする
+--------------------------------------------- */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .header_inner {
+    flex-direction: column;
+    /* 上下2段構成 */
+    align-items: flex-start;
+    /* stretch防止 */
+    gap: 8px;
+    padding: 12px 20px;
+  }
+
+  .brand_logo {
+    margin-bottom: 4px;
+  }
+
+  .header_search {
+    align-self: flex-end;
+    /* 検索バーを右寄せ */
+    width: 80%;
+    max-width: 420px;
+    justify-content: flex-start;
+    margin-right: 24px;
+  }
+
+  .nav {
+    align-self: flex-end;
+    /* ログイン／出品を右寄せ */
+    justify-content: flex-end;
+    height: 48px;
+    /* 高さを小さめに固定 */
+    gap: 20px;
+    padding-right: 24px;
+  }
+
+
+}
+
+/* ---------------------------------------------
+   🖥️ PC向け調整（1400px以上）
+--------------------------------------------- */
+@media (min-width: 1400px) {
+  .header_inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .header_search {
+    margin-left: auto;
+    margin-right: 20px;
+    width: 400px;
+
+  }
+
+  .nav {
+    height: 60px;
+    gap: 20px;
+  }
+}
+
+/* ===========================================
+   🔍 検索バー（ヘッダー内共通）
+=========================================== */
+.header_search {
+  display: flex;
+  justify-content: flex-start;
+  flex: 1;
+  margin: 0 120px 0 auto;
+  max-width: 360px;
+}
+
+.header_search input[type="text"] {
+  width: 100%;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #fff;
+  color: #333;
+  font-size: 14px;
+  box-shadow: 0 0 1px #ccc inset;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+/* 🩶 フォーカス時（入力中） */
+.header_search input[type="text"]:focus {
+  background-color: #fafafa;
+  box-shadow: 0 0 2px #ff6b6b inset;
+  outline: none;
 }
