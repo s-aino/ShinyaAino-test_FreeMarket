@@ -1,3 +1,4 @@
 
 # Ignore Docker MySQL volume
 docker/mysql/data/
+src/.env.testing
