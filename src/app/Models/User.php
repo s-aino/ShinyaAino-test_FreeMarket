@@ -9,7 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Storage;
 
-class User extends Authenticatable implements MustVerifyEmail{
+class User extends Authenticatable implements MustVerifyEmail
+{
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
@@ -90,10 +91,6 @@ class User extends Authenticatable implements MustVerifyEmail{
 
 
 
-    // public function addresses()
-    // {
-    //     return $this->hasMany(Address::class);
-    // }
     public function address()
     {
         return $this->hasOne(Address::class);

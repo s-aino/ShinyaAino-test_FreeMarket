@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Item extends Model
 {
+    use HasFactory;
     // ※DBが 'available' を使っているなら、ここを 'available' に変更してください
     public const STATUS_ACTIVE = 'active';
     public const STATUS_SOLD   = 'sold';
@@ -22,6 +23,8 @@ class Item extends Model
         'status',
         'image_path'
     ];
+
+
 
     // BladeやJSONで補助属性を常に使いたいので追加
     protected $appends = ['image_url', 'is_sold'];
@@ -88,10 +91,10 @@ class Item extends Model
     {
         return $this->hasMany(Order::class);
     }
-    public function isSold()
+    public function isSold(): bool
     {
-        return $this->orders()
-            ->where('status', 'paid')
-            ->exists();
+        // items.statusが'sold'のとき、もしくはordersにpaidがあるとき
+        return $this->status === 'sold'
+            || $this->orders()->where('status', 'paid')->exists();
     }
 }

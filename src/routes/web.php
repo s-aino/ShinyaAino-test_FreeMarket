@@ -10,7 +10,7 @@ use App\Http\Controllers\{ItemController, PurchaseController, CommentController,
 Route::get('/', [ItemController::class, 'index'])->name('items.index');
 Route::get('/item/{item}', [ItemController::class, 'show'])->name('items.show');
 
-// 認証必須ページ（auth）
+// 認証必須ページ（auth+verified）
 Route::middleware(['auth', 'verified'])->group(function () {
     // マイページ関連
     Route::get('/mypage', [MyPageController::class, 'show'])->name('mypage.show');
@@ -36,10 +36,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // 住所登録
     Route::get('/purchase/address/{item}', [PurchaseController::class, 'editAddress'])->name('purchase.address.edit');
-    Route::put('/purchase/address/{item}', [PurchaseController::class, 'updateAddress'])->name('purchase.address.update');
+    Route::post('/purchase/address/{item}', [PurchaseController::class, 'updateAddress'])
+        ->name('purchase.address.update');
 });
 //  メール認証関連ルート
-// ログイン済みユーザー専用（※ verified はまだ不要）
+// ログイン済みユーザー専用
 Route::middleware('auth')->group(function () {
 
     //  メール認証待ち画面
@@ -51,7 +52,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/email/verify/guide', function () {
         return view('auth.verify-guide');
     })->name('verification.guide');
-    
+
     //  認証メール再送信
     Route::post('/email/verification-notification', function (Request $request) {
         $request->user()->sendEmailVerificationNotification();

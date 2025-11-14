@@ -13,58 +13,67 @@ use Stripe\Stripe;
 use Stripe\Checkout\Session as CheckoutSession;
 use Carbon\Carbon;
 use Stripe\PaymentIntent;
+use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
-    // 購入ページ表示 (purchase.show)
+    // 🛒 購入ページ表示
     public function show(Item $item)
     {
-        // ✅ ログインしていなければ、戻り先URLを記録してログイン画面へ
+        // ログインしていなければログイン画面へリダイレクト
         if (!auth()->check()) {
-            Session::put('url.intended', route('purchase.show', ['item_id' => $item->id]));
+            session()->put('url.intended', route('purchase.show', ['item_id' => $item->id]));
             return redirect()->route('login');
         }
+
         $user = auth()->user();
 
-        // ✅ セッションに一時住所があればそれを優先
+        // 一時住所がセッションにある場合はそちらを優先
         $tempAddress = session('temp_address_id')
-            ? \App\Models\Address::find(session('temp_address_id'))
+            ? Address::find(session('temp_address_id'))
             : null;
 
-        // ✅ 一時住所があればそれを、なければ登録住所を使用
+        // 一時住所がなければ登録住所を使用
         $address = $tempAddress ?? $user->address;
 
         return view('purchase.show', compact('item', 'address'));
     }
 
-    // 住所変更画面
+    // 🏠 住所変更フォーム表示
     public function editAddress(Item $item)
     {
-        $address = auth()->user()->address ?? new Address();
+        $address = auth()->user()->address ?? new Address([
+            'postal' => '',
+            'line1' => '',
+            'line2' => '',
+        ]);
+
         return view('purchase.address', compact('item', 'address'));
     }
 
-
-    // 住所変更更新（今回のみの配送先）
+    // 📦 住所変更（今回の配送先）
     public function updateAddress(AddressRequest $request, Item $item)
     {
-        $user = auth()->user();
+//  Log::info('auth check', ['check' => auth()->check(), 'id' => auth()->id()]);
+         $user = auth()->user();
 
         // 一時住所として新規登録
         $tempAddress = $user->address()->create([
-            'postal'        => $request->postal_code,
-            'line1'         => $request->line1,
-            'line2'         => $request->line2,
-            'is_temporary'  => true, // ← 重要！
+            'postal' => $request->postal,
+            'line1' => $request->address,
+            'line2' => $request->building,
+            'is_temporary' => true,
         ]);
 
-        // 購入ページで使う一時住所IDをセッションに保存
+        // セッションに保存
         session(['temp_address_id' => $tempAddress->id]);
 
         return redirect()
             ->route('purchase.show', ['item' => $item->id])
-            ->with('message', '今回の配送先を変更しました。');
+            ->with('message', '今回の配送先を変更しました。')
+            ->with('temp_address_id', $tempAddress->id);
     }
+
 
     public function checkout(Request $request, Item $item)
     {
@@ -84,7 +93,7 @@ class PurchaseController extends Controller
         }
 
         // --- 売り切れチェック ---
-        if (method_exists($item, 'isSold') && $item->isSold()) {
+        if ($item->isSold()) {
             abort(403, 'この商品は売り切れです。');
         }
 
@@ -171,28 +180,28 @@ class PurchaseController extends Controller
     }
 
 
-    public function tempAddress(Request $request, Item $item)
-    {
-        $validated = $request->validate([
-            'postal_code' => 'required|string|max:10',
-            'line1' => 'required|string|max:255',
-            'line2' => 'nullable|string|max:255',
-        ]);
+    // public function tempAddress(Request $request, Item $item)
+    // {
+    //     $validated = $request->validate([
+    //         'postal_code' => 'required|string|max:10',
+    //         'line1' => 'required|string|max:255',
+    //         'line2' => 'nullable|string|max:255',
+    //     ]);
 
-        // 一時住所を保存（既存住所を上書きしない）
-        $address = \App\Models\Address::create([
-            'user_id' => auth()->id(),
-            'postal' => $validated['postal_code'],
-            'line1' => $validated['line1'],
-            'line2' => $validated['line2'],
-            'is_temporary' => true,
-        ]);
+    // 一時住所を保存（既存住所を上書きしない）
+    //     $address = \App\Models\Address::create([
+    //         'user_id' => auth()->id(),
+    //         'postal' => $validated['postal_code'],
+    //         'line1' => $validated['line1'],
+    //         'line2' => $validated['line2'],
+    //         'is_temporary' => true,
+    //     ]);
 
-        // 一時住所IDをセッションに保存
-        session(['temp_address_id' => $address->id]);
+    //     // 一時住所IDをセッションに保存
+    //     session(['temp_address_id' => $address->id]);
 
-        return redirect()
-            ->route('purchase.show', ['item' => $item->id])
-            ->with('message', '今回の配送住所を登録しました');
-    }
+    //     return redirect()
+    //         ->route('purchase.show', ['item' => $item->id])
+    //         ->with('message', '今回の配送住所を登録しました');
+    // }
 }

@@ -35,44 +35,44 @@ class MyPageController extends Controller
     {
         $user = auth()->user();
 
-        // 住所など必要であればここで取得
-        $address = $user->address;
-        // ->where('is_default', true)->first();
+        $address = $user->address ?? new \App\Models\Address([
+            'postal' => '',
+            'line1' => '',
+            'line2' => '',
+        ]);
 
-        // profile/edit.blade.php を表示
         return view('profile.edit', compact('user', 'address'));
     }
     public function update(ProfileRequest $request)
     {
         $user = $request->user();
 
-        // 画像アップロード（現状維持）
+        // 画像アップロード
         if ($request->hasFile('profile_image')) {
             $path = $request->file('profile_image')->store('profile_images', 'public');
             $user->profile_image_path = $path;
         }
 
-        // 基本情報
+        // 基本情報更新
         $user->name = $request->name;
         if (is_null($user->onboarded_at)) {
             $user->onboarded_at = now();
         }
         $user->save();
 
-        // --- 住所更新 or 新規作成 ---
-        $data = [
-            'postal' => $request->postal,
-            'line1' => $request->address,
-            'line2' => $request->building,
-            'is_default' => true,
-        ];
+        // 住所更新（既存行があれば上書き）
+        $user->address()->updateOrCreate(
+            ['user_id' => $user->id, 'is_default' => true],
+            [
+                'postal' => $request->postal,
+                'line1' => $request->address,
+                'line2' => $request->building,
+                'is_default' => true,
+            ]
+        );
 
-        // Userモデル: hasMany(Address::class)
-        $user->address()->updateOrCreate([], $data);
-        $user->load('address');
-
-
-        return redirect()->route('profile.edit')
+        return redirect()
+            ->route('mypage.show')
             ->with('message', 'プロフィールを更新しました。');
     }
 }

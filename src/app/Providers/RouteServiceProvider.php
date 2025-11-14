@@ -42,6 +42,6 @@ class RouteServiceProvider extends ServiceProvider
         
 
         parent::boot();
-        Route::model('item_id', Item::class);
+        Route::model('item', Item::class);
     }
 }

@@ -1,80 +1,101 @@
 # ER Diagram (Mermaid)
 
+Laravel フリマアプリ — 最終 ER 図  
+（User・Item・Order・Address・Comment・Like・Category・category_item対応）
+
 ```mermaid
 erDiagram
-    users ||--o{ items : "sells"
-    users ||--o{ addresses : "has"
-    users ||--o{ comments : "writes"
-    users ||--o{ orders : "buys(buyer_id)"
 
-    categories ||--o{ items : "includes"
-    items ||--o{ comments : "has"
-    items ||--|| orders : "sold in"
-    orders }o--|| addresses : "ships to"
+  USERS ||--o{ ITEMS : "sells"
+  USERS ||--o{ COMMENTS : "writes"
+  USERS ||--o{ LIKES : "favorites"
+  USERS ||--o{ ORDERS : "buys(buyer_id)"
+  USERS ||--o{ ADDRESSES : "has"
 
-    users {
-        bigint id PK
-        varchar name
-        varchar email
-        varchar password
-        datetime email_verified_at
-        datetime created_at
-        datetime updated_at
-    }
+  ITEMS ||--o{ COMMENTS : "has"
+  ITEMS ||--o{ LIKES : "liked by"
+  ITEMS ||--o{ ORDERS : "sold in"
+  ITEMS }o--o{ CATEGORIES : "categorized as"
 
-    categories {
-        bigint id PK
-        varchar name
-        varchar slug
-        datetime created_at
-        datetime updated_at
-    }
+  ORDERS }o--|| ADDRESSES : "ships to"
 
-    items {
-        bigint id PK
-        bigint user_id FK
-        bigint category_id FK
-        varchar title
-        text description
-        int price
-        varchar status
-        varchar image_path
-        datetime created_at
-        datetime updated_at
-    }
+  CATEGORIES }o--o{ ITEMS : "includes"
 
-    addresses {
-        bigint id PK
-        bigint user_id FK
-        varchar postal
-        varchar prefecture
-        varchar city
-        varchar line1
-        varchar line2
-        varchar phone
-        boolean is_default
-        datetime created_at
-        datetime updated_at
-    }
+  USERS {
+      bigint id PK
+      varchar name
+      varchar email
+      varchar password
+      datetime email_verified_at
+      datetime created_at
+      datetime updated_at
+  }
 
-    orders {
-        bigint id PK
-        bigint buyer_id FK
-        bigint item_id FK
-        int price
-        int qty
-        varchar status
-        datetime ordered_at
-        bigint address_id FK
-        datetime created_at
-        datetime updated_at
-    }
+  ITEMS {
+      bigint id PK
+      bigint user_id FK
+      bigint category_id FK
+      varchar title
+      text description
+      int price
+      varchar status
+      varchar image_path
+      datetime created_at
+      datetime updated_at
+  }
 
-    comments {
-        bigint id PK
-        bigint user_id FK
-        bigint item_id FK
-        varchar body
-        datetime created_at
-        datetime updated_at
-    }
+  COMMENTS {
+      bigint id PK
+      bigint user_id FK
+      bigint item_id FK
+      text body
+      datetime created_at
+      datetime updated_at
+  }
+
+  LIKES {
+      bigint id PK
+      bigint user_id FK
+      bigint item_id FK
+      datetime created_at
+      datetime updated_at
+  }
+
+  ORDERS {
+      bigint id PK
+      bigint buyer_id FK
+      bigint item_id FK
+      bigint address_id FK
+      int price
+      int qty
+      varchar status
+      datetime ordered_at
+      datetime created_at
+      datetime updated_at
+  }
+
+  ADDRESSES {
+      bigint id PK
+      bigint user_id FK
+      varchar postal
+      varchar line1
+      varchar line2
+      boolean is_default
+      boolean is_temporary
+      datetime created_at
+      datetime updated_at
+  }
+
+  CATEGORIES {
+      bigint id PK
+      varchar name
+      varchar slug
+      datetime created_at
+      datetime updated_at
+  }
+
+  CATEGORY_ITEM {
+      bigint id PK
+      bigint category_id FK
+      bigint item_id FK
+  }

@@ -14,18 +14,25 @@ class AddressRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'postal_code' => ['required', 'regex:/^\d{3}-\d{4}$/'],
-            'line1'       => ['required', 'string', 'max:255'],
-            'line2'       => ['nullable', 'string', 'max:255'],
+            'postal'   => ['required', 'regex:/^\d{3}-\d{4}$/'], // 123-4567
+            'address'  => ['required', 'string', 'max:255'],
+            'building' => ['nullable', 'string', 'max:255'],
         ];
     }
 
     public function attributes(): array
     {
         return [
-            'postal_code' => '郵便番号',
-            'line1' => '住所',
-            'line2' => '建物名',
+            'postal'   => '郵便番号',
+            'address'  => '住所',
+            'building' => '建物名',
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'postal.regex' => '郵便番号はハイフンありの 8 文字で入力してください。（例: 123-4567）',
         ];
     }
 }

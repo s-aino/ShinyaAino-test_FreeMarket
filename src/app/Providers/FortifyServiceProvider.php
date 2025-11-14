@@ -16,7 +16,6 @@ class FortifyServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        // ログイン後：直前の intended があればそこへ、なければ '/'
         $this->app->singleton(LoginResponse::class, function () {
             return new class implements LoginResponse {
                 public function toResponse($request)
@@ -25,13 +24,11 @@ class FortifyServiceProvider extends ServiceProvider
                 }
             };
         });
-
-        // 新規登録後：今回は '/' に統一（/profile/edit にしたければここを変更）
         $this->app->singleton(RegisterResponse::class, function () {
             return new class implements RegisterResponse {
                 public function toResponse($request)
                 {
-                    return redirect()->route('profile.edit'); // 例: return redirect('/profile/edit');
+                    return redirect()->route('profile.edit');
                 }
             };
         });
