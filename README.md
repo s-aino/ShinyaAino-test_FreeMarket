@@ -72,7 +72,7 @@ Docker 上で動作する Laravel 製フリマアプリです。
 
  ### Docker ビルド
 
-1. git clone https://github.com/Estra-Coachtech/laravel-docker-template.git
+1. git clone https://github.com/s-aino/ShinyaAino-test_FreeMarket.git
 2. DockerDesktopアプリを立ち上げる
 3. docker compose up -d --build
 
