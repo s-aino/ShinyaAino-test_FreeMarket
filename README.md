@@ -58,7 +58,7 @@ Docker 上で動作する Laravel 製フリマアプリです。
 メール認証は **Mailtrap** を用いて動作確認しています。
 
 ただし以下の理由で、  
-**アプリ内の「認証メールはこちらから」ボタンから Mailtrap へ直接遷移させることはできません：**
+**アプリ内の「認証はこちらから」ボタンから Mailtrap へ直接遷移させることはできません：**
 
 - Mailtrap は **外部サービス**  
 - ローカルアプリ → Mailtrap への **直接リンク遷移は不可**
@@ -125,7 +125,7 @@ php artisan db:seed
 ## 🗂 ER 図 / 仕様書
 
 - **ER 図（PNG）** : [docs/img/er.png](docs/img/er.png)
-- **ER 図（Mermaid 元ファイル）** : [docs/er.mmd](docs/er.mmd)
+- **ER 図（Mermaid 元ファイル）** : [docs/er.mmd](docs/ER.md)
 - **テーブル仕様書** : [docs/DB_SPEC.md](docs/DB_SPEC.md)
   
   （Google スプレッドシート版「テーブル仕様書」を Markdown へ書き起こしたもの）
