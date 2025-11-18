@@ -108,7 +108,56 @@ php artisan key:generate
 php artisan migrate
 php artisan db:seed
 ```
+#### 6. 権限エラー（Permission denied）発生時の対処
 
+Laravel のログ・キャッシュ生成時に
+Permission denied が発生する場合は、以下の手順で権限を修正してください。
+
+1. PHP コンテナに入る
+```bash
+docker compose exec php bash
+```
+2. storage / cache の権限を修正
+```bash
+chmod -R 777 storage
+chmod -R 777 bootstrap/cache
+```
+
+3. Laravel のキャッシュをクリア
+```bash
+php artisan cache:clear
+php artisan config:clear
+php artisan view:clear
+php artisan route:clear
+```
+### 7.  テストの実行
+
+本アプリには 16 個の自動テストが含まれています。
+以下のコマンドで すべてのテストを一括実行できます。
+```bash
+php artisan test
+```
+### 8.  テスト環境（env.testing）
+
+テストは本番DBとは別に
+phpunit / php artisan test 実行時に env.testing を使用します。
+プロジェクト直下（.env と同階層）に `.env.testing` を作成し、
+以下の内容を記述してください。
+
+
+```env
+# env.testing の例
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_DATABASE=laravel_test_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+```
+
+### 9. テスト内容詳細
+- **機能ごとのテストケース一覧を Markdown 形式で整理したもの**  
+- PHPUnit によるテスト実行時のスクリーンショット結果をまとめた資料  
+[src/testcase/testcase_summary.md](src/testcase/testcase_summary.md)
 
 ## 🌐 開発環境 
 - **アプリ**：http://localhost  
@@ -130,12 +179,6 @@ php artisan db:seed
   
   （Google スプレッドシート版「テーブル仕様書」を Markdown へ書き起こしたもの）
 
-## 🧪 テストケース（testcase_summary.md）
-
-- **機能ごとのテストケース一覧を Markdown 形式で整理したもの**  
-- PHPUnit によるテスト実行時のスクリーンショット結果をまとめた資料  
-
-[src/testcase/testcase_summary.md](src/testcase/testcase_summary.md)
 
 
 
