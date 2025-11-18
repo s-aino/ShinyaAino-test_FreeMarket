@@ -125,7 +125,7 @@ php artisan db:seed
 ## 🗂 ER 図 / 仕様書
 
 - **ER 図（PNG）** : [docs/img/er.png](docs/img/er.png)
-- **ER 図（Mermaid 元ファイル）** : [docs/er.mmd](docs/ER.md)
+- **ER 図（Mermaid 元ファイル）** : [docs/ER.md](docs/ER.md)
 - **テーブル仕様書** : [docs/DB_SPEC.md](docs/DB_SPEC.md)
   
   （Google スプレッドシート版「テーブル仕様書」を Markdown へ書き起こしたもの）
