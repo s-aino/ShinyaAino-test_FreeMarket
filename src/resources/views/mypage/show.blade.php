@@ -16,7 +16,7 @@
     @if(!empty($user->profile_image_path))
     <img src="{{ asset('storage/' . $user->profile_image_path) }}" alt="プロフィール画像" class="profile-image">
     @else
-    {{-- プレースホルダ（グレー丸） --}}
+    {{-- プレースホルダ --}}
     <div class="profile-placeholder"></div>
     @endif
 

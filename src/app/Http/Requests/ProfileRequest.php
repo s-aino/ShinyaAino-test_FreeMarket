@@ -15,10 +15,10 @@ class ProfileRequest extends FormRequest
     {
         return [
             'name'          => ['required', 'string', 'max:20'],
-            'postal'        => ['required', 'regex:/^\d{3}-\d{4}$/'], // 123-4567
+            'postal'        => ['required', 'regex:/^\d{3}-\d{4}$/'], 
             'address'       => ['required', 'string', 'max:255'],
             'building'      => ['nullable', 'string', 'max:255'],
-            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], // 4MB
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png', 'max:4096'], 
         ];
     }
     public function attributes(): array
@@ -35,7 +35,7 @@ class ProfileRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'postal.regex'         => '郵便番号はハイフンありの 8 文字で入力してください。（例: 123-4567）',
+            'postal.regex'         => '郵便番号はハイフンありの 8 文字で入力してください。',
             'profile_image.image'  => '画像ファイルを選択してください。',
             'profile_image.mimes'  => '拡張子は jpeg もしくは png を指定してください。',
             'profile_image.max'    => '画像サイズは 4MB 以下にしてください。',

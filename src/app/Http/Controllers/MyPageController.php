@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\ProfileRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Address;
 use App\Models\Order;
@@ -12,22 +11,21 @@ use App\Models\Item;
 
 class MyPageController extends Controller
 {
+    // 出品した商品と購入した商品
     public function show()
     {
         $user = auth()->user();
 
-        // 出品した商品（そのままでOK）
         $sellingItems = $user->items()
             ->with('categories')
             ->latest()
             ->get();
 
-        // 購入した商品（Order経由 → Itemコレクションへ変換）
         $purchasedItems = \App\Models\Order::where('buyer_id', $user->id)
-            ->with('item')     // itemリレーションを一度にロード
+            ->with('item')
             ->latest()
             ->get()
-            ->pluck('item');   // ← ここでItemのコレクションだけ取り出す！
+            ->pluck('item');
 
         return view('mypage.show', compact('user', 'sellingItems', 'purchasedItems'));
     }

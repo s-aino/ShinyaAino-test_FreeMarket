@@ -15,7 +15,6 @@
 <div class="container">
     <h1 class="sell-title">商品の出品</h1>
 
-    {{-- ★ フォーム開始ここに移動 ★ --}}
     <form action="{{ route('items.store') }}" method="POST" enctype="multipart/form-data" class="sell-form">
         @csrf
 
@@ -45,7 +44,7 @@
                         {{ (is_array(old('categories')) && in_array($category->id, old('categories'))) ? 'checked' : '' }}>
                     <span>{{ $category->name }}</span>
                 </label>
-                {{-- ✅ 改行ポイントを追加 --}}
+                {{-- 改行ポイント --}}
                 @if ($index === 5 || $index === 11)
                 <br class="category-break">
                 @endif
@@ -90,7 +89,7 @@
             <p class="form-error">{{ $message }}</p>
             @enderror
         </div>
-        {{-- ▼ 商品名と説明 --}}
+        {{-- 商品名と説明 --}}
         <h2 class="section-title">商品名と説明</h2>
         <hr class="section-line">
 

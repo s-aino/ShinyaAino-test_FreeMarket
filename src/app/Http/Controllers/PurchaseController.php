@@ -4,9 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Order;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Models\Address;
+use Illuminate\Http\Request;
 use App\Http\Requests\AddressRequest;
 use Illuminate\Support\Facades\Session;
 use Stripe\Stripe;
@@ -17,10 +16,10 @@ use Illuminate\Support\Facades\Log;
 
 class PurchaseController extends Controller
 {
-    // 🛒 購入ページ表示
+    // 購入ページ表示
     public function show(Item $item)
     {
-        // ログインしていなければログイン画面へリダイレクト
+        // 未ログイン → ログイン画面へ
         if (!auth()->check()) {
             session()->put('url.intended', route('purchase.show', ['item_id' => $item->id]));
             return redirect()->route('login');
@@ -28,7 +27,7 @@ class PurchaseController extends Controller
 
         $user = auth()->user();
 
-        // 一時住所がセッションにある場合はそちらを優先
+        // 一時住所（セッション）があれば優先
         $tempAddress = session('temp_address_id')
             ? Address::find(session('temp_address_id'))
             : null;
@@ -39,7 +38,7 @@ class PurchaseController extends Controller
         return view('purchase.show', compact('item', 'address'));
     }
 
-    // 🏠 住所変更フォーム表示
+    // 配送先編集フォーム
     public function editAddress(Item $item)
     {
         $address = auth()->user()->address ?? new Address([
@@ -51,13 +50,12 @@ class PurchaseController extends Controller
         return view('purchase.address', compact('item', 'address'));
     }
 
-    // 📦 住所変更（今回の配送先）
+    // 配送先更新（今回の配送先）
     public function updateAddress(AddressRequest $request, Item $item)
     {
-//  Log::info('auth check', ['check' => auth()->check(), 'id' => auth()->id()]);
          $user = auth()->user();
 
-        // 一時住所として新規登録
+        // 一時住所を新規作成（今回の配送先）
         $tempAddress = $user->address()->create([
             'postal' => $request->postal,
             'line1' => $request->address,
@@ -74,25 +72,25 @@ class PurchaseController extends Controller
             ->with('temp_address_id', $tempAddress->id);
     }
 
-
+    // 購入処理 (カード / コンビニ)
     public function checkout(Request $request, Item $item)
     {
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
         $user = $request->user();
 
-        // --- バリデーション ---
+        // バリデーション
         $request->validate([
             'payment_method' => 'required|in:card,conveni',
             'address_id' => 'required|exists:addresses,id',
         ]);
 
-        // --- 自分の出品は購入不可 ---
+        // 自分の出品は購入不可
         if ($item->user_id === $user->id) {
             abort(403, '自分の出品は購入できません。');
         }
 
-        // --- 売り切れチェック ---
+        // 売り切れチェック 
         if ($item->isSold()) {
             abort(403, 'この商品は売り切れです。');
         }
@@ -101,12 +99,13 @@ class PurchaseController extends Controller
         $method = $request->input('payment_method');
         $types = [];
 
+        // カード払い（Stripe）
         if ($method === 'card') {
             $types = ['card'];
             $successUrl = route('purchase.success', ['item' => $item->id]);
             $cancelUrl = route('purchase.show', ['item' => $item->id]);
 
-            // 💳 Stripe セッション作成（この時点ではDB登録しない）
+            // 💳 Stripe セッション作成
             $session = \Stripe\Checkout\Session::create([
                 'payment_method_types' => $types,
                 'line_items' => [[
@@ -125,7 +124,7 @@ class PurchaseController extends Controller
             return redirect($session->url);
         }
 
-        // --- 🏪 コンビニ払い ---
+        // コンビニ払い
         if ($method === 'conveni') {
             $existingOrder = Order::where('buyer_id', $user->id)
                 ->where('item_id', $item->id)
@@ -142,17 +141,21 @@ class PurchaseController extends Controller
                     'ordered_at' => now(),
                 ]);
             }
+
+            // 商品を売り切れに更新
             $item->update(['status' => 'sold']);
 
             return view('purchase.success', compact('item'))
                 ->with('message', '購入が完了しました（コンビニ払い）');
         }
 
-        // fallback
+        // その他（戻す）
         return redirect()
             ->route('purchase.show', ['item' => $item->id])
             ->with('message', '支払い方法を選択してください。');
     }
+
+    // Stripeカード払い 成功時の処理
     public function success(Item $item)
     {
         $user = auth()->user();
@@ -179,29 +182,4 @@ class PurchaseController extends Controller
             ->with('message', '決済が完了しました。');
     }
 
-
-    // public function tempAddress(Request $request, Item $item)
-    // {
-    //     $validated = $request->validate([
-    //         'postal_code' => 'required|string|max:10',
-    //         'line1' => 'required|string|max:255',
-    //         'line2' => 'nullable|string|max:255',
-    //     ]);
-
-    // 一時住所を保存（既存住所を上書きしない）
-    //     $address = \App\Models\Address::create([
-    //         'user_id' => auth()->id(),
-    //         'postal' => $validated['postal_code'],
-    //         'line1' => $validated['line1'],
-    //         'line2' => $validated['line2'],
-    //         'is_temporary' => true,
-    //     ]);
-
-    //     // 一時住所IDをセッションに保存
-    //     session(['temp_address_id' => $address->id]);
-
-    //     return redirect()
-    //         ->route('purchase.show', ['item' => $item->id])
-    //         ->with('message', '今回の配送住所を登録しました');
-    // }
 }

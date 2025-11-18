@@ -20,7 +20,6 @@ class RegisterRequest extends FormRequest
         ];
     }
 
-    // 設計表の文言をそのまま
     public function messages(): array
     {
         return [

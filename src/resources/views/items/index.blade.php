@@ -15,7 +15,7 @@
 <div class="container">
     @php $tab = request('tab', 'recommend'); @endphp
 
-    {{-- タブ --}}
+    {{-- タブ切り替え（おすすめ / マイリスト） --}}
     <nav class="tabs">
         <a
             class="tab {{ $tab === 'recommend' ? 'is-active' : '' }}"
@@ -28,14 +28,13 @@
             aria-current="{{ $tab === 'likes' ? 'page' : null }}">マイリスト</a>
     </nav>
 
-    {{-- 一覧 --}}
+    {{-- 商品一覧 --}}
     <div class="items-wrap">
         <div class="item-grid">
             @forelse($items as $item)
             <a class="item-card" href="{{ route('items.show',$item) }}">
                 <div class="thumb">
                     <img src="{{ asset($item->image_path) }}" alt="{{ $item->title }}">
-                    <!-- loading="lazy" decoding="async"> -->
                     @if($item->is_sold)
                     <span class="sold-badge">SOLD</span>
                     @endif
@@ -51,7 +50,7 @@
                 </div>
             </a>
             @empty
-            {{-- likesタブ未認証などで空の場合はメッセージ非表示の仕様 --}}
+            {{-- likes 非ログイン時は空のまま（仕様） --}}
             @endforelse
         </div>
     </div>

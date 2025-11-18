@@ -16,12 +16,13 @@ class Item extends Model
 
     protected $fillable = [
         'user_id',
-        'category_id',
         'title',
         'description',
         'price',
+        'brand',
+        'condition',
         'status',
-        'image_path'
+        'image_path',
     ];
 
 

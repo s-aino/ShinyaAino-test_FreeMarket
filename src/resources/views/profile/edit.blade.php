@@ -89,10 +89,10 @@ $avatarSrc = $user->profile_image_path
     <div class="form-row">
       <label class="label">建物名</label>
       <input class="input" type="text" name="building" value="{{ old('building', $address->line2 ?? '') }}">
-       @error('building') <div class="error">{{ $message }}</div> @enderror
+      @error('building') <div class="error">{{ $message }}</div> @enderror
     </div>
 
-    {{-- 送信ボタン（入力と同幅に） --}}
+    {{-- 送信ボタン --}}
     <div class="form-actions">
       <button type="submit" class="btn btn--update">更新する</button>
     </div>

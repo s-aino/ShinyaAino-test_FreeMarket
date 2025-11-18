@@ -31,18 +31,17 @@
             <div class="detail__brand">{{ $item->brand }}</div>
             @endif
 
-            {{-- 価格（※（税込）はCSSで付与） --}}
             <div class="detail__price">
                 ¥{{ number_format((int)($item->price ?? 0)) }}
                 <span class="price__tax">(税込)</span>
             </div>
-            {{-- いいね / コメント数（白抜き風アイコン） --}}
+            {{-- いいね判定 --}}
             @php
             $liked = auth()->check() ? $item->isLikedBy(auth()->user()) : false;
             @endphp
 
+            {{-- いいね / コメント数 --}}
             <div class="detail__stats">
-                {{-- 星（いいね） --}}
                 <div class="stat">
                     @auth
                     <form method="POST" action="{{ $liked ? route('likes.destroy',$item) : route('likes.store',$item) }}">
@@ -52,7 +51,7 @@
                         <button type="submit"
                             class="icon-btn {{ $liked ? 'is-on' : '' }}"
                             aria-label="{{ $liked ? 'いいねを取り消す' : 'いいねする' }}">
-                            {{-- 好き/嫌いで SVG を切り替え（※あなたのポイント値をそのまま使用） --}}
+                            {{-- いいねアイコン（ON/OFF 切替） --}}
                             @if($liked)
                             {{-- 塗り（ON）--}}
                             <svg class="glyph-svg" viewBox="0 0 24 24" aria-hidden="true">
@@ -83,9 +82,8 @@
                     <span class="count">{{ $item->likes_count ?? $item->likes()->count() }}</span>
                 </div>
 
-                {{-- 吹き出しはそのまま（表示だけ） --}}
+                {{-- コメント数 --}}
                 <div class="stat">
-                    {{-- いま使っている吹き出し SVG を維持 --}}
                     <svg class="glyph-svg comment-rounded" viewBox="0 0 24 24" aria-hidden="true">
                         <path d="M12 3.8c4.66 0 8.44 3.16 8.44 7.06S16.66 17.9 12 17.9a9.4 9.4 0 0 1-2.72-.39L6 18l.83-2.25A7.9 7.9 0 0 1 3.56 10.9C3.56 6.96 7.34 3.8 12 3.8Z"
                             fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" />
@@ -96,14 +94,11 @@
             {{-- 購入ボタン（ゲストはログイン導線） --}}
 
             <div class="actions">
-                {{-- ログイン時 --}}
                 @auth
                 @if($item->status === 'sold')
-                {{-- 売り切れ --}}
                 <button class="btn btn--disabled" disabled>売り切れ</button>
 
                 @elseif(Auth::id() === $item->user_id)
-                {{-- 自分の出品商品 --}}
                 <button class="btn btn--disabled" disabled>自分の出品商品は購入できません</button>
                 @else
                 <a class="btn btn--primary btn--square"

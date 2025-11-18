@@ -13,7 +13,6 @@
 
 @section('content')
 <div class="verify-container">
-    <!-- <h2>認証メールを送信しました</h2> -->
     <p class="verify-subtext">
         <strong>「認証はこちらから」ボタンを押すと Mailtrapに移動</strong>し、<br>
         受信メール内のリンクから認証を完了します。<br><br>
