@@ -110,51 +110,76 @@ php artisan db:seed
 ```
 #### 6. 権限エラー（Permission denied）発生時の対処
 
-Laravel のログ・キャッシュ生成時に
-Permission denied が発生する場合は、以下の手順で権限を修正してください。
-
-1. PHP コンテナに入る
+クローン直後や .env、画像保存ができない場合は、以下の手順で権限とストレージリンクを修正してください。
+##### PHP コンテナに入る
 ```bash
 docker compose exec php bash
 ```
-2. storage / cache の権限を修正
+
+##### 権限の修正
 ```bash
 chmod -R 777 storage
 chmod -R 777 bootstrap/cache
 ```
 
-3. Laravel のキャッシュをクリア
+##### 画像用のストレージリンクを作成
+```bash
+chmod -R 777 bootstrap/cache
+```
+
+##### Laravel のキャッシュ削除
 ```bash
 php artisan cache:clear
 php artisan config:clear
 php artisan view:clear
 php artisan route:clear
 ```
-### 7.  テストの実行
+
+#### それでも改善しない場合
+サーバー側の所有者に合わせる必要があるケースでは、以下を追加で実行してください
+```bash
+chown -R www-data:www-data storage bootstrap/cache
+```
+
+#### 7.  テスト環境（env.testing）
+
+テストは本番DBとは別に
+phpunit / php artisan test 実行時に env.testing を使用します。
+プロジェクト直下に `.env.testing` を作成し(.env.exampleをコピー)
+```bash
+cp .env.example .env.testing
+```
+env.testingに以下の内容を記述してください。
+
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_test_db
+DB_USERNAME=root
+DB_PASSWORD=root
+```
+##### APP_KEYの生成（初回のみ）
+テスト環境専用のアプリケーションキーを生成します。
+```bash
+php artisan key:generate --env=testing
+```
+
+##### テーブルの作成（初回のみ）
+```bash
+php artisan migrate --env=testing
+```
+
+#### 8.  テストの実行
 
 本アプリには 16 個の自動テストが含まれています。
 以下のコマンドで すべてのテストを一括実行できます。
 ```bash
 php artisan test
 ```
-### 8.  テスト環境（env.testing）
 
-テストは本番DBとは別に
-phpunit / php artisan test 実行時に env.testing を使用します。
-プロジェクト直下（.env と同階層）に `.env.testing` を作成し、
-以下の内容を記述してください。
-
-
-```env
-# env.testing の例
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_DATABASE=laravel_test_db
-DB_USERNAME=laravel_user
-DB_PASSWORD=laravel_pass
-```
-
-### 9. テスト内容詳細
+###P# 9. テスト内容詳細
 - **機能ごとのテストケース一覧を Markdown 形式で整理したもの**  
 - PHPUnit によるテスト実行時のスクリーンショット結果をまとめた資料  
 [src/testcase/testcase_summary.md](src/testcase/testcase_summary.md)
