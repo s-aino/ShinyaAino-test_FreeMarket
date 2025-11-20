@@ -179,7 +179,7 @@ php artisan migrate --env=testing
 php artisan test
 ```
 
-###P# 9. テスト内容詳細
+#### 9. テスト内容詳細
 - **機能ごとのテストケース一覧を Markdown 形式で整理したもの**  
 - PHPUnit によるテスト実行時のスクリーンショット結果をまとめた資料  
 [src/testcase/testcase_summary.md](src/testcase/testcase_summary.md)
