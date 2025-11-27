@@ -124,7 +124,7 @@ chmod -R 777 bootstrap/cache
 
 ##### 画像用のストレージリンクを作成
 ```bash
-chmod -R 777 bootstrap/cache
+php artisan storage:link
 ```
 
 ##### Laravel のキャッシュ削除
