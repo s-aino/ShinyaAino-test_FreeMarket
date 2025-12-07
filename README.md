@@ -108,21 +108,10 @@ php artisan key:generate
 php artisan migrate
 php artisan db:seed
 ```
-#### 6. 権限エラー（Permission denied）発生時の対処
+#### 6. ストレージリンクの作成（画像表示に必要）
+本アプリでは商品画像を storage/app/public に保存します。
+以下を実行して公開ディレクトリへのリンクを作成してください。
 
-クローン直後や .env、画像保存ができない場合は、以下の手順で権限とストレージリンクを修正してください。
-##### PHP コンテナに入る
-```bash
-docker compose exec php bash
-```
-
-##### 権限の修正
-```bash
-chmod -R 777 storage
-chmod -R 777 bootstrap/cache
-```
-
-##### 画像用のストレージリンクを作成
 ```bash
 php artisan storage:link
 ```
@@ -135,22 +124,16 @@ php artisan view:clear
 php artisan route:clear
 ```
 
-#### それでも改善しない場合
-サーバー側の所有者に合わせる必要があるケースでは、以下を追加で実行してください
-```bash
-chown -R www-data:www-data storage bootstrap/cache
-```
-
 #### 7.  テスト環境（env.testing）
 
-テストは本番DBとは別に
-phpunit / php artisan test 実行時に env.testing を使用します。
-プロジェクト直下に `.env.testing` を作成し(.env.exampleをコピー)
+phpunit / php artisan test 実行時は、本番 DB とは別の テスト用データベース を使用します。
+
+##### env.testing を作成
+プロジェクト直下で以下を実行します。
 ```bash
 cp .env.example .env.testing
 ```
 env.testingに以下の内容を記述してください。
-
 
 ```env
 DB_CONNECTION=mysql
@@ -170,6 +153,13 @@ php artisan key:generate --env=testing
 ```bash
 php artisan migrate --env=testing
 ```
+
+注意：初回は以下のような質問が表示されます
+```bash
+The database 'laravel_test_db' does not exist. Create it? (yes/no)
+```
+👉 yes と入力してください。
+（yes を選ぶことで、テスト用 DB が自動作成されます）
 
 #### 8.  テストの実行
 
