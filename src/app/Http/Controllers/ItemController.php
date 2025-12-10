@@ -84,14 +84,14 @@ class ItemController extends Controller
         $path = $request->file('image')->store('items', 'public');
 
         // テスト環境以外は画像をリサイズ
-        if (app()->environment('testing')) {
-        } else {
-            $imagePath = storage_path('app/public/' . $path);
-            $manager = new ImageManager(new Driver());
-            $manager->read($imagePath)
-                ->cover(600, 600)
-                ->save($imagePath);
-        }
+        // if (app()->environment('testing')) {
+        // } else {
+        //     $imagePath = storage_path('app/public/' . $path);
+        //     $manager = new ImageManager(new Driver());
+        //     $manager->read($imagePath)
+        //         ->cover(600, 600)
+        //         ->save($imagePath);
+        // }
 
         //  商品登録（DBには "items/〇〇.jpg" だけを保存）
         $item = new Item();

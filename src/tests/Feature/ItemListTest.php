@@ -50,9 +50,13 @@ class ItemListTest extends TestCase
         $user = User::factory()->create();
         $ownItem = Item::factory()->create(['user_id' => $user->id]);
 
+        // 他人の商品（表示されるはず）
+        $otherItem = Item::factory()->create();
+
         $this->actingAs($user);
         $response = $this->get('/');
-
+        // dd($response->getContent());
         $response->assertDontSee($ownItem->title);
+        $response->assertSee($otherItem->title);
     }
 }

@@ -25,8 +25,7 @@ class ItemRegisterTest extends TestCase
 
         // 🖼 ダミー画像ファイル
         Storage::fake('public');
-        $file = UploadedFile::fake()->image('sample.jpg', 600, 600);
-
+        $file = UploadedFile::fake()->create('sample.jpg', 100, 'image/jpeg');
         // 📦 出品データを送信
         $response = $this->actingAs($user)
             ->post(route('items.store'), [

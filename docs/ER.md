@@ -6,7 +6,7 @@ erDiagram
     USERS ||--o{ COMMENTS : "writes"
     USERS ||--o{ LIKES : "favorites"
     USERS ||--o{ ORDERS : "buys (buyer_id)"
-    USERS ||--o{ ADDRESSES : "has"
+    USERS ||--o{ ADDRESSES : "has many"
     ITEMS ||--o{ COMMENTS : "has"
     ITEMS ||--o{ LIKES : "liked by"
     ITEMS ||--o{ ORDERS : "sold in"

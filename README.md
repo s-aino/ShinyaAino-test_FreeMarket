@@ -83,12 +83,12 @@ Docker 上で動作する Laravel 製フリマアプリです。
 ```bash
 docker compose exec php bash
 ```
-
+---
 #### 2. Composer インストール
 ```bash
 composer install
 ```
-
+---
 #### 3. .env 作成  
 .env.example をコピーし、以下の DB 設定に変更：
 ```env
@@ -97,18 +97,31 @@ DB_DATABASE=laravel_db
 DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
-
+---
 #### 4. アプリケーションキーの作成
 ```bash
 php artisan key:generate
 ```
-
+---
 #### 5. マイグレーション & シーディング
+##### 初回構築・仕様更新時
+```bash
+php artisan migrate:fresh --seed
+```
+##### （データ保持が必要な場合のみ）
 ```bash
 php artisan migrate
 php artisan db:seed
 ```
-#### 6. ストレージリンクの作成（画像表示に必要）
+---
+#### 6.権限の修正が必要なとき
+```bash
+chmod -R 777 storage
+chmod -R 777 bootstrap/cache
+```
+---
+
+#### 7. ストレージリンクの作成（画像表示に必要）
 本アプリでは商品画像を storage/app/public に保存します。
 以下を実行して公開ディレクトリへのリンクを作成してください。
 
@@ -124,16 +137,105 @@ php artisan view:clear
 php artisan route:clear
 ```
 
-#### 7.  テスト環境（env.testing）
+---
+#### 8. メール送信設定（Mailtrap を使用）
+
+本アプリでは、ユーザー登録時のメール認証に **Mailtrap** を使用しています。  
+動作確認のため、評価環境でも Mailtrap の無料アカウントを作成していただく必要があります。
+
+##### 8-1. Mailtrap アカウントの作成
+
+1. ブラウザで以下にアクセスします。  
+   https://mailtrap.io/
+2. 「Sign up」から無料アカウントを作成してください。
+3. ログイン後、「Sandboxes」→ デフォルトの **My Sandbox** を開きます。
+
+##### 8-2. Mailtrap の SMTP 情報を .env に設定
+
+Mailtrap の画面で以下の場所を開きます。
+
+- 上部タブ **「Integration」**
+- 「SMTP」タブを選択
+
+表示されている値を、プロジェクト直下の `.env` にコピーしてください。
+
+```env
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=（Mailtrap の Username）
+MAIL_PASSWORD=（Mailtrap の Password）
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+※ Username / Password は Mailtrap 画面の Credentials に表示されている値をそのまま使用してください。
+
+##### 8-3. .env を保存したあと、念のため Laravel の設定キャッシュをクリアします。
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+```
+---
+#### 9.Stripe の設定（カード決済機能を利用する場合）
+
+本アプリのカード決済では Stripe を使用しています。
+カード払い機能を動作させるには、Stripe アカウントを作成し、API Key を .env に設定してください。
+
+##### 9-1. Stripe アカウント作成
+
+https://dashboard.stripe.com/register
+
+より無料アカウントを作成してください。
+
+##### 9-2.  API キーを取得
+
+Stripe ダッシュボード →「開発者」→「APIキー」から以下を取得します。
+
+公開鍵（Publishable key）
+
+秘密鍵（Secret key）
+
+#####  9-3. .env に入力
+```bash
+STRIPE_PUBLIC_KEY=pk_test_xxxxxxxxxxxxxxxxxxxxx
+STRIPE_SECRET_KEY=sk_test_xxxxxxxxxxxxxxxxxxxxx
+```
+##### 9-4. キャッシュクリア
+```bash
+php artisan config:clear
+php artisan cache:clear
+php artisan view:clear
+php artisan route:clear
+```
+
+##### Stripe テストカード番号（動作確認用）
+
+Stripe のテストモードでは、以下のカード番号が使用できます：
+```bash
+カード番号：　4242 4242 4242 4242
+有効期限：任意（例 12/34）
+CVC：任意（例 123）
+```
+---
+### 🎉 以上で環境構築は完了です。
+ブラウザでアプリを利用できる状態になりました。
+
+- アプリURL: http://localhost
+---
+## 🧾 PHPUnit テスト
+####   テスト環境（env.testing）
 
 phpunit / php artisan test 実行時は、本番 DB とは別の テスト用データベース を使用します。
 
-##### env.testing を作成
+#####   env.testing を作成
 プロジェクト直下で以下を実行します。
 ```bash
 cp .env.example .env.testing
 ```
-env.testingに以下の内容を記述してください。
+##### 　env.testingに以下の内容を記述してください。
 
 ```env
 DB_CONNECTION=mysql
@@ -154,14 +256,14 @@ php artisan key:generate --env=testing
 php artisan migrate --env=testing
 ```
 
-注意：初回は以下のような質問が表示されます
+##### 注意：初回は以下のような質問が表示されます
 ```bash
 The database 'laravel_test_db' does not exist. Create it? (yes/no)
 ```
-👉 yes と入力してください。
+ **👉 yes  と入力してください。**
 （yes を選ぶことで、テスト用 DB が自動作成されます）
 
-#### 8.  テストの実行
+####   テストの実行
 
 本アプリには 16 個の自動テストが含まれています。
 以下のコマンドで すべてのテストを一括実行できます。
@@ -169,9 +271,8 @@ The database 'laravel_test_db' does not exist. Create it? (yes/no)
 php artisan test
 ```
 
-#### 9. テスト内容詳細
-- **機能ごとのテストケース一覧を Markdown 形式で整理したもの**  
-- PHPUnit によるテスト実行時のスクリーンショット結果をまとめた資料  
+#####  テスト内容詳細
+- **PHPUnit によるテストケース一覧を Markdown 形式で整理したもの**  
 [src/testcase/testcase_summary.md](src/testcase/testcase_summary.md)
 
 ## 🌐 開発環境 
@@ -185,10 +286,10 @@ php artisan test
 - MySQL 8.x
 - Nginx（php-fpm 経由）
 - Stripe API（クレジットカード決済で利用）
+- Mailtrap（メール認証機能で利用）
   
 ## 🗂 ER 図 / 仕様書
 
-- **ER 図（PNG）** : [docs/img/er.png](docs/img/er.png)
 - **ER 図（Mermaid 元ファイル）** : [docs/ER.md](docs/ER.md)
 - **テーブル仕様書** : [docs/DB_SPEC.md](docs/DB_SPEC.md)
   

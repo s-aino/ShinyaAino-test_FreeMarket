@@ -91,8 +91,13 @@ class User extends Authenticatable implements MustVerifyEmail
 
 
 
-    public function address()
+    public function addresses()
     {
-        return $this->hasOne(Address::class);
+        return $this->hasMany(Address::class);
+    }
+
+    public function defaultAddress()
+    {
+        return $this->addresses()->where('is_default', true)->first();
     }
 }

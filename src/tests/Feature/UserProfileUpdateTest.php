@@ -68,7 +68,7 @@ class UserProfileUpdateTest extends TestCase
         $user = User::factory()->create();
         $this->actingAs($user);
 
-        $file = UploadedFile::fake()->image('avatar.jpg');
+        $file = UploadedFile::fake()->create('avatar.jpg', 100, 'image/jpeg');
 
         $data = [
             'name' => '画像テスト',

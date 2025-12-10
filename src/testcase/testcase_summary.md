@@ -21,34 +21,25 @@
 
 ---
 
-##  テスト結果概要
+##  テスト概要（49テスト・133アサーション）
+| No | 機能       | テスト名                  | テスト概要                                   |
+| -: | -------- | --------------------- | --------------------------------------- |
+| 01 | 会員登録     | UserRegisterTest      | 必須項目のバリデーション・登録成功・プロフィール画面への遷移を確認       |
+| 02 | ログイン     | LoginTest             | 正常ログイン／バリデーションエラー／失敗時の制御を確認             |
+| 03 | ログアウト    | LogoutTest            | POSTログアウト処理の成功・未ログイン時の制御を確認             |
+| 04 | 商品一覧     | ItemListTest          | 全商品表示・SOLDラベル表示・自分の商品非表示を確認             |
+| 05 | マイリスト    | MyListTest            | いいね商品のみ表示、SOLD商品のラベル表示、未ログイン時は空表示を確認    |
+| 06 | 商品検索     | SearchTest            | 商品名部分一致検索・検索語の保持（マイリスト遷移後も維持）を確認        |
+| 07 | 商品詳細     | ItemDetailTest        | 画像・価格・カテゴリ・状態・ブランド・コメント一覧を正しく表示できることを確認 |
+| 08 | いいね      | LikeTest              | いいね登録／解除が正しく動作し、アイコン状態が反映されることを確認       |
+| 09 | コメント     | CommentTest           | ログイン必須、バリデーション（空／255字超）動作を確認            |
+| 10 | 商品購入     | PurchaseTest          | 「購入する」→購入処理→SOLD反映→購入履歴反映までの一連の流れを確認    |
+| 11 | 支払い方法選択  | PaymentMethodTest     | コンビニ／カード選択・hidden反映・バリデーション動作を確認        |
+| 12 | 配送先変更    | AddressChangeTest     | 配送先登録／一時住所保存（session）／購入画面への反映を確認       |
+| 13 | ユーザー情報   | UserInfoTest          | プロフィール画像・出品／購入履歴・ユーザー基本情報の取得表示を確認       |
+| 14 | プロフィール更新 | UserProfileUpdateTest | 各項目の更新、画像アップロード、バリデーション動作を確認            |
+| 15 | 商品出品     | ItemRegisterTest      | 出品フォーム入力・カテゴリ紐付け・画像保存が正しく行われることを確認      |
+| 16 | メール認証    | MailVerificationTest  | 登録後のメール送信→ガイドページ→認証成功→プロフィール画面遷移を確認     |
 
-| No  | 機能               | テスト概要                                                                                                                                           | テスト名 / 結果                                                        |
-| --- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| 01  | 会員登録           | 必須項目未入力時のバリデーションと登録成功を確認                                                                                                     | [UserRegisterTest](../test_results/phpunit_user.png)                   |
-| 02  | ログイン           | 認証情報の成功・失敗パターンを確認                                                                                                                   | [loginTest](../test_results/phpunit_login.png)                         |
-| 03  | ログアウト         | 認証解除・未ログイン制御を確認                                                                                                                       | [logoutTest](../test_results/phpunit_logout.png)                       |
-| 04  | 商品一覧           | 全商品の表示・出品者除外・SOLD表示                                                                                                                   | [ItemListTest](../test_results/phpunit_itemlist.png)                   |
-| 05  | マイリスト         | いいね商品表示・SOLDラベル表示・未ログイン時の空表示                                                                                                 | [MylistTest](../test_results/phpunit_mylist.png)                       |
-| 06  | 商品検索           | 商品名で部分一致検索できる／検索キーワードがマイリストでも保持される                                                                                 | [searchTest](../test_results/phpunit_search.png)                       |
-| 07  | 商品詳細情報取得   | 商品詳細ページで、商品画像・価格・ブランド名・カテゴリ・状態・コメントなど全情報の表示を確認                                                         | [ItemDetailTest](../test_results/phpunit_itemdetail.png)               |
-| 08  | いいね機能         | ログインユーザーによる「いいね登録」「色変化」「いいね解除」を確認                                                                                   | [LikeTest](../test_results/phpunit_like.png)                           |
-| 09  | コメント送信機能   | ログイン済み送信・未ログイン拒否・バリデーション（空欄／255字超）を確認                                                                              | [CommentTest](../test_results/phpunit_comment.png)                     |
-| 10  | 商品購入機能       | 「購入する」ボタン押下で購入が完了し、購入済商品のSOLD表示およびプロフィールへの反映を確認                                                           | [PurchaseTest](../test_results/phpunit_purchase.png)                   |
-| 11  | 支払い方法選択機能 | 「コンビニ払い／カード支払い」の選択表示・hidden反映・バリデーション動作を確認                                                                       | [PaymentMethodTest](../test_results/phpunit_paymentmethod.png)         |
-| 12  | 配送先変更機能     | 住所変更画面表示・住所登録・反映動作の3パターンを確認                                                                                                | [AddressChangeTest](../test_results/phpunit_addresschange.png)         |
-| 13  | ユーザー情報取得   | マイページにて、プロフィール画像・ユーザー名・出品／購入した商品一覧が正しく取得・表示を確認                                                         | [UserInfoTest](../test_results/phpunit_userinfo.png)                   |
-| 14  | ユーザー情報変更   | 変更項目が初期値として過去設定されていること（プロフィール画像、ユーザー名、郵便番号、住所）を確認                                                   | [UserProfileUpdateTest](../test_results/phpunit_userprofileupdate.png) |
-| 15  | 出品商品情報登録   | 商品出品画面にて情報を保存（カテゴリ、商品の状態、商品名、ブランド名、商品の説明、販売価格）                                                         | [ItemRegisterTest](../test_results/phpunit_itemregister.png)           |
-| 16  | メール認証機能     | 会員登録後に認証メールが送信され、「認証はこちらから」ボタンでガイドページへ遷移し、Mailtrapでの認証完了後にプロフィール設定画面へ移動する流れを確認 | [MailVerificationTest](../test_results/phpunit_mailverification.png)   |
 
----
-
-##  補足資料
-| 項目                   | 内容                               |
-| ---------------------- | ---------------------------------- |
-| 結果スクリーンショット | `/test_results/*.png`              |
-| 使用データベース       | `demo_test`（phpunit.xmlにて指定） |
-
----
 

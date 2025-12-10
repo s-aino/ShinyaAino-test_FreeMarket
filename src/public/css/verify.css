@@ -64,3 +64,11 @@
     font-size: 15px;
     cursor: pointer;
 }
+
+.verify-instruction {
+    margin-top: 30px;
+    font-size: 18px;
+    color: #666;
+    text-align: left;     
+    display: inline-block;  
+}

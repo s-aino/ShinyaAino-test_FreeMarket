@@ -72,10 +72,11 @@
                     </div>
 
                     @if ($address)
-                    <p class="addr-line">〒 {{ $address->postal ?? '―' }}</p>
+                    <p class="addr-line">〒 {{ $address->postal }}</p>
+
                     <p class="addr-line">
-                        {{ ($address->prefecture ?? '') . ($address->city ?? '') . ($address->line1 ?? '') }}
-                        {{ $address->line2 ? ' ' . $address->line2 : '' }}
+                        {{ $address->line1 }}
+                        {{ $address->line2 ? '・' . $address->line2 : '' }}
                     </p>
                     <input type="hidden" name="address_id" value="{{ $address->id }}">
                     <hr class="divider">
@@ -109,8 +110,13 @@
                             </span>
                     </section>
                 </div>
-
+                {{-- ▼ 購入ボタン --}}
+                @if(!$address)
+                <!-- <button class="btn-purchase-disabled" disabled>購入できません</button> -->
+                <p class="address-alert">※マイページで住所を登録してください。</p>
+                @else
                 <button type="submit" class="btn btn-purchase">購入する</button>
+                @endif
             </aside>
             {{-- ▲ 右カラムここまで --}}
 

@@ -678,3 +678,13 @@
     max-width: 280px;
     margin: 8px 0 20px;
 }
+
+
+.address-alert {
+    font-size: 18px !important;
+    color: #d9534f; /* 落ち着いた赤 */
+    font-weight: bold;
+    margin-bottom: 12px;
+    margin-top: 12px;
+    display: block;
+}

@@ -19,7 +19,6 @@ class PurchaseController extends Controller
     // 購入ページ表示
     public function show(Item $item)
     {
-        // 未ログイン → ログイン画面へ
         if (!auth()->check()) {
             session()->put('url.intended', route('purchase.show', ['item_id' => $item->id]));
             return redirect()->route('login');
@@ -27,13 +26,13 @@ class PurchaseController extends Controller
 
         $user = auth()->user();
 
-        // 一時住所（セッション）があれば優先
+        // 一時住所（最新）を優先
         $tempAddress = session('temp_address_id')
             ? Address::find(session('temp_address_id'))
             : null;
 
-        // 一時住所がなければ登録住所を使用
-        $address = $tempAddress ?? $user->address;
+        // 一時住所があれば最優先、なければ defaultAddress
+        $address = $tempAddress ?? $user->defaultAddress();
 
         return view('purchase.show', compact('item', 'address'));
     }
@@ -41,7 +40,10 @@ class PurchaseController extends Controller
     // 配送先編集フォーム
     public function editAddress(Item $item)
     {
-        $address = auth()->user()->address ?? new Address([
+        $user = auth()->user();
+
+        // デフォルト住所を取得（無ければ新規インスタンス）
+        $address = $user->defaultAddress() ?? new Address([
             'postal' => '',
             'line1' => '',
             'line2' => '',
@@ -49,17 +51,16 @@ class PurchaseController extends Controller
 
         return view('purchase.address', compact('item', 'address'));
     }
-
     // 配送先更新（今回の配送先）
     public function updateAddress(AddressRequest $request, Item $item)
     {
-         $user = auth()->user();
+        $user = auth()->user();
 
-        // 一時住所を新規作成（今回の配送先）
-        $tempAddress = $user->address()->create([
-            'postal' => $request->postal,
-            'line1' => $request->address,
-            'line2' => $request->building,
+        // 一時住所を作成（今回の配送先）
+        $tempAddress = $user->addresses()->create([
+            'postal'      => $request->postal,
+            'line1'       => $request->address,
+            'line2'       => $request->building,
             'is_temporary' => true,
         ]);
 
@@ -68,8 +69,7 @@ class PurchaseController extends Controller
 
         return redirect()
             ->route('purchase.show', ['item' => $item->id])
-            ->with('message', '今回の配送先を変更しました。')
-            ->with('temp_address_id', $tempAddress->id);
+            ->with('message', '今回の配送先を変更しました。');
     }
 
     // 購入処理 (カード / コンビニ)
@@ -160,26 +160,41 @@ class PurchaseController extends Controller
     {
         $user = auth()->user();
 
+        // ① 今回の配送先（セッション）
+        $tempAddressId = session('temp_address_id');
+
+        // ② デフォルト配送先
+        $defaultAddress = $user->defaultAddress();
+        $defaultAddressId = $defaultAddress ? $defaultAddress->id : null;
+
+        // ③ address_id の決定（今回 > デフォルト）
+        $addressId = $tempAddressId ?? $defaultAddressId;
+
+        if (!$addressId) {
+            return back()->withErrors('配送先住所が登録されていません。');
+        }
+
+        // ④ すでに購入済みかチェック
         $existingOrder = Order::where('buyer_id', $user->id)
             ->where('item_id', $item->id)
             ->first();
 
         if (!$existingOrder) {
             Order::create([
-                'buyer_id' => $user->id,
-                'item_id' => $item->id,
-                'address_id' => optional($user->address)->id,
-                'price' => $item->price,
-                'qty' => 1,
-                'status' => 'paid',
+                'buyer_id'   => $user->id,
+                'item_id'    => $item->id,
+                'address_id' => $addressId,
+                'price'      => $item->price,
+                'qty'        => 1,
+                'status'     => 'paid',
                 'ordered_at' => now(),
             ]);
 
             $item->update(['status' => 'sold']);
         }
 
+
         return view('purchase.success', compact('item'))
             ->with('message', '決済が完了しました。');
     }
-
 }
