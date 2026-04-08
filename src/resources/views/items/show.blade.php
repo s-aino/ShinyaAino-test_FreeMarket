@@ -186,22 +186,31 @@
                 </article>
                 @empty
                 <p class="muted">まだコメントはありません。</p>
-                @endforelse {{-- コメント投稿欄 --}}
-                @auth
-                @if (Auth::id() === $item->user_id)
-                {{-- 自分の出品商品にはコメント不可 --}}
-                <p class="text-muted" style="margin-top:10px;">※自分の出品商品にはコメントできません。</p>
-                @else
+                @endforelse
+
+                {{-- コメント投稿欄 --}}
+                @php
+                $isOwner = auth()->check() && auth()->id() === $item->user_id;
+                @endphp
+
+                @if($isOwner)
+                <p class="text-muted" style="margin-top:10px;">
+                    ※自分の出品商品にはコメントできません。
+                </p>
+                @elseif(auth()->check())
+                {{-- ログイン済み --}}
                 <form action="{{ route('comments.store', ['item' => $item->id]) }}"
                     method="POST"
                     class="comment__form actions"
                     id="comments">
                     @csrf
+
                     <div class="comment-title">商品へのコメント</div>
 
-                    <textarea id="comment-body" class="comment-box"
+                    <textarea id="comment-body"
+                        class="comment-box"
                         name="body"
-                        maxlength="1000"
+                        maxlength="400"
                         placeholder="ここにコメントを入力…">{{ old('body') }}</textarea>
 
                     @error('body')
@@ -209,13 +218,32 @@
                     @enderror
 
                     <div class="item-detail">
-                        <button type="submit" class="btn btn--primary btn--square" style="margin-top:10px;">
+                        <button type="submit"
+                            class="btn btn--primary btn--square"
+                            style="margin-top:10px;">
                             コメントを送信する
                         </button>
                     </div>
                 </form>
+                @else
+                {{-- 未ログイン --}}
+                <div class="comment__form actions" id="comments">
+                    <div class="comment-title">商品へのコメント</div>
+
+                    <textarea id="comment-body"
+                        class="comment-box"
+                        maxlength="400"
+                        placeholder="ここにコメントを入力…"></textarea>
+
+                    <div class="item-detail">
+                        <a href="{{ route('login', ['redirect_to' => route('items.show', $item->id)]) }}"
+                            class="btn btn--primary btn--square"
+                            style="margin-top:10px; display:inline-block; text-align:center;">
+                            コメントを送信する
+                        </a>
+                    </div>
+                </div>
                 @endif
-                @endauth
             </section>
         </div>
     </div>

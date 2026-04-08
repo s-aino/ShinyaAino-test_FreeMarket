@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CommentRequest extends FormRequest
 {
@@ -13,19 +15,33 @@ class CommentRequest extends FormRequest
 
     public function rules(): array
     {
-        return ['comment' => ['required', 'string', 'max:255']];
+        return [
+            'body' => ['required', 'string', 'max:255'],
+        ];
     }
 
     public function messages(): array
     {
         return [
-            'comment.required' => '商品コメントを入力してください。',
-            'comment.max'      => '商品コメントは最大255文字です。',
+            'body.required' => 'コメントを入力してください。',
+            'body.string'   => 'コメントの形式が正しくありません。',
+            'body.max'      => 'コメントは255文字以内で入力してください。',
         ];
     }
 
     public function attributes(): array
     {
-        return ['comment' => '商品コメント'];
+        return [
+            'body' => '商品コメント',
+        ];
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(
+            redirect()->to(url()->previous() . '#comment-body')
+                ->withErrors($validator)
+                ->withInput()
+        );
     }
 }

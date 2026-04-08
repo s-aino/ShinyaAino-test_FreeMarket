@@ -17,7 +17,9 @@ class ItemFactory extends Factory
             'title' => $this->faker->word(),
             'price' => $this->faker->numberBetween(100, 10000),
             'description' => $this->faker->sentence(),
-            'status' => 'active', // active/sold 切替はテスト側で操作予定
+            'brand' => null,
+            'condition' => '良好',
+            'status' => 'active',
             'image_path' => 'items/sample1.jpg',
         ];
     }

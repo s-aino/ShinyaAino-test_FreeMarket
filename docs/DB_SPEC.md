@@ -65,7 +65,7 @@ Google スプレッドシートの「テーブル仕様書」シートを Markdo
 | line2        | varchar(255)  |    |    |    |             | 建物名 ※アプリで使用 |
 | phone        | varchar(20)   |    |    |    |             | 電話番号 ※アプリでは未使用 |
 | is_default   | tinyint(1)    |    |    | ○  |             | デフォルト住所 |
-| is_temporary | tinyint(1)    |    |    |    |             | 購入時だけ使用する仮住所 |
+| is_temporary | tinyint(1)    |    |    | ○  |             | 購入時だけ使用する仮住所 |
 | created_at   | timestamp     |    |    | ○  |             | 作成日時 |
 | updated_at   | timestamp     |    |    | ○  |             | 更新日時 |
 ---
