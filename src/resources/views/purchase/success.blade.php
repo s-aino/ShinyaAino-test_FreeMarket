@@ -12,7 +12,7 @@
 
 @section('content')
 <div class="success-container text-center">
-    <h2 class="success-title">ご購入ありがとうございました！</h2>
+    <h1 class="success-title">ご購入ありがとうございました！</h1>
     <p class="success-message">{{ $message ?? '決済が完了しました。' }}</p>
 
     <div class="success-card">
